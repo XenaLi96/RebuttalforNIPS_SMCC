@@ -1,0 +1,201 @@
+Meta Review of Submission13175 by Area Chair xiU3
+Meta Reviewby Area Chair xiU322 Jul 2026, 22:54 (modified: 23 Jul 2026, 10:49)Senior Area Chairs, Area Chairs, Authors, Reviewers Submitted, Program Chairs, Area Chair xiU3Revisions
+Metareview:
+The paper has received mixed, borderline reviews and, at this stage, the final decision could reasonably move toward either acceptance or rejection. The authors should use the rebuttal to directly address the key technical concerns raised by the reviewers, clarify any misunderstandings, and provide evidence supporting the paper’s main claims where possible.
+
+The Area Chair will closely follow the rebuttal discussion and subsequent reviewer engagement. The final recommendation will depend significantly on whether the authors can resolve the central concerns and whether the reviewers find the responses convincing.
+
+Add:
+Official Review of Submission13175 by Reviewer aSvP
+Official Reviewby Reviewer aSvP25 Jun 2026, 09:03 (modified: 23 Jul 2026, 07:39)Program Chairs, Senior Area Chairs, Area Chairs, Reviewers Submitted, Authors, Reviewer aSvPRevisions
+Summary:
+The paper publish sMMC-22M, a single-cell spatial transcriptomics dataset with over 20 million cells across 25 organ categories, which enjoys larger scale, higher resolution and richer context compared to existing dataset in literature.
+
+Contribution Type: General: Most submissions will fall into this type.
+Strengths And Weaknesses:
+Strength: the new dataset enjoys larger scale, higher resolution and richer context, which potentially can support more study refined research on the spatial transcriptomics and reveal more biological insights.
+
+Weakness: The extent to which this new data can truly promote relevant research progress has not been fully explained.
+
+Quality: 3: good
+Clarity: 3: good
+Significance: 3: good
+Originality: 3: good
+Questions:
+the increase of the data scale, resolution and contexts typically associates with the increase of data heterogeneity, which may pose critical challenges for data analysis. please clarify the heterogeneity of the new dataset and how it may influence the downstream data analysis.
+
+Limitations:
+yes
+
+Rating: 4: Borderline accept: Technically solid paper where reasons to accept outweigh reasons to reject, e.g., limited evaluation. Please use sparingly.
+Confidence: 3: You are fairly confident in your assessment. It is possible that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work. Math/other details were not carefully checked.
+Ethical Concerns: NO or VERY MINOR ethics concerns only
+Paper Formatting Concerns:
+No
+
+Code Of Conduct Acknowledgement: Yes
+Responsible Reviewing Acknowledgement: Yes
+Add:
+Official Review of Submission13175 by Reviewer vCPF
+Official Reviewby Reviewer vCPF24 Jun 2026, 09:23 (modified: 23 Jul 2026, 07:39)Program Chairs, Senior Area Chairs, Area Chairs, Reviewers Submitted, Authors, Reviewer vCPFRevisions
+Summary:
+The paper describes sMMC-22M, a single cell-level benchmark built from Xenium and Visium HD spatial transcriptomics data with matched histology images and metadata. Its main goal is to move histology-to-gene evaluation from spot-level prediction toward individual cells, while also keeping sample and tissue context available for analysis. The authors use STBoost to run existing prediction pipelines in this setting and report examples including pathology encoder comparisons, cross-patient transfer, and an ovarian age-shift analysis.
+
+Contribution Type: General: Most submissions will fall into this type.
+Strengths And Weaknesses:
+The paper addresses a relevant gap in histology-to-gene benchmarking, where many existing resources are still limited to spot-level evaluation.
+The cell-centered data organization is useful, since it links expression, histology crops, spatial coordinates, and metadata around the same biological unit.
+The use of metadata and tissue context is a nice aspect of the benchmark, especially for analyzing failures under patient or age-related shifts rather than only reporting pooled scores.
+Quality: 3: good
+Clarity: 3: good
+Significance: 3: good
+Originality: 3: good
+Questions:
+For the Visium HD data, how reliable is the bin-to-cell aggregation used to construct cell-level targets? Could the authors clarify how boundary bins are assigned and whether segmentation errors noticeably affect the resulting expression profiles?
+The main experiments seem to cover only a small number of representative cases. Can the authors provide a compact summary across more organs or platforms, even with a lightweight baseline, to better support the claimed breadth of the benchmark?
+Some reported gene-wise correlations are quite low, especially under transfer settings. How should these scores be interpreted biologically, and could marker-gene, cell-type-associated-gene, or simple spatial-only/metadata-only baselines help calibrate the results?
+Limitations:
+In-domain results have limited implications, since splits within the same or closely related samples may reflect local interpolation and spatial autocorrelation rather than robust generalization.
+The context analysis is useful but still narrow; the ovarian age-shift experiment is more of a case study than evidence that all biological context variables can be systematically evaluated.
+The resource contains several derived artifacts, such as processed cell-level records, histology crops, captions, and communication summaries, so users need clear guidance on which fields are direct measurements and which are generated or post-processed outputs.
+Rating: 4: Borderline accept: Technically solid paper where reasons to accept outweigh reasons to reject, e.g., limited evaluation. Please use sparingly.
+Confidence: 5: You are absolutely certain about your assessment. You are very familiar with the related work and checked the math/other details carefully.
+Ethical Concerns: NO or VERY MINOR ethics concerns only
+Paper Formatting Concerns:
+None
+
+Code Of Conduct Acknowledgement: Yes
+Responsible Reviewing Acknowledgement: Yes
+Add:
+Official Review of Submission13175 by Reviewer 7Gar
+Official Reviewby Reviewer 7Gar23 Jun 2026, 06:29 (modified: 23 Jul 2026, 07:40)Program Chairs, Senior Area Chairs, Area Chairs, Reviewers Submitted, Authors, Reviewer 7GarRevisions
+Summary:
+The paper presents a large-scale paired spatial transcriptomics + histology resource together with a benchmark and an accompanying model (STBoost). The authors frame three contributions: (1) increasing the scale and diversity of paired ST–histology data, in part by adding in-house data on top of existing collections of public 10x Genomics data (Xenium & Visium HD), (2) pushing the data to cell-level resolution and enriching each record with biological/textual context, yielding per-cell multimodal records, and (3) an empirical study organized along these three axes (scale, resolution, rich context).
+
+Contribution Type: General: Most submissions will fall into this type.
+Strengths And Weaknesses:
+Strengths: Paired ST-histology data at scale is genuinely scarce and valuable, so the overall direction is worthwhile. Organizing the resource and its evaluation along three axes (scale, resolution, biological context) is a reasonable framing, and the ambition to move from spot-level toward cell-level, multimodal records is well motivated in principle. If the in-house data are substantial and the full resource and pipeline are released, this could be a useful community asset.
+
+Weaknesses: 1. My main concern is that, while I understand how scale, resolution, and rich context were incorporated into the dataset, it is unclear what the experiment for each axis is actually meant to show i.e., whether the benchmark poses biologically meaningful questions or establishes that each axis yields measurable scientific value. A benchmark should define a biologically meaningful task, explain why that task matters, and compare the performance of multiple methods that can address it; this paper is substantially lacking in both the rationale for, and the clarity of the experimental design behind, each of its experiments. 2. The new data are largely derived or generated rather than measured, and the paper does not validate them. The cell-level expression appears to come from bin2cell, i.e., a computational decomposition of spot-level signal, and the rich textual context appears to be LLM/LMM-generated, but the paper does not validate it: there is no factuality or human evaluation of the generated text, no description of the generation pipeline in the main text (it only appears in Figure 1), and no example records shown. 3. The magnitude of the in-house contribution is also not quantified. It is unclear how many samples/cells/tissues are added relative to HEST-1K and STimage-1K4M, which makes the "scale" claim hard to assess. 4. The cell-level profiling relies on bin2cell, a well-known existing tool, so the methodological novelty of the spot→cell component is weak. Spot-to-cell expression inference also appears to be an approach that has been extensively explored in prior work, but the paper does not position itself against this in related work. An explanation of the idea behind the spot→cell construction should appear before the downstream experiments. 5. Clarity. This is a pervasive problem and it limited my ability to assess the claims. • Figure 2 / scale: the task is not stated (is it image→gene-expression prediction?), the metric is unclear, and the motivation for the experiment is missing. Whether a scaling law is actually demonstrated is unclear. • STBoost / resolution: the model's inputs and outputs are not clearly specified in the main manuscript. At inference, does it take only histology and output cell-level expression, or does it also use spot-level expression? The relationships among STBoost-Ref, "Ours" in Figure 4, and "STBoosted BLEEP" are not explained, and BLEEP itself (the baseline) is never introduced. The evaluation protocol, the ground truth used, and the actual conclusion of the resolution study are hard to extract. • I don’t get what Table 2 explains at all. Please clarify. • Rich context / age effect: the abbreviations AK and AD are never defined. • There is substantial redundancy — the scale/resolution/rich-context story is repeated many times, while the concrete experimental descriptions that readers actually need are thin.
+
+Quality: 2: not good
+Clarity: 2: not good
+Significance: 2: not good
+Originality: 2: not good
+Questions:
+In-house data scale. Please quantify precisely how much new in-house data is contributed relative to HEST-1K and STimage-1K4M (samples, tissues, platforms, spots/cells), ideally as a comparison table. What fraction of the resource is genuinely new vs. aggregated? 
+Clear purpose and biological meaning of the per-axis experiments. For each experiment, please lay out the benchmark objective, design, results, and significance cleanly. In particular: • What task and metric does Fig. 2 use? • In the resolution study, what exactly are STBoost, STBoost-Ref, and "Ours"; what is BLEEP; and what is "STBoosted BLEEP"? • For the age-effect analysis, what is the precise claim, and why is it informative beyond the expected degradation under an age shift?
+Validation of generated data. How are the bin2cell-derived cell-level profiles and the LMM-generated textual records validated? Please describe the generation pipeline in the main text and show representative example records.
+Limitations:
+No. The paper does not address (a) the rationale and biological significance of its benchmark experiments, (b) validation of its generated cell-level profile and textual data, or (c) data accessibility/reproducibility.
+
+Rating: 2: Reject: For instance, a paper with technical flaws, weak evaluation, inadequate reproducibility and incompletely addressed ethical considerations.
+Confidence: 3: You are fairly confident in your assessment. It is possible that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work. Math/other details were not carefully checked.
+Ethical Concerns: NO or VERY MINOR ethics concerns only
+Paper Formatting Concerns:
+• References appear to be uniformly truncated to "et al." in the bibliography. Please verify this matches the required citation style and lists authors as specified. • Several dataset links (in Appendix) appear inaccessible / the full dataset does not seem viewable.
+
+Code Of Conduct Acknowledgement: Yes
+Responsible Reviewing Acknowledgement: Yes
+Add:
+Official Review of Submission13175 by Reviewer kUmZ
+Official Reviewby Reviewer kUmZ10 Jun 2026, 07:13 (modified: 23 Jul 2026, 07:40)Program Chairs, Senior Area Chairs, Area Chairs, Reviewers Submitted, Authors, Reviewer kUmZRevisions
+Summary:
+The work presents a database of 23+ million cell-aligned transcriptomics samples along with an initial study that appears to be focused on three of the twenty-five organs included in the database: mouse brain, cancerous human lung, and human ovary. Each cell's data includes a cell crop, a larger-field contextual crop, gene expression data from nearby spot transcriptomics, and patient metadata. The purpose of the aligned-cell database is to move in the direction of single-cell gene expression prediction.
+
+Contribution Type: General: Most submissions will fall into this type.
+Strengths And Weaknesses:
+A narrative format is assumed; paragraphs are numbered simply to aid the authors in refering to specific sections of the review in their their rebuttal.
+
+P1. The paper takes on a worthy and challenging goal: single-cell transcriptomics. The cell-aligned dataset compiled for this study is a good approach towards this goal. As the authors suggest, regional spot analysis does not have a mechanism for modeling the reality that different cells within a spot regions may be expressing significantly different sets of genes. By including an image centered and primarily cropped to a single cell, with a second image providing a larger context also centered on that cell, the database focuses in on the single-cell transcriptomics goal.
+
+P2. Yet the larger question remains unanswered: Since all of the datasets provide spot-level gene expression data, and thus ground truth is only available at the spot level or some interpolation of it, how can we determine if a method is properly predicting the gene expression of the single cell shown in the transcriptions? It is conceivable that large models trained at scale could learn some sort of super-resolution modeling of gene expression. But the paper does not address this question. So the dataset (and the baseline experiments that accompany it) are single-cell on the imaging side, but not on the gene expression side.
+
+P3. The baseline experiments appear to be incomplete. As mentioned in the summary, the experiments within the main paper clearly focus on three organ types: mouse brain, cancerous human lung, and human ovary. While there are additional experiments that do not mention specific organs, such as those used to produce figures 2b and 2c, it is not clear whether these are evaluated across all 25 organs or only on the two organs shown in figure 2a and discussed elsewhere in the section.
+
+P4. While the ovarian experiment highlights the importance of metadata and the dangers of out-of-distribution deployment of models, it does not help to move the paper towards true single-cell analysis.
+
+The remarks above explain my ratings in the quality, significance, and originality ratings. Now considering the clarity rating:
+
+P5. The paper is generally free of typographical and grammatical errors (though the figures, especially Figure 1, contain a rather large number of these). Nevertheless, the writing style appears to occasionally slip needless remarks. The main body of the paper also reiterates the main themes from the introduction several times. While such anchoring can be helpful, it feels like the paper could be made more clear by including more details within the main body of the paper at the expense of removing some of this redundancy. Examples of these are included below.
+
+P6. Examples of detail that could be moved into or enhanced in the main body of the paper include: (1) A breif summary of how closely the spot centers align with the cell centers. (2) Many other details of the cell alignment procedure: a) What algorithms are used to find cells when the scanner or existing datasets do not provide these? b) Have these algorithms been previously validated and are they reliable at finding cells?
+
+P7. The term STBoost is used in the abstract and again used for the first time in the paper in Section 3.3. In neither place is the term defined -- it is only in Section 4.2 (line 204) that the paper says "we introduce STBoost" and defines it. Please use such language both in the abstract and in the introduction, where STBoost can be introduced as one of the contributions of the paper. For example, on line 57, you could say, "Second, it defines a data-centric framework, STBoost, for lifting..."
+
+P8. It would be good to clearly specify how many patients and animals are included in the study, including, for the cross-patient splits, how many patients are in the the training set and how many are in the testing set. Including this figure alongside cell counts helps to establish the scale of the dataset.
+
+FURTHER MINOR REMARKS
+
+Paragraph 5 above mentions typographical errors and textual excesses. Here are some specific examples of these:
+
+Figure 1:
+
+hierarchical -> Hierarchical (letter case issue)
+
+Resolutio(Single -> Resolution (Single (missing letter and space)
+
+There are some blanks in this figure that could be filled in, e.g. under "LLM Agent"
+
+This figure feels AI-generated. If it is manually re-cast with, e.g. Inkscape and adjusted, I think the overall clarity could be improved.
+
+The caption could also add more text explaining the parts of the figure up front.
+
+Table 1: Clarify what "study split" means in the text referring to this table, with a forward reference to the appendix that describes the splits in detail
+
+Table 2: Clarify what "cell unit" means in the text referring to this table, again, with a forward reference to the section(s) that define these different cell units in more detail.
+
+Figure 2 b), horizontal axis: Define what ratio is being used both here and in the text referring to this figure
+
+Figure 3: Eliminate the thin partial border around the top left of the figure. Render text as text rather than as a rasterized image
+
+Line 107 cut "but the dataset itself must be introduced first" and shorten related text.
+
+Line 115 cut "kept" and "rather than used as a main text claim"
+
+Line 268 cut "rather than only as a descriptive dataset." Also clarify within this sentence that "We release part of sMMC-22MBench" rather than the whole dataset. Although the final paper should describe more clearly exactly which parts of the dataset are publicly available at the time of publication.
+
+P9. Please note that it is not safe to assume that existing datasets are representative of ethnic, gender, or other human traits that could disadvantage minorities underrepresented in the data. Performing a metaanalysis, where possible, of the gender and ethnic balance of the dataset adds to the paper.
+
+Quality: 2: not good
+Clarity: 2: not good
+Significance: 2: not good
+Originality: 2: not good
+Questions:
+Q1. If you have trained and tested on all 25 organs, please provide summary performance and per-organ performance information in the main body of the paper.
+
+Q2: Please seriously consider removing "Single-cell" from the title and "single-cell predictors" from the abstract or exclusively couch such terms in expressions like "moving towards single-cell predictions."
+
+Q3. Consider whether it is feasible to compare cell-aligned performance with spot performance. If cell-aligned performance could be shown to have significantly higher transcriptomic prediction accuracy than spot centered methods, this could be an argument that we are indeed nearing single cell predictions.
+
+Q4. Consider describing clearly in the main body of the paper what techniques were used to interpolate or match spot-level gene expression to individual cells.
+
+Q4. Consider renaming sMMC-22M to sMMC-23M or whatever the proper cell count is at the time of publication.
+
+Limitations:
+L1. The core limitation that I have described earlier (e.g. in P2 and in Q2.) is that the method claims to have single-cell predictions yet don't have experiments that back this claim. The first sentence of the Limitations section acknowledges this concern, but replaces it with a vague "stronger evaluation" contribution:
+
+Line 283: The value of sMMC-22M lies in enabling stronger evaluation, not in implying that histology-to molecular prediction is solved.
+
+L2. The second sentence of limitations appears to move on to a different topic:
+
+Line 284: "Scale improves morphology–gene correspondence, but the scaling-law results do not remove the need for leakage-controlled biological transfer tests."
+
+It is unclear to me whether the paper claims (e.g. with the carefully defined splits included as part of the dataset) to solve the biological transfer tests) or whether this is a further indirect acknowledgement that the current work does not align the single cells with cell-specific gene expression.
+
+L3. The third sentence of the limitations section is the most confusing to me:
+
+Line 285: "Cell-level resolution makes the task more biologically meaningful, but it also exposes errors that spot-level averaging can hide."
+
+What errors does the current work expose that spot-level averaging can hide? I can't think of which experiment in the paper this may refer to, or to discussion earlier in the paper on any errors exposed in spot-level averaging.
+
+L4: Lines 287-288 acknowledge that various forms of information are missing from the public datasets from which the proposed dataset is derived. A summary of coverage across organs, patients and animals, of where alignment and metadata are satisfactory (or how satisfactory they are in different portions of the dataset) would provide a modest strengthening of the paper. This is related to Q1.
+
+Rating: 2: Reject: For instance, a paper with technical flaws, weak evaluation, inadequate reproducibility and incompletely addressed ethical considerations.
+Confidence: 5: You are absolutely certain about your assessment. You are very familiar with the related work and checked the math/other details carefully.
+Ethical Concerns: NO or VERY MINOR ethics concerns only
+Paper Formatting Concerns:
+No concerns in this area.
+
+Code Of Conduct Acknowledgement: Yes
+Responsible Reviewing Acknowledgement: Yes
