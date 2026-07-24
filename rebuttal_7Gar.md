@@ -62,15 +62,3 @@ GPT-4o only verbalizes supplied fields and adds no attributes. Detailed audits w
 | CONCH | 29 | 0.040 | 0.0021 | 19.1× | 0.988 | 90.9% / 100% |
 
 Blue boxes define matches. AUC separates matched from mismatched scores; Top-$k$ asks whether a match is among the $k$ nearest captions. Both VLMs reach AUC $\geq0.988$ and 100% Top-3. These are similarity—not Pearson-correlation—audits of image relevance; source-field checks test factuality. Text remains optional context, not ground truth.
-
-**5. Prior-work positioning.**
-
-No decomposition novelty is claimed; related work will be expanded.
-
-**6. STBoost terminology.**
-
-Resolved in Response 2.
-
-**7. Reproducibility.**
-
-Add manifests, checksums, licenses, inventory, and fix references.
