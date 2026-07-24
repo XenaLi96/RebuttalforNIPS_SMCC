@@ -10,8 +10,9 @@
 \setlength{\parskip}{0.42em}
 \setlength{\emergencystretch}{2em}
 
-\newcommand{\revcomment}[1]{\textbf{Reviewer comment.} \emph{#1}}
-\newcommand{\response}{\textbf{Response.}}
+\newcommand{\revcomment}[1]{\textcolor{black}{\textbf{Reviewer comment. #1}}}
+\newcommand{\questionsep}{\par\vspace{1.25em}}
+\newcommand{\response}{\textbf{Response.}\enspace}
 \newcommand{\needexp}[1]{\textcolor{red}{\textbf{[EXPERIMENT TO INSERT:} #1\textbf{]}}}
 \newcommand{\needinfo}[1]{\textcolor{red}{\textbf{[AUTHOR INPUT TO INSERT:} #1\textbf{]}}}
 
@@ -30,9 +31,9 @@ We thank the reviewer for the careful and constructive assessment. We agree with
 three central requests: quantify uncertainty in the Visium HD cell construction,
 demonstrate breadth beyond a few case studies, and calibrate low correlations with
 biologically interpretable and simple baselines. We also agree that in-domain and
-cross-patient results answer different questions and should not be conflated.
+sample-held-out results answer different questions and should not be conflated.
 
-\medskip
+\questionsep
 \textbf{vCPF-1.}\quad
 \revcomment{How reliable is Visium HD bin-to-cell aggregation? How are boundary bins
 assigned, and do segmentation errors affect the resulting profiles?}
@@ -40,26 +41,37 @@ assigned, and do segmentation errors affect the resulting profiles?}
 \response
 We will clarify the claim boundary first. Xenium supplies natively cell-resolved
 transcript locations and platform-defined cell masks. Visium HD instead supplies
-dense 8-\(\mu\)m bins; we register these bins to the H\&E image, segment cell
+dense native 2-\(\mu\)m bins; we register these bins to the H\&E image, segment cell
 footprints, and aggregate bin counts to the aligned footprints. Thus, Visium HD
 records are \emph{cell-aligned computational targets}, not direct single-cell
 measurements. We will replace wording that could imply otherwise.
 
-\needinfo{State the exact boundary-bin rule used in the released pipeline
-(intersection threshold, tie handling, treatment of bins overlapping multiple cells,
-and discarded-bin criteria), together with the segmentation model/version and all QC
-thresholds.}
+The audited released rule assigns a bin when its closed 2-\(\mu\)m square intersects
+a CellViT polygon. If multiple polygons claim a bin, the bin is assigned to the
+nearest CellViT centroid in full-resolution image coordinates; exact-distance ties
+use the lower raw-cell index. The 8-\(\mu\)m files are legacy QC/fallback artifacts,
+not the canonical expression targets.
 
-\needexp{Report a boundary/segmentation sensitivity analysis: strict boundary-bin
-discard versus the released assignment rule; mask erosion and dilation; fraction of
-cells/bins retained; expression-profile agreement; marker consistency; and
-downstream prediction changes with confidence intervals. Where matched Xenium or
-another cell-resolved reference is available, add an external concordance check.}
+\needinfo{Confirm the CellViT model/version, registration implementation, and all
+released-pipeline QC thresholds.}
+
+All nine perturbation aggregations are complete for lung A, lung B, and ovary.
+Relative to the released rule, strict-interior assignment retained
+\(62.5\%/56.1\%/80.7\%\) of cells and
+\(16.0\%/11.0\%/20.5\%\) of assigned bins; one-bin erosion retained
+\(46.0\%/37.9\%/72.0\%\) of cells and \(18.9\%/12.2\%/26.0\%\) of bins.
+One-bin dilation retained \(100.0\%--100.1\%\) of cells but increased assigned bins
+to \(181.9\%--196.2\%\) of default. Thus, the construction is materially sensitive
+to the boundary rule and should not be treated as direct single-cell ground truth.
+
+\needexp{On identical common cells and genes, insert expression Pearson/Spearman,
+HVG/marker-rank stability, coarse-state concordance, and fixed-checkpoint
+image-to-gene sensitivity with confidence intervals.}
 
 These results will be reported separately for Visium HD and Xenium, because
 combining them would obscure the uncertainty specific to computational aggregation.
 
-\medskip
+\questionsep
 \textbf{vCPF-2.}\quad
 \revcomment{The main experiments cover only a few cases. Please provide a compact
 summary across more organs or platforms.}
@@ -95,7 +107,7 @@ platforms, with per-organ/per-platform values, organ-macro averages, sample and 
 counts, gene-panel overlap, and uncertainty. Keep Xenium and Visium HD summaries
 separate.}
 
-\medskip
+\questionsep
 \textbf{vCPF-3.}\quad
 \revcomment{How should low gene-wise correlations, especially under transfer, be
 interpreted biologically? Please add marker/cell-type-gene or spatial-only/metadata-only
@@ -104,50 +116,62 @@ baselines.}
 \response
 We agree that the low full-gene correlations are important negative results, not
 numbers to hide. Full-gene evaluation contains many sparse and weakly predictable
-genes; cross-patient shifts further change morphology, tissue composition, and
+genes; cross-sample shifts further change morphology, tissue composition, and
 acquisition conditions. For the lung experiment, STBoost-Ref obtains gene-wise
 Pearson/Spearman and cell-wise Pearson correlations of
 \(0.0259/0.0268/0.4112\) in-domain and
-\(0.0124/0.0137/0.2820\) cross-patient over the full panel. These values indicate
+\(0.0124/0.0137/0.2820\) sample-held-out over the full panel. These values indicate
 that histology alone is not a reliable replacement for measured expression.
 
-As a diagnostic rather than a replacement for full-gene evaluation, we also
-examined 50 genes selected within each regime. STBoost-Ref reaches
-\(0.5117/0.5069/0.5979\) in-domain and
-\(0.2986/0.2405/0.3451\) cross-patient (gene Pearson/gene Spearman/cell Pearson).
-Because this subset was selected post hoc by STBoost-Ref performance, we will label
-it explicitly as an upper-bound diagnostic and not as an unbiased marker-gene
-benchmark.
+As an explicitly post-hoc upper-bound diagnostic, the corresponding selected
+50-gene results are \(0.5117/0.5069/0.5979\) in-domain and
+\(0.2986/0.2405/0.3451\) sample-held-out (gene Pearson/Spearman/cell Pearson).
+Separately, marker-derived states from 111,772 lung cells reach \(0.5922\)
+balanced accuracy (ARI \(0.1362\)); both results caution against cell-by-cell
+interpretation.
 
-For biological calibration, inferred expression from 111,772 lung cells supports
-coarse marker-derived cell-state prediction with \(0.5935\) accuracy and \(0.5922\)
-balanced accuracy (ARI \(0.1362\), NMI \(0.2154\)). This shows partial recovery of
-cell-state signal while the modest clustering agreement cautions against
-cell-by-cell biological interpretation.
+On \emph{native Xenium targets}, four existing 70/10/20 random-cell-split
+evaluations (training-only gene selection) gave:
 
-\needexp{Add a prespecified marker-gene/cell-type-associated-gene evaluation with no
-test-set gene selection, including marker recovery, direction agreement, and
-cell-state performance from predicted versus measured expression.}
+\begin{center}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Organ & Cells & Genes & Gene \(r/\rho\) & Coord. \(r\) & Cell \(r/\rho\) \\
+\midrule
+Colon  & 77,636  & 10 & 0.541/0.544 & 0.238 & 0.666/0.637 \\
+Breast & 114,907 & 10 & 0.512/0.585 & 0.116 & 0.546/0.519 \\
+Ovary  & 4,000   & 10 & 0.406/0.459 & 0.285 & 0.644/0.543 \\
+Skin   & 13,696  & 10 & 0.509/0.384 & 0.257 & 0.508/0.443 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\needexp{Add spatial-only and metadata-only baselines, using only training-split
-information at query time, and report them under the same in-domain and
-cross-patient splits.}
+Recovered markers include TFF3/EPCAM, IGKC/JCHAIN, MUC1/GATA3, and
+DES/MYH11/MYLK; ovary excludes three deprecated controls. These quantify
+within-sample interpolation, not sample-held-out transfer. In 100 spatial-block
+bootstrap replicates, image gene-\(r\) 95\% CIs were
+\([0.518,0.558]\), \([0.487,0.530]\), \([0.377,0.424]\), and
+\([0.467,0.525]\); none overlapped the coordinate-only CIs.
 
-\medskip
+\needexp{Complete fixed-panel, sample-held-out native-Xenium evaluation with
+marker, program, and coarse-state metrics; Average, Worst, and Gap; and a metadata baseline.}
+
+\questionsep
 \textbf{vCPF-4.}\quad
 \revcomment{In-domain splits may measure local interpolation and spatial
 autocorrelation rather than robust generalization.}
 
 \response
 We agree. We will relabel the in-domain setting as an interpolation diagnostic and
-use cross-patient/cross-study transfer for the main generalization claim. In the lung
+use sample-held-out/cross-study transfer for the main generalization claim. In the lung
 experiment, the drop from \(0.4112\) to \(0.2820\) in full-panel cell-wise Pearson
 correlation illustrates this gap.
 
 \needexp{Add a distance-buffered in-domain split and a coordinate-only/spatial-neighbor
 baseline, reporting performance as a function of the minimum train--test distance.}
 
-\medskip
+\questionsep
 \textbf{vCPF-5.}\quad
 \revcomment{The ovarian age-shift experiment is narrow and does not establish that
 all context variables can be evaluated systematically.}
@@ -164,7 +188,7 @@ preprocessing, report sample/cell counts and uncertainty, and rewrite the conclu
 as an age-associated shift only if the result remains supported after acknowledging
 patient and tissue-state confounding.}
 
-\medskip
+\questionsep
 \textbf{vCPF-6.}\quad
 \revcomment{Users need to know which released fields are direct measurements and
 which are generated or processed.}
@@ -179,7 +203,7 @@ Provenance & Examples \\
 \midrule
 Directly measured &
 H\&E image; Xenium transcript coordinates and platform cell masks; Visium HD
-8-\(\mu\)m bin counts; source-study metadata as originally reported. \\
+2-\(\mu\)m bin counts; source-study metadata as originally reported. \\
 Processed &
 Registered coordinates; segmented footprints; Visium HD bin-to-cell aggregated
 matrices; local/context crops; normalized matrices; split indices; communication

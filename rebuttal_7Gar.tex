@@ -5,13 +5,15 @@
 \usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage[hidelinks]{hyperref}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.38em}
 \setlength{\emergencystretch}{2em}
 
-\newcommand{\revcomment}[1]{\textbf{Reviewer comment.} \emph{#1}}
-\newcommand{\response}{\textbf{Response.}}
+\newcommand{\revcomment}[1]{\textcolor{black}{\textbf{Reviewer comment. #1}}}
+\newcommand{\questionsep}{\par\vspace{1.25em}}
+\newcommand{\response}{\textbf{Response.}\enspace}
 \newcommand{\needexp}[1]{\textcolor{red}{\textbf{[EXPERIMENT TO INSERT:} #1\textbf{]}}}
 \newcommand{\needinfo}[1]{\textcolor{red}{\textbf{[AUTHOR INPUT TO INSERT:} #1\textbf{]}}}
 
@@ -32,8 +34,95 @@ evaluation unit, inputs, targets, metrics, and conclusion for each experiment. W
 will substantially reorganize the paper around these items and narrow claims where
 the target is computationally derived.
 
-\medskip
+\questionsep
 \textbf{7Gar-1.}\quad
+\revcomment{In-house data scale. Please quantify precisely how much new in-house
+data is contributed relative to HEST-1K and STimage-1K4M (samples, tissues,
+platforms, spots/cells), ideally as a comparison table. What fraction of the
+resource is genuinely new vs.\ aggregated?}
+
+\response
+We agree that the previous manuscript did not separate new primary acquisition
+from aggregation and processing. We audited the release sample by sample against
+HEST-1K (v1.1.0) and STimage-1K4M (metadata snapshot 2025-02-12), assigning samples
+to mutually exclusive categories in the order HEST overlap, STimage-only overlap,
+and other public data. The in-house contribution is one shared Yale pilot study
+without an accession, comprising four cell-line samples:
+C414 (\(2{,}430\) cells), its replicate C416 (\(2{,}496\)),
+HD701 (\(2{,}497\)), and AD715 (\(2{,}383\)). All four use DBiC-seq, with a
+\(50\times50\) paired grid and matched DAPI, membrane, and expression
+measurements.
+
+\begin{center}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{
+  >{\raggedright\arraybackslash}p{0.19\linewidth}
+  >{\raggedright\arraybackslash}p{0.10\linewidth}
+  >{\raggedright\arraybackslash}X
+  >{\raggedright\arraybackslash}p{0.13\linewidth}
+  >{\raggedleft\arraybackslash}p{0.13\linewidth}
+  >{\raggedleft\arraybackslash}p{0.13\linewidth}}
+\toprule
+Category & Slides/ samples & Organs / cell-line origin & Platforms &
+Measured/source units after QC & Aligned target cells after QC \\
+\midrule
+New in-house primary data &
+4 &
+3 cell-line origins: mouse-embryo 3T3 fibroblast; cervical HeLa; lung
+adenocarcinoma A549 &
+DBiC-seq &
+9,806 &
+9,806 \\
+Public, overlapping HEST-1K &
+32 unique slides (33 records) &
+22 species--organ strata &
+Xenium; Visium HD &
+11,611,127 &
+11,051,149 \\
+Public, overlapping STimage-1K4M only &
+2 &
+2 species--organ strata &
+Visium HD &
+377,753 &
+213,405 \\
+Other public data &
+32 &
+16 species--organ strata &
+Xenium; Visium HD &
+11,954,946 &
+8,981,615 \\
+\textbf{Total sMMC-22M} &
+\textbf{70 unique samples (71 records)} &
+\textbf{25 tissue strata + 3 cell-line origins} &
+\textbf{Xenium; Visium HD; DBiC-seq} &
+\textbf{23,953,632} &
+\textbf{20,255,975} \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{center}
+
+Thus, genuinely new primary acquisition represents \(4/70=5.7\%\) of unique
+source samples, \(9{,}806/23{,}953{,}632=0.041\%\) of measured/source units, and
+\(9{,}806/20{,}255{,}975=0.048\%\) of aligned target cells. Conversely,
+\(94.3\%\) of source samples and \(99.952\%\) of aligned target cells originate
+from public data. The in-house pilot therefore adds three cell-line origins, not
+new patient tissues or organ cohorts; in particular, 3T3 is a mouse-embryo-derived
+fibroblast line, not brain tissue. We will revise the paper to state directly that
+the resource's scale comes predominantly from public-data aggregation and
+harmonization, while the genuinely new primary component is small.
+
+For transparency, one HEST-overlapping breast slide occurs as two versioned
+processing records, which is why the table distinguishes 70 unique samples from 71
+records. Public Visium HD ``measured/source units'' are pre-aggregation
+source/segmentation records; their aligned column reports canonical
+2-\(\mu\)m bin-to-cell targets. Native Xenium cells are already cell resolved.
+
+\questionsep
+\textbf{7Gar-2.}\quad
 \revcomment{The purpose and biological meaning of the scale, resolution, and context
 experiments are unclear.}
 
@@ -84,6 +173,17 @@ STBoost-Ref gene-wise Pearson correlations of \(0.4523\), \(0.5178\), \(0.3366\)
 respectively. We will add the complete per-organ table and emphasize the substantial
 variation rather than only a pooled average.
 
+We also audited four evaluations on native Xenium segmented-cell targets. Using
+training-selected top/HVG panels under a fixed within-sample random-cell split,
+colon and breast obtained gene-wise Pearson/Spearman correlations of
+\(0.541/0.544\) and \(0.512/0.585\); ovary and skin obtained
+\(0.406/0.459\) and \(0.509/0.384\). The recovered genes include epithelial,
+immune, stromal, and smooth-muscle markers. We will label these as in-domain
+marker-level diagnostics rather than sample-held-out validation.
+The corresponding image-model/coordinate-only gene-wise Pearson values were
+\(0.541/0.238\), \(0.512/0.116\), \(0.406/0.285\), and \(0.509/0.257\);
+100-replicate spatial-block bootstrap intervals did not overlap for any sample.
+
 For context, we agree that the ovarian analysis is currently a case study. AK, AD,
 and AL are anonymized ovarian sample identifiers; the comparison also changes
 patient/tissue context and currently uses unequal gene panels. Therefore it does not
@@ -94,53 +194,44 @@ metrics, and uncertainty estimates; insert the result and rewrite the claim as
 ``age-associated'' only if supported while explicitly retaining patient/tissue-state
 confounding.}
 
-\medskip
-\textbf{7Gar-2.}\quad
+\questionsep
+\textbf{7Gar-3.}\quad
 \revcomment{The cell-level profiles and generated textual context are derived but
 not validated; the pipeline and example records should be shown.}
 
 \response
 We agree. We will distinguish platform-native measurements from derived fields.
 Xenium provides transcript coordinates and cell masks. For Visium HD, registered
-8-\(\mu\)m bin counts are aggregated to segmented H\&E cell footprints; these are
+2-\(\mu\)m bin counts are aggregated to segmented H\&E cell footprints; these are
 cell-aligned computational targets, not direct single-cell measurements. Textual
 captions are metadata-grounded generated annotations and are not used as molecular
 ground truth. A representative record will show the raw provenance, local and
 context crops, coordinates, processed expression, metadata, generated text, and
 split key.
 
-\needinfo{Insert the exact boundary-bin assignment rule, segmentation model/version,
-registration procedure, QC thresholds, and the number/fraction of cells and bins
-removed by each QC step.}
+The audited released rule assigns intersecting closed bin squares to CellViT
+polygons and resolves multi-cell claims by nearest centroid, with raw-cell index as
+an exact-tie breaker. The 8-\(\mu\)m files are legacy QC/fallback artifacts.
 
-\needexp{Insert Visium HD validation under boundary-bin discard and mask
-erosion/dilation, with retained-cell rates, expression agreement, marker consistency,
-and downstream sensitivity; include cell-resolved external concordance where
-available.}
+\needinfo{Insert the CellViT model/version, registration implementation, QC
+thresholds, and the number/fraction of cells and bins removed by each QC step.}
+
+Across lung A, lung B, and ovary, strict-interior assignment retained
+\(62.5\%/56.1\%/80.7\%\) of default cells and
+\(16.0\%/11.0\%/20.5\%\) of default bins. One-bin dilation retained essentially all
+cells but increased assigned bins to \(181.9\%--196.2\%\) of default. These completed
+assignment-level results demonstrate material boundary sensitivity.
+
+\needexp{Insert matched-cell expression agreement, HVG/marker stability,
+coarse-state concordance, and fixed-checkpoint downstream sensitivity with
+uncertainty for the completed strict/eroded/dilated aggregations.}
 
 \needexp{Insert a blinded human factuality audit of generated captions: number of
 records and raters, expertise, rubric, supported/unsupported statement rates, error
 types, and inter-rater agreement. Until then, label captions as optional unvalidated
 generated fields.}
 
-\medskip
-\textbf{7Gar-3.}\quad
-\revcomment{Please quantify the genuinely new in-house contribution relative to
-aggregated public resources such as HEST-1K and STimage-1K4M.}
-
-\response
-We agree that our current wording is ambiguous. The count of 23,943,826 refers to
-the released aligned records, not automatically to newly acquired specimens. We
-will separate (i) source measurements from public studies, (ii) any newly acquired
-in-house measurements, and (iii) newly created harmonized/derived artifacts. We will
-not equate aggregation with new biological acquisition.
-
-\needinfo{Insert a source-audited comparison table giving, for sMMC-22M overall and
-for the genuinely in-house subset, the numbers of studies, samples, patients/animals,
-organs, platforms, spots/bins/cells, and unique cells not present in HEST-1K or
-STimage-1K4M. Include source IDs and deduplication rules.}
-
-\medskip
+\questionsep
 \textbf{7Gar-4.}\quad
 \revcomment{The spot-to-cell component uses existing bin2cell-style methodology and
 is not positioned against prior work.}
@@ -154,7 +245,7 @@ spot/bin-to-cell construction before downstream experiments and expand related w
 on Bin2Cell and other spot-to-cell or super-resolution methods. We will state that
 derived Visium HD targets inherit the assumptions of those methods.
 
-\medskip
+\questionsep
 \textbf{7Gar-5.}\quad
 \revcomment{STBoost, STBoost-Ref, ``Ours,'' STBoosted BLEEP, BLEEP, Table 2, and the
 inference protocol are unclear.}
@@ -180,7 +271,7 @@ to the construction and split sections. We will introduce BLEEP and STBoost befo
 their first use, define AK/AD/AL in the text, add the missing task/metric/ratio
 definitions to Figure 2, and remove repetitive framing.
 
-\medskip
+\questionsep
 \textbf{7Gar-6.}\quad
 \revcomment{Data accessibility, reproducibility, and reference formatting are
 inadequate.}

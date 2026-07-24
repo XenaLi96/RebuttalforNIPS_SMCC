@@ -21,9 +21,9 @@
 | 顺位 | 项目 | 致命性 | Reviewer 覆盖 | 完成速度 | 当前状态 | 依赖 |
 |---:|---|---|---|---|---|---|
 | 1 | P0 canonical audit | Blocking | aSvP、vCPF、7Gar、kUmZ | 快，CPU/人工 | `[!]` 初版已生成，缺 verified donor/context metadata | 无 |
-| 2 | P1A Visium HD boundary sensitivity | Blocking | vCPF、7Gar、kUmZ | 中，CPU | `[~]` 2/9 aggregation tasks 完成 | P0 样本定义 |
-| 3 | P1B native Xenium benchmark | Blocking | 四位 reviewer | 中，GPU | `[~]` sample-held-out array 运行/排队中 | P0 donor 定义 |
-| 4 | P2 eight-organ breadth | High | aSvP、vCPF、7Gar、kUmZ | 中，GPU | `[ ]` pipeline ready，未提交 | P0 样本/organ 定义 |
+| 2 | P1A Visium HD boundary sensitivity | Blocking | vCPF、7Gar、kUmZ | 中，CPU | `[~]` 9/9 perturbation aggregations 完成；下游比较未完成 | P0 样本定义 |
+| 3 | P1B native Xenium benchmark | Blocking | 四位 reviewer | 中，GPU | `[~]` 7/12 sample-held-out folds 完成；其余运行/排队 | P0 donor 定义 |
+| 4 | P2 eight-organ breadth | High | aSvP、vCPF、7Gar、kUmZ | 中，GPU | `[~]` canonical-2µm array `257544` 已提交 | P0 样本/organ 定义 |
 | 5 | P3 Xenium pseudo-spot control | High | kUmZ、7Gar、vCPF | 中，GPU | `[ ]` 未开始 | P1B pipeline 稳定 |
 | 6 | P5 caption factuality audit | Medium | 7Gar、vCPF | 快，人工 | `[ ]` 未开始 | P0 分层字段 |
 | 7 | P4 support-calibrated context-bias audit | Medium--High | 四位 reviewer | 慢，GPU/统计 | `[!]` 等待 support matrix | P0 完成 |
@@ -32,16 +32,26 @@
 ## 当前并行队列
 
 - `[~]` CPU-1：P0 manifest 已生成，但 author metadata override 尚未补齐。
-- `[~]` CPU-2：P1A job `257454`；仅 task 0 (`k/strict_interior`) 和 task 2 (`ad/strict_interior`) 完成，其余 7 个 task 因 `/lv_scratch` 写权限失败。
-- `[~]` GPU-1：P1B 原 job `257463` 仅 task 0 完成；tasks 1--11 已由 `257484` 重提，task 1--2 运行中、3--11 排队；summary job `257486` 等待中。
-- `[ ]` GPU-2：P2 已有 eight-pair manifest 和提交脚本，尚无正式 job ID。
+- `[~]` CPU-2：P1A 失败 tasks 已改到共享 output root 并以 job `257513`
+  重提；`3 samples × 3 variants` 全部完成。assignment-level summary 已生成，
+  matched-cell expression/marker/state/benchmark 分析待完成。
+- `[~]` GPU-1：P1B 原 job `257463` 仅 task 0 完成；tasks 1--7 由 `257484`
+  运行，其中 7 folds 已完成、task 3 仍运行。H-Optimus-0 tasks 8--11
+  因 node-local scratch 失败后已切换共享 cache 并以 `257549` 重提；
+  corrected summary job 为 `257550`。
+- `[~]` GPU-2：首次 P2 job `257517` 因 Slurm spool 路径失败；`257530`
+  暴露 legacy 8-µm cache 后已停止。已修正为隔离的 canonical-2µm cache，
+  正式 array `257544` 与 dependent summary `257546` 已提交。
 
 **下一轮按此顺序清空**
 
 1. P0：作者补 source/study/sample/donor/context mapping，并重新生成三张表。
-2. P1A：修正 output root，只重提失败的 7 个 tasks；完成后立即做 aggregation/marker/state/benchmark summary。
-3. P1B：等待 `257484`，逐 fold 验证 alignment、gene panel 和 baselines；不要重复提交运行中的 tasks。
-4. P2：有空闲 GPU 即提交最低版本 eight-organ UNI2-h + training mean。
+2. P1A：完成 common-cell expression、marker/state 与固定-checkpoint
+   benchmark summary；assignment-level 结果已写入 rebuttal。
+3. P1B：等待 `257484` 剩余 folds；逐 fold 验证 alignment、gene panel 和
+   baselines。当前已完成 folds 的 image signal 接近零且未优于 metadata baseline，
+   必须作为主要风险复核。
+4. P2：监控 canonical-2µm array `257544`；不得恢复 legacy 8-µm cache。
 5. P5：GPU 运行期间冻结抽样 seed、record IDs 和双人标注 rubric。
 
 ---
@@ -52,7 +62,7 @@
 
 - aSvP-2：heterogeneity 及其下游影响。
 - vCPF-6：measured / processed / generated provenance。
-- 7Gar-3、7Gar-6：in-house contribution、data access/reproducibility。
+- 7Gar-1、7Gar-6：in-house contribution、data access/reproducibility。
 - kUmZ-5、kUmZ-6、kUmZ-8：patient/animal counts、demographics、22M/23M 命名。
 
 **当前证据**
@@ -72,17 +82,20 @@
 - `[x]` 当前 native + derived expression targets 合计 20,246,169。
 - `[x]` 53、66、67 的来源已追溯；它们不是可互换的 biological-study counts。
 - `[x]` 8 µm 文件只用于 legacy QC/fallback，不是 canonical expression target。
-- `[x]` 当前本地 manifest 没有证据确认 in-house biological samples；当前只能写“0 documented”，不能写“确定不存在”。
+- `[x]` 作者确认 4 个 in-house DBiC-seq cell-line samples（C414、C416、
+  HD701、AD715），QC 后 measured/aligned cells 均合计 9,806；它们来自
+  1 个无 accession 的 Yale pilot，不作为新增患者组织或器官队列。
 
 **待清空**
 
 - `[!]` 由作者为 67 个 included source records 补充 evidence-backed：
   `study_id`、`biological_sample_id`、`patient_id/donor_id`、age、sex、disease、public/in-house。
-- `[ ]` 区分并冻结四层计数：
+- `[x]` 区分并冻结四层计数：
   upstream source、biological samples、native targets、derived targets。
 - `[ ]` 决定 manuscript headline 使用哪个数量；同步修正 22M/23.94M/20.25M 的含义，不得把 7.63M source count 当作 3.93M derived matrix rows。
 - `[ ]` 根据真实 pipeline 全文统一 2 µm 与 8 µm 描述。
-- `[ ]` 重新生成并人工核验三张 rebuttal 表：
+- `[~]` 已生成并核验 provenance 和 organ/platform/cell 计数；donor/context
+  字段仍缺，因此第三张表尚未完成：
   1. public aggregation / documented in-house biological samples / processed derivatives；
   2. 每 organ 的 samples、patients/donors、platforms、native/derived cells；
   3. 每个 context comparison 的 independent-donor support。
@@ -95,7 +108,8 @@
 
 - `[ ]` 三张表中的总数可以从 canonical manifest 无歧义复算。
 - `[ ]` 所有 cross-patient/context claims 都能追溯到独立 donor IDs；否则降级为 cross-sample 或 sample/context-confounded shift。
-- `[ ]` P0 表格已写入对应 rebuttal 段落并标注来源。
+- `[~]` 已将 verified counting layers、2-µm rule 和 long-tail summary 写入
+  四份 rebuttal；donor/context 位置保留显式 author-input placeholder。
 
 ---
 
@@ -121,17 +135,18 @@
 
 - `rebuttal_experiments/p1a_visium_boundary/experiment_manifest.json`
 - `rebuttal_experiments/p1a_visium_boundary/slurm_array_manifest.tsv`
-- Slurm job `257454`
+- Slurm jobs `257454`、共享路径重提 `257513`
+- `rebuttal_experiments/outputs/p1a_visium_boundary/summary/assignment_sensitivity.{csv,md}`
 
 **待清空**
 
 - `[x]` `k/strict_interior` aggregation 完成。
 - `[x]` `ad/strict_interior` aggregation 完成。
-- `[!]` 修正 scratch output root；不得继续写无权限的 `/lv_scratch`。
-- `[ ]` 重跑 `d/strict_interior`。
-- `[ ]` 完成 `k,d,ad × erode1`。
-- `[ ]` 完成 `k,d,ad × dilate1`。
-- `[ ]` 为每个 sample/variant 报告 retained cells、assigned bins、UMI、detected genes。
+- `[x]` scratch output root 已改为共享 project path，已完成结果也已核验迁移。
+- `[x]` `d/strict_interior`。
+- `[x]` `k,d,ad × erode1`。
+- `[x]` `k,d,ad × dilate1`。
+- `[x]` 已汇总 retained cells、assigned bins、UMI、detected genes。
 - `[ ]` 在相同 cell 与 gene 交集上计算相对 default 的 per-cell Pearson/Spearman。
 - `[ ]` 计算 HVG rank stability 和预定义 marker-gene rank stability；marker list 必须在看结果前冻结。
 - `[ ]` 计算 coarse cell-state assignment concordance。
@@ -141,10 +156,11 @@
 
 **完成门槛**
 
-- `[ ]` 3 samples × 4 variants 全部可追溯，default 不被覆盖。
+- `[x]` 3 samples × 4 variants 全部可追溯，default 未被覆盖。
 - `[ ]` 一张 robustness 主表 + 一张 marker/state stability 补充表完成。
 - `[ ]` 结论区分“aggregation 对合理 boundary 变化稳定”与“derived target 等同真实 single-cell ground truth”；后者不得声称。
-- `[ ]` 结果写入 vCPF-1、7Gar-2、kUmZ-1/4/9。
+- `[~]` assignment-level 结果已写入 vCPF-1、7Gar-2、kUmZ-1；
+  expression/marker/state/benchmark 结果仍待补。
 
 ---
 
@@ -170,7 +186,8 @@
 
 - `rebuttal_experiments/p1b_xenium_native/runs.tsv`
 - `rebuttal_experiments/p1b_xenium_native/README.md`
-- Slurm jobs：`257463`、重提 `257484`、summary `257486`
+- Slurm jobs：`257463`、重提 `257484`、H-Optimus-0 重提 `257549`、
+  corrected summary `257550`
 - 已有 within-sample random-cell supporting evidence：
   `rebuttal_experiments/p1b_xenium_native/existing_examples_rebuttal.md`
 - 已有四样本 CPU baseline/CI outputs：
@@ -178,8 +195,11 @@
 
 **待清空**
 
-- `[x]` lung `HLCD033 -> HLCX022` / UNI2-h fold 完成。
-- `[~]` 其余 11 个 sample-held-out encoder folds 正在运行或排队。
+- `[x]` 7/12 folds 已完成：3 个 UNI2-h 与 4 个 ResNet50。
+- `[~]` 剩余一个 UNI2-h fold 与四个 H-Optimus-0 folds 正在运行或排队。
+- `[!]` 当前 completed folds 的 image-model all-gene/marker/program
+  correlations接近零，并一致低于 metadata-only baseline；在完整 summary
+  之前不得据此声称 robust native-cell transfer。
 - `[ ]` summary job 完成，并检查所有 fold 使用相同 H&E alignment、gene harmonization 和 target transform。
 - `[ ]` 核对 inverse `*_he_imagealignment.csv` 映射；抽样可视化 cell centroid 与 H&E crop。
 - `[ ]` training mean、coordinate-only、metadata-only 都只能使用 training-split information。
@@ -227,11 +247,14 @@
 - `rebuttal_experiments/p2_hd_breadth/pair_manifest.tsv`
 - `rebuttal_experiments/p2_hd_breadth/submit_hd_breadth.py`
 - `rebuttal_experiments/p2_hd_breadth/summarize_hd_breadth.py`
+- Slurm array `257544`；dependent summary `257546`
 
 **待清空**
 
 - `[x]` eight-pair manifest、UNI2-h runner、training-mean summary 已准备。
-- `[ ]` 正式提交 eight-organ UNI2-h array，并记录 job IDs。
+- `[x]` 已隔离 canonical `single_cell_from_002um` cache；不复用 legacy
+  `bleep_hie_exp1/data` 8-µm cache。
+- `[~]` eight-organ UNI2-h array `257544` 已提交；等待 8/8 完成。
 - `[ ]` 每个 sample 固定、等量抽样；保存实际 train/test cell counts。
 - `[ ]` 每 organ 一行，报告 organ-macro mean、median/IQR、worst organ。
 - `[ ]` training-mean 的 gene-wise Pearson/Spearman 因 constant prediction 为 undefined，必须写 `NA`，不得写 0。

@@ -10,8 +10,9 @@
 \setlength{\parskip}{0.45em}
 \setlength{\emergencystretch}{2em}
 
-\newcommand{\revcomment}[1]{\textbf{Reviewer comment.} \emph{#1}}
-\newcommand{\response}{\textbf{Response.}}
+\newcommand{\revcomment}[1]{\textcolor{black}{\textbf{Reviewer comment. #1}}}
+\newcommand{\questionsep}{\par\vspace{1.25em}}
+\newcommand{\response}{\textbf{Response.}\enspace}
 \newcommand{\needexp}[1]{\textcolor{red}{\textbf{[EXPERIMENT TO INSERT:} #1\textbf{]}}}
 \newcommand{\needinfo}[1]{\textcolor{red}{\textbf{[AUTHOR INPUT TO INSERT:} #1\textbf{]}}}
 
@@ -32,7 +33,7 @@ the resource should expose concrete analysis challenges and enable conclusions t
 smaller, less diverse collections cannot support. We will therefore make the
 benchmark objectives and the effects of dataset heterogeneity more explicit.
 
-\medskip
+\questionsep
 \textbf{aSvP-1.}\quad
 \revcomment{The extent to which the larger, higher-resolution, and context-rich
 dataset can promote research progress is not fully explained.}
@@ -48,7 +49,7 @@ evaluations practical:
   \item \textbf{Cell-aligned resolution:} each record links a cell-centered local
   image, a wider tissue-context image, coordinates, and an expression target. For
   Xenium the molecular measurements are natively cell resolved; for Visium HD the
-  target is a boundary-aware aggregation of 8-\(\mu\)m bins and will be described as
+  target is a boundary-aware aggregation of native 2-\(\mu\)m bins and will be described as
   \emph{cell-aligned}, not as error-free single-cell ground truth.
   \item \textbf{Context-aware failure analysis:} metadata allow performance to be
   stratified rather than hiding patient, organ, or acquisition shifts in a pooled
@@ -84,23 +85,54 @@ cell-state prediction from inferred expression reaches \(0.5935\) accuracy and
 agreement is useful calibration: predicted expression retains some biological
 signal, but is not a substitute for direct molecular measurement.
 
-\needexp{Add a prespecified, non-post-hoc biological evaluation across the final
-organ set (for example, marker-gene recovery or cell-state prediction), reporting
-per-organ values, macro average, confidence intervals, and the exact number of
-samples/cells.}
+We additionally audited four existing evaluations whose expression targets are
+native Xenium segmented cells. Under a fixed 70/10/20 within-sample random-cell
+split and training-selected top/HVG panels, colon (\(n=77{,}636\) test cells) and
+breast (\(n=114{,}907\)) achieved gene-wise Pearson/Spearman correlations of
+\(0.541/0.544\) and \(0.512/0.585\), respectively. Ovary
+(\(n=4{,}000\)) and skin (\(n=13{,}696\)) yielded
+\(0.406/0.459\) and \(0.509/0.384\). Recovered genes included
+TFF3/EPCAM and IGKC/JCHAIN in colon, MUC1/GATA3 in breast, and a coherent
+DES/MYH11/MYLK/ACTG2/ACTA2 smooth-muscle program in skin. These results provide
+marker-level evidence on native targets, but the random-cell split may exploit
+within-sample spatial structure and is not evidence of sample-held-out
+generalization.
 
-\medskip
+Against coordinate-only baselines, image-model gene-wise Pearson correlation was
+\(0.541\) versus \(0.238\) in colon, \(0.512\) versus \(0.116\) in breast,
+\(0.406\) versus \(0.285\) in ovary, and \(0.509\) versus \(0.257\) in skin.
+Across 100 spatial-block bootstrap replicates, none of the four image-model
+gene-correlation 95\% confidence intervals overlapped its coordinate-only interval.
+
+\needexp{Insert the ongoing native-Xenium sample-held-out benchmark with
+training-mean, coordinate-only, and metadata-only baselines; report prespecified
+marker/program and coarse-state metrics, per-sample values, and uncertainty.}
+
+\questionsep
 \textbf{aSvP-2.}\quad
 \revcomment{The increased scale, resolution, and context may also increase
 heterogeneity. Please clarify that heterogeneity and how it influences downstream
 analysis.}
 
 \response
-We agree. sMMC-22M contains 23,943,826 aligned cell records across 25 organ
-categories. The two platforms already differ substantially in representation:
-Xenium contributes 16,314,129 cells from 42 studies, whereas Visium HD contributes
-7,629,697 cells from 24 studies. In addition, organs differ in sample size, gene
-panel, tissue state, morphology, donor composition, and metadata completeness.
+We agree. Our canonical audit separates source-package counts from final expression
+targets. The public component contains 42 native Xenium packages with 16,314,129
+target cells and 25 Visium HD source packages with 7,629,697 pre-aggregation
+source/segmentation records. The canonical 2-\(\mu\)m bin-to-cell matrices contain
+3,932,040 derived Visium HD target rows, giving 20,246,169 public aligned targets
+across 25 species--organ strata. Four in-house Yale pilot DBiC-seq cell-line
+samples add 9,806 measured and aligned cells, for a record-level total of
+20,255,975 aligned
+targets. The release therefore contains 70 unique source samples represented by 71
+processing records; these records are not independently verified studies or
+donors.
+
+Among the public tissue strata, the imbalance is substantial: target counts range
+from 26,366 (human heart) to
+3,559,793 (human breast), a 135-fold range; the median is 384,121
+(IQR 225,906--880,627). Gene coverage ranges from 450 to 72,302, and only 10 of
+25 strata are represented on both platforms. Organs also differ in tissue state,
+morphology, donor composition, and metadata completeness.
 Consequently, randomly pooled performance can be dominated by the largest
 organ/platform strata and can overstate generalization through spatial or
 within-sample autocorrelation.
@@ -110,16 +142,18 @@ We will make these consequences operational in the benchmark:
 \begin{itemize}
   \item report platform-separated and organ-macro averages rather than only a
   cell-weighted pooled average;
-  \item publish split keys at the study/patient level and distinguish in-domain
-  interpolation from cross-patient or cross-study transfer;
+  \item publish split keys at the highest verified biological unit and distinguish
+  in-domain interpolation from cross-sample transfer; ``cross-patient'' will be used
+  only where independent patient IDs are documented;
   \item report gene-panel overlap and metadata missingness for each evaluation;
   \item attach a provenance label to every field (directly measured, processed, or
   generated), so users can select a reliability tier appropriate to their task.
 \end{itemize}
 
-\needexp{Insert the heterogeneity audit table: cells and samples per organ/platform,
-gene-panel size and pairwise overlap, donor/patient counts, tissue-state coverage,
-metadata missingness, and long-tail imbalance statistics.}
+\needinfo{Complete the audited heterogeneity table with evidence-backed biological
+sample and donor/patient IDs, tissue-state labels, and metadata missingness. The
+organ/platform cell counts, gene ranges, and long-tail statistics are already
+verified; donor-level claims remain unsupported until these fields are supplied.}
 
 \needexp{Insert stratified downstream results showing how performance changes across
 platforms, organs, patients/studies, panel-overlap bins, and metadata-completeness
@@ -131,7 +165,7 @@ groups may be underrepresented, and that processed Visium HD cell profiles inher
 segmentation and aggregation uncertainty. These changes turn heterogeneity from an
 unreported nuisance into an explicit benchmark variable and a documented limitation.
 
-\medskip
+\questionsep
 \textbf{Planned manuscript changes.}
 We will (i) add the platform/organ composition and heterogeneity tables, (ii) add the
 five-organ result summary and the broader biological evaluation once completed,
