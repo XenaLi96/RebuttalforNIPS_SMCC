@@ -2,7 +2,7 @@
 \usepackage[margin=0.70in]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{tabularx}
@@ -16,6 +16,7 @@
 \newcommand{\response}{\textbf{Response.}\enspace}
 \newcommand{\needexp}[1]{\textcolor{red}{\textbf{[EXPERIMENT TO INSERT:} #1\textbf{]}}}
 \newcommand{\needinfo}[1]{\textcolor{red}{\textbf{[AUTHOR INPUT TO INSERT:} #1\textbf{]}}}
+\definecolor{inhouseblue}{RGB}{225,240,255}
 
 \begin{document}
 
@@ -51,11 +52,55 @@ To quantify overlap with existing resources, we audited the submitted sMMC-22M
 manifest sample by sample against HEST-1K (v1.1.0) and STimage-1K4M (metadata
 snapshot 2025-02-12), assigning samples to mutually exclusive categories in the
 order HEST overlap, STimage-only overlap, other public data, and new in-house
-primary data. The table below reports the QC-frozen submitted manifest.
+primary data. The updated rebuttal-time manifest additionally includes 12 Visium
+HD samples under other public data. The table below reports this sMMC-28M working
+manifest.
 
-\begin{center} \begingroup \footnotesize \setlength{\tabcolsep}{3pt} \renewcommand{\arraystretch}{1.12} \begin{tabularx}{\linewidth}{ >{\raggedright\arraybackslash}p{0.19\linewidth} >{\raggedright\arraybackslash}p{0.10\linewidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.13\linewidth} >{\raggedleft\arraybackslash}p{0.13\linewidth} >{\raggedleft\arraybackslash}p{0.13\linewidth}} \toprule Category & Slides/ samples & Organs / cell-line origin & Platforms & Measured/source units & Aligned target cells after QC \\ \midrule New in-house primary data & 21 & mouse-embryo; cervical; lung & DBiC-seq & 54,304 & 53,989 \\ Public, overlapping HEST-1K & 32 unique slides (33 records) & 22 species--organ strata & Xenium; Visium HD & 11,611,127 & 11,051,149 \\ Public, overlapping STimage-1K4M only & 2 & 2 species--organ strata & Visium HD & 377,753 & 213,405 \\ Other public data & 32 & 16 species--organ strata & Xenium; Visium HD & 11,954,946 & 8,981,615 \\ \textbf{Total sMMC-22M} & \textbf{87 unique samples (88 records)} & \textbf{25 tissue strata + 3 cell-line origins} & \textbf{Xenium; Visium HD; DBiC-seq} & \textbf{23,998,130} & \textbf{20,300,158} \\ \bottomrule \end{tabularx} \endgroup \end{center}
-
-% ---- keep the current comparison table here ----
+\begin{center}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{
+  >{\raggedright\arraybackslash}p{0.22\linewidth}
+  >{\raggedright\arraybackslash}p{0.12\linewidth}
+  >{\raggedright\arraybackslash}X
+  >{\raggedright\arraybackslash}p{0.15\linewidth}
+  >{\raggedleft\arraybackslash}p{0.17\linewidth}}
+\toprule
+Category & Slides/samples & Organs / cell-line origin & Platforms &
+Aligned target cells after QC \\
+\midrule
+\rowcolor{inhouseblue}
+New in-house primary data &
+21 &
+mouse-embryo; cervical; lung &
+DBiC-seq &
+53,989 \\
+Public, overlapping HEST-1K &
+32 unique slides (33 records) &
+22 species--organ strata &
+Xenium; Visium HD &
+11,051,149 \\
+Public, overlapping STimage-1K4M only &
+2 &
+2 species--organ strata &
+Visium HD &
+213,405 \\
+Other public data &
+44 &
+16 species--organ strata &
+Xenium; Visium HD &
+16,996,704 \\
+\textbf{Total sMMC-28M} &
+\textbf{99 unique samples (100 records)} &
+\textbf{25 tissue strata + 3 cell-line origins} &
+\textbf{Xenium; Visium HD; DBiC-seq} &
+\textbf{28,315,247} \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{center}
 
 The 21 in-house samples contain 54,304 measured cells. Final paired-record QC
 removes 315 cells, leaving 53,989 aligned target cells.
@@ -74,10 +119,10 @@ separately in the final sMMC-28M manifest with exact sample counts, cell counts,
 checksums, and fractions.
 
 For transparency, one HEST-overlapping breast slide appears as two versioned
-processing records. Public Visium HD ``measured/source units'' are
-pre-aggregation source or segmentation records, whereas the aligned-cell column
-reports canonical 2-\(\mu\)m bin-to-cell targets. Native Xenium and DBiC-seq
-records are already cell aligned.
+processing records, which is why the table distinguishes 99 unique samples from
+100 records. Public Visium HD aligned-cell counts report canonical
+2-\(\mu\)m bin-to-cell targets, whereas native Xenium and DBiC-seq records are
+already cell aligned.
 
 
 
