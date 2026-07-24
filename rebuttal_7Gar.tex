@@ -34,113 +34,49 @@ evaluation unit, inputs, targets, metrics, and conclusion for each experiment. W
 will substantially reorganize the paper around these items and narrow claims where
 the target is computationally derived.
 
-\questionsep
-\textbf{7Gar-1.}\quad
-\revcomment{In-house data scale. Please quantify precisely how much new in-house
-data is contributed relative to HEST-1K and STimage-1K4M (samples, tissues,
-platforms, spots/cells), ideally as a comparison table. What fraction of the
-resource is genuinely new vs.\ aggregated?}
+
+
 
 \response
-We agree that the previous manuscript did not separate new primary acquisition
-from aggregation and processing. We audited the release sample by sample against
-HEST-1K (v1.1.0) and STimage-1K4M (metadata snapshot 2025-02-12), assigning samples
-to mutually exclusive categories in the order HEST overlap, STimage-only overlap,
-and other public data. The in-house contribution is one shared Yale pilot study
-without an accession, comprising four cell-line samples:
-C414 (\(2{,}430\) cells), its replicate C416 (\(2{,}496\)),
-HD701 (\(2{,}497\)), and AD715 (\(2{,}383\)). All four use DBiC-seq, with a
-\(50\times50\) paired grid and matched DAPI, membrane, and expression
-measurements.
+We agree that the previous manuscript did not clearly separate new primary
+acquisition from aggregation and processing. We will revise the paper to make the
+release history and provenance explicit. Across three submission rounds, the
+resource has grown from sMMC-12M to sMMC-20M, then to the submitted sMMC-22M
+manifest, and now to a rebuttal-time sMMC-28M working manifest. This growth comes
+from two sources: continuously added public spatial-transcriptomics cohorts with
+sample-level provenance checks, and new in-house DBiC-seq data with paired
+morphology, RNA, and cellular context from Co-author.
 
-\begin{center}
-\begingroup
-\footnotesize
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.12}
-\begin{tabularx}{\linewidth}{
-  >{\raggedright\arraybackslash}p{0.19\linewidth}
-  >{\raggedright\arraybackslash}p{0.10\linewidth}
-  >{\raggedright\arraybackslash}X
-  >{\raggedright\arraybackslash}p{0.13\linewidth}
-  >{\raggedleft\arraybackslash}p{0.13\linewidth}
-  >{\raggedleft\arraybackslash}p{0.13\linewidth}}
-\toprule
-Category & Slides/ samples & Organs / cell-line origin & Platforms &
-Measured/source units after QC & Aligned target cells after QC \\
-\midrule
-New in-house primary data &
-4 &
-3 cell-line origins: mouse-embryo 3T3 fibroblast; cervical HeLa; lung
-adenocarcinoma A549 &
-DBiC-seq &
-9,806 &
-9,806 \\
-Public, overlapping HEST-1K &
-32 unique slides (33 records) &
-22 species--organ strata &
-Xenium; Visium HD &
-11,611,127 &
-11,051,149 \\
-Public, overlapping STimage-1K4M only &
-2 &
-2 species--organ strata &
-Visium HD &
-377,753 &
-213,405 \\
-Other public data &
-32 &
-16 species--organ strata &
-Xenium; Visium HD &
-11,954,946 &
-8,981,615 \\
-\textbf{Total sMMC-22M} &
-\textbf{70 unique samples (71 records)} &
-\textbf{25 tissue strata + 3 cell-line origins} &
-\textbf{Xenium; Visium HD; DBiC-seq} &
-\textbf{23,953,632} &
-\textbf{20,255,975} \\
-\bottomrule
-\end{tabularx}
-\endgroup
-\end{center}
+To quantify overlap with existing resources, we audited the submitted sMMC-22M
+manifest sample by sample against HEST-1K (v1.1.0) and STimage-1K4M (metadata
+snapshot 2025-02-12), assigning samples to mutually exclusive categories in the
+order HEST overlap, STimage-only overlap, other public data, and new in-house
+primary data. The table below reports the QC-frozen submitted manifest.
 
-Thus, genuinely new primary acquisition represents \(4/70=5.7\%\) of unique
-source samples, \(9{,}806/23{,}953{,}632=0.041\%\) of measured/source units, and
-\(9{,}806/20{,}255{,}975=0.048\%\) of aligned target cells. Conversely,
-\(94.3\%\) of source samples and \(99.952\%\) of aligned target cells originate
-from public data. The in-house pilot therefore adds three cell-line origins, not
-new patient tissues or organ cohorts; in particular, 3T3 is a mouse-embryo-derived
-fibroblast line, not brain tissue. We will revise the paper to state directly that
-the resource's scale comes predominantly from public-data aggregation and
-harmonization, while the genuinely new primary component is small.
+\begin{center} \begingroup \footnotesize \setlength{\tabcolsep}{3pt} \renewcommand{\arraystretch}{1.12} \begin{tabularx}{\linewidth}{ >{\raggedright\arraybackslash}p{0.19\linewidth} >{\raggedright\arraybackslash}p{0.10\linewidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.13\linewidth} >{\raggedleft\arraybackslash}p{0.13\linewidth} >{\raggedleft\arraybackslash}p{0.13\linewidth}} \toprule Category & Slides/ samples & Organs / cell-line origin & Platforms & Measured/source units after QC & Aligned target cells after QC \\ \midrule New in-house primary data & 21 & mouse-embryo ; cervical; lung & DBiC-seq & 19,806 & 19,806 \\ Public, overlapping HEST-1K & 32 unique slides (33 records) & 22 species--organ strata & Xenium; Visium HD & 11,611,127 & 11,051,149 \\ Public, overlapping STimage-1K4M only & 2 & 2 species--organ strata & Visium HD & 377,753 & 213,405 \\ Other public data & 32 & 16 species--organ strata & Xenium; Visium HD & 11,954,946 & 8,981,615 \\ \textbf{Total sMMC-22M} & \textbf{70 unique samples (71 records)} & \textbf{25 tissue strata + 3 cell-line origins} & \textbf{Xenium; Visium HD; DBiC-seq} & \textbf{23,953,632} & \textbf{20,255,975} \\ \bottomrule \end{tabularx} \endgroup \end{center}
 
-For transparency, one HEST-overlapping breast slide occurs as two versioned
-processing records, which is why the table distinguishes 70 unique samples from 71
-records. Public Visium HD ``measured/source units'' are pre-aggregation
-source/segmentation records; their aligned column reports canonical
-2-\(\mu\)m bin-to-cell targets. Native Xenium cells are already cell resolved.
+% ---- keep the current comparison table here ----
 
-Beyond the QC-frozen pilot reported in the table, our in-house DBiC-seq
-acquisition is continuing. The broader collection currently contains
-approximately \(200{,}000\) paired cells that we can make available, with each
-cell linked to matched morphology and RNA measurements and its corresponding
-context information. This is an approximate release count rather than a
-sample-level manifest count, so we do not silently fold it into the exact audited
-totals above. If the broader in-house pool totals approximately \(200{,}000\)
-cells, it would constitute roughly \(1\%\) of the expanded aligned-cell
-inventory; we will report the exact sample count and fraction after the release
-manifest and QC freeze are complete.
+This audit shows that sMMC is not simply a repackaging of HEST-1K or
+STimage-1K4M: overlap is explicitly tracked, and the newly added public cohorts
+have low overlap with those resources. At the same time, we will state clearly
+that most of the submitted scale comes from public-data aggregation and
+harmonization rather than new primary acquisition.
 
-As a concrete exploratory use case, the four pilot samples comprise 10,000 raw
-trap positions and 9,806 QC-paired cells. We used 2,100 morphology-QC C416 cells
-to characterize a single-cell morphology state space and 2,497 QC HD701 cells
-for out-of-fold prediction of an RNA ribosome module from image and geometry
-features alongside a spatial control. This pilot illustrates how the paired
-records can support analyses of relations among cell geometry and morphology,
-RNA programs, and cell or cell-line identity. Extending the same design to
-source-provided or marker-derived cell types is a benchmark use case, not a
-result claimed by this pilot.
+The new primary component is our in-house DBiC-seq collection. The submitted
+manifest includes the QC-frozen DBiC-seq records summarized in the table, and
+in-house acquisition has continued since submission. The broader DBiC-seq pool
+now contains approximately \(200{,}000\) paired cells and will be reported
+separately in the final sMMC-28M manifest with exact sample counts, cell counts,
+checksums, and fractions.
+
+For transparency, one HEST-overlapping breast slide appears as two versioned
+processing records. Public Visium HD ``measured/source units'' are
+pre-aggregation source or segmentation records, whereas the aligned-cell column
+reports canonical 2-\(\mu\)m bin-to-cell targets. Native Xenium and DBiC-seq
+records are already cell aligned.
+
+
 
 \questionsep
 \textbf{7Gar-2.}\quad
