@@ -50,27 +50,27 @@ BA is balanced accuracy; Gap is best-to-worst context, not Avg.-Worst. High aver
 
 **3. How are bin2cell targets constructed and validated?**
 
-Appendix S2 shows the standard 10x Visium HD workflow: official transforms register native bins to H&E; same-frame masks aggregate overlapping counts; unsupported cells are removed. We will state this in the main text, show an example, and label them derived cell-aligned targets rather than directly measured single-cell RNA.
+Appendix S2 shows standard 10x Visium HD: official transforms register native bins to H&E; same-frame masks aggregate overlapping counts; unsupported cells are removed. We will add this and an example to the main text and label outputs derived cell-aligned targets, not directly measured single-cell RNA.
 
 **4. How are LMM-generated texts produced and validated?**
 
-GPT-4o only verbalizes supplied structured fields; it adds no attributes. Detailed audits were completed but mistakenly omitted when this secondary section was shortened across revisions. This was a serious oversight; we apologize. We will restore the prompt, field checks, examples, and matrices:
+GPT-4o only verbalizes supplied fields and adds no attributes. Detailed audits were completed but omitted while this secondary section was shortened across revisions. This was a serious oversight; we apologize. We will restore the prompt, field checks, examples, and matrices:
 
-| Encoder | Matrix | Blue-box $n$ | Mean: blue / other (fold) | Median [range] |
-|---|---|---:|---:|---:|
-| PLIP | sample $15{\times}15$; 10-run avg. | 15 | 0.262 / 0.0529 (4.96×) | 0.230 [0.130, 0.410] |
-| CONCH | organ $29{\times}29$; 10 captions/organ | 29 | 0.0399 / ≈0.00215 (18.6×) | 0.038 [0.010, 0.100] |
+| Model | Match $n$ | Match sim. | Mismatch sim. | Enrichment | Pairwise AUC | Top-1 / Top-3 |
+|---|---:|---:|---:|---:|---:|---:|
+| PLIP | 15 | 0.262 | 0.053 | 4.96× | 0.993 | 84.6% / 100% |
+| CONCH | 29 | 0.040 | 0.0021 | 19.1× | 0.988 | 90.9% / 100% |
 
-Blue boxes mark matched/semantic cells. Scores are encoder similarities, not Pearson correlations. They test image relevance; source-field checks test factuality. Text remains optional context, not ground truth.
+Blue boxes define matches. AUC separates matched from mismatched scores; Top-$k$ asks whether a match is among the $k$ nearest captions. Both VLMs reach AUC $\geq0.988$ and 100% Top-3. These are similarity—not Pearson-correlation—audits of image relevance; source-field checks test factuality. Text remains optional context, not ground truth.
 
-**5. Existing-method positioning.**
+**5. Prior-work positioning.**
 
 No decomposition novelty is claimed; related work will be expanded.
 
-**6. STBoost terminology/inference.**
+**6. STBoost terminology.**
 
 Resolved in Response 2.
 
 **7. Reproducibility.**
 
-Add manifests, checksums, licenses, inventory, and corrected references.
+Add manifests, checksums, licenses, inventory, and fix references.

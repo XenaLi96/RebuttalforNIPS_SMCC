@@ -227,55 +227,54 @@ panels differ, we call it age-associated and sample-confounded, not causal.
 \revcomment{How are bin2cell targets constructed and validated?}
 
 \response
-Appendix S2 shows the standard 10x Visium HD workflow: official transforms
-register native bins to H\&E; same-frame masks aggregate overlapping counts;
-unsupported cells are removed. We will state this in the main text, show an
-example, and label them derived cell-aligned targets rather than directly measured
-single-cell RNA.
+Appendix S2 shows standard 10x Visium HD: official transforms register native
+bins to H\&E; same-frame masks aggregate overlapping counts; unsupported cells
+are removed. We will add this and an example to the main text and label outputs
+derived cell-aligned targets, not directly measured single-cell RNA.
 
 \questionsep
 \textbf{7Gar-4.}\quad
 \revcomment{How are LMM-generated texts produced and validated?}
 
 \response
-GPT-4o only verbalizes supplied structured fields; it adds no attributes.
-Detailed audits were completed but mistakenly omitted when this secondary
-section was shortened across revisions. This was a serious oversight; we
-apologize. We will restore the prompt, field checks, examples, and matrices:
+GPT-4o only verbalizes supplied fields and adds no attributes. Detailed audits
+were completed but omitted while this secondary section was shortened across
+revisions. This was a serious oversight; we apologize. We will restore the
+prompt, field checks, examples, and matrices:
 
 \begin{center}
 \begingroup
 \scriptsize
 \setlength{\tabcolsep}{2pt}
 \renewcommand{\arraystretch}{1.08}
-\begin{tabularx}{\linewidth}{@{}p{0.09\linewidth}Xr
-  p{0.25\linewidth}p{0.20\linewidth}@{}}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
 \toprule
-Encoder & Matrix & Blue-box \(n\) & Mean: blue / other (fold) & Median [range] \\
+Model & Match \(n\) & Match sim. & Mismatch sim. & Enrichment &
+Pairwise AUC & Top-1 / Top-3 \\
 \midrule
-PLIP & sample \(15{\times}15\); 10-run avg. & 15 &
-\(0.262/0.0529\;(4.96{\times})\) & \(0.230\;[0.130,0.410]\) \\
-CONCH & organ \(29{\times}29\); 10 captions/organ & 29 &
-\(0.0399/{\approx}0.00215\;(18.6{\times})\) & \(0.038\;[0.010,0.100]\) \\
+PLIP & 15 & 0.262 & 0.053 & \(4.96{\times}\) & 0.993 & 84.6\% / 100\% \\
+CONCH & 29 & 0.040 & 0.0021 & \(19.1{\times}\) & 0.988 & 90.9\% / 100\% \\
 \bottomrule
-\end{tabularx}
+\end{tabular*}
 \endgroup
 \end{center}
 
-Blue boxes mark matched/semantic cells. Scores are encoder similarities, not
-Pearson correlations. They test image relevance; source-field checks test
+Blue boxes define matches. AUC separates matched from mismatched scores;
+Top-\(k\) asks whether a match is among the \(k\) nearest captions. Both VLMs
+reach AUC \(\geq 0.988\) and 100\% Top-3. These are similarity---not
+Pearson-correlation---audits of image relevance; source-field checks test
 factuality. Text remains optional context, not ground truth.
 
 \questionsep
 \textbf{7Gar-5.}\quad
-\revcomment{Existing-method positioning.}
+\revcomment{Prior-work positioning.}
 
 \response
 No decomposition novelty is claimed; related work will be expanded.
 
 \questionsep
 \textbf{7Gar-6.}\quad
-\revcomment{STBoost terminology/inference.}
+\revcomment{STBoost terminology.}
 
 \response
 Resolved in Response 2.
@@ -285,6 +284,6 @@ Resolved in Response 2.
 \revcomment{Reproducibility.}
 
 \response
-Add manifests, checksums, licenses, inventory, and corrected references.
+Add manifests, checksums, licenses, inventory, and fix references.
 
 \end{document}
