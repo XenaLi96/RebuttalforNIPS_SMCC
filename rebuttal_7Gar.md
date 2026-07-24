@@ -54,24 +54,23 @@ Appendix S2 shows the standard 10x Visium HD workflow: official transforms regis
 
 **4. How are LMM-generated texts produced and validated?**
 
-GPT-4o only consolidates supplied structured fields into fluent text; it is not asked to invent attributes. We had completed detailed audits but omitted them while shortening this secondary section through several revisions. This was a serious oversight; we apologize. We will restore the prompt, field checks, examples, and matrices:
+GPT-4o only verbalizes supplied structured fields; it adds no attributes. Detailed audits were completed but mistakenly omitted when this secondary section was shortened across revisions. This was a serious oversight; we apologize. We will restore the prompt, field checks, examples, and matrices:
 
-| Encoder | Unit | Similarity result |
-|---|---|---|
-| PLIP | sample; 10-run average | matched/semantic pairs score above mismatches |
-| CONCH | organ; 10 captions/organ | matched/semantic pairs score above mismatches |
-| **[AUTHOR INPUT: third encoder]** | **[unit]** | **[correlation/similarity result]** |
+| Encoder | Matrix | Blue-box $n$ | Mean: blue / other (fold) | Median [range] |
+|---|---|---:|---:|---:|
+| PLIP | sample $15{\times}15$; 10-run avg. | 15 | 0.262 / 0.0529 (4.96×) | 0.230 [0.130, 0.410] |
+| CONCH | organ $29{\times}29$; 10 captions/organ | 29 | 0.0399 / ≈0.00215 (18.6×) | 0.038 [0.010, 0.100] |
 
-Matrices assess image relevance; source-field checks assess factuality. Text remains optional derived context, not ground truth.
+Blue boxes mark matched/semantic cells. Scores are encoder similarities, not Pearson correlations. They test image relevance; source-field checks test factuality. Text remains optional context, not ground truth.
 
-**5. Existing methodology and prior-work positioning.**
+**5. Existing-method positioning.**
 
-No decomposition novelty is claimed; we will expand prior work.
+No decomposition novelty is claimed; related work will be expanded.
 
-**6. Unclear STBoost terminology and inference.**
+**6. STBoost terminology/inference.**
 
-Resolved in Response 2; names will match.
+Resolved in Response 2.
 
-**7. Accessibility and reproducibility.**
+**7. Reproducibility.**
 
-We will add manifests, checksums, licenses, inventory, and fix references.
+Add manifests, checksums, licenses, inventory, and corrected references.

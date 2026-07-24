@@ -238,52 +238,53 @@ single-cell RNA.
 \revcomment{How are LMM-generated texts produced and validated?}
 
 \response
-GPT-4o only consolidates supplied structured fields into fluent text; it is not
-asked to invent attributes. We had completed detailed audits but omitted them
-while shortening this secondary section through several revisions. This was a
-serious oversight; we apologize. We will restore the prompt, field checks,
-examples, and matrices:
+GPT-4o only verbalizes supplied structured fields; it adds no attributes.
+Detailed audits were completed but mistakenly omitted when this secondary
+section was shortened across revisions. This was a serious oversight; we
+apologize. We will restore the prompt, field checks, examples, and matrices:
 
 \begin{center}
 \begingroup
-\footnotesize
-\setlength{\tabcolsep}{3pt}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
 \renewcommand{\arraystretch}{1.08}
-\begin{tabularx}{\linewidth}{@{}p{0.13\linewidth}p{0.24\linewidth}X@{}}
+\begin{tabularx}{\linewidth}{@{}p{0.09\linewidth}Xr
+  p{0.25\linewidth}p{0.20\linewidth}@{}}
 \toprule
-Encoder & Unit & Similarity result \\
+Encoder & Matrix & Blue-box \(n\) & Mean: blue / other (fold) & Median [range] \\
 \midrule
-PLIP & sample; 10-run average & matched/semantic pairs score above mismatches \\
-CONCH & organ; 10 captions/organ & matched/semantic pairs score above mismatches \\
-\needinfo{third encoder} & \needinfo{unit} &
-\needinfo{correlation/similarity result} \\
+PLIP & sample \(15{\times}15\); 10-run avg. & 15 &
+\(0.262/0.0529\;(4.96{\times})\) & \(0.230\;[0.130,0.410]\) \\
+CONCH & organ \(29{\times}29\); 10 captions/organ & 29 &
+\(0.0399/{\approx}0.00215\;(18.6{\times})\) & \(0.038\;[0.010,0.100]\) \\
 \bottomrule
 \end{tabularx}
 \endgroup
 \end{center}
 
-Matrices assess image relevance; source-field checks assess factuality. Text
-remains optional derived context, not ground truth.
+Blue boxes mark matched/semantic cells. Scores are encoder similarities, not
+Pearson correlations. They test image relevance; source-field checks test
+factuality. Text remains optional context, not ground truth.
 
 \questionsep
 \textbf{7Gar-5.}\quad
-\revcomment{Existing methodology and prior-work positioning.}
+\revcomment{Existing-method positioning.}
 
 \response
-No decomposition novelty is claimed; we will expand prior work.
+No decomposition novelty is claimed; related work will be expanded.
 
 \questionsep
 \textbf{7Gar-6.}\quad
-\revcomment{Unclear STBoost terminology and inference.}
+\revcomment{STBoost terminology/inference.}
 
 \response
-Resolved in Response 2; names will match.
+Resolved in Response 2.
 
 \questionsep
 \textbf{7Gar-7.}\quad
-\revcomment{Accessibility and reproducibility.}
+\revcomment{Reproducibility.}
 
 \response
-We will add manifests, checksums, licenses, inventory, and fix references.
+Add manifests, checksums, licenses, inventory, and corrected references.
 
 \end{document}
