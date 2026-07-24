@@ -224,47 +224,66 @@ panels differ, we call it age-associated and sample-confounded, not causal.
 
 \questionsep
 \textbf{7Gar-3.}\quad
-\revcomment{Validation of generated data. How are the bin2cell-derived cell-level
-profiles and the LMM-generated textual records validated? Please describe the
-generation pipeline in the main text and show representative example records.}
+\revcomment{How are bin2cell targets constructed and validated?}
 
 \response
-We agree; this was omitted during revision and will be restored and summarized in
-the main text.
-\textbf{Bin-to-cell:} Appendix S2 shows the 10x workflow: official transforms
-register native bins to H\&E; same-frame masks collect overlapping counts;
-unsupported cells are removed. These are deterministic cell-aligned---not direct
-single-cell---profiles; boundary audits show assignment sensitivity.
-
-\textbf{Text:} GPT-4o only verbalizes existing fields; no new attributes are
-requested. We will restore the prompt, field checks, and side-by-side
-source/image/expression/text examples. A PLIP sample matrix (10 runs) and a CONCH
-organ matrix (\(k=10\) captions/organ) favor matched/semantic pairs over
-mismatches. They test image relevance; field checks test factuality. Text is
-optional, not ground truth.
+Appendix S2 shows the standard 10x Visium HD workflow: official transforms
+register native bins to H\&E; same-frame masks aggregate overlapping counts;
+unsupported cells are removed. We will state this in the main text, show an
+example, and label them derived cell-aligned targets rather than directly measured
+single-cell RNA.
 
 \questionsep
 \textbf{7Gar-4.}\quad
-\revcomment{The spot-to-cell component uses existing bin2cell-style methodology and
-is not positioned against prior work.}
+\revcomment{How are LMM-generated texts produced and validated?}
 
 \response
-Agreed: no decomposition novelty is claimed; related work will be expanded.
+GPT-4o only consolidates supplied structured fields into fluent text; it is not
+asked to invent attributes. We had completed detailed audits but omitted them
+while shortening this secondary section through several revisions. This was a
+serious oversight; we apologize. We will restore the prompt, field checks,
+examples, and matrices:
+
+\begin{center}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\linewidth}{@{}p{0.13\linewidth}p{0.24\linewidth}X@{}}
+\toprule
+Encoder & Unit & Similarity result \\
+\midrule
+PLIP & sample; 10-run average & matched/semantic pairs score above mismatches \\
+CONCH & organ; 10 captions/organ & matched/semantic pairs score above mismatches \\
+\needinfo{third encoder} & \needinfo{unit} &
+\needinfo{correlation/similarity result} \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{center}
+
+Matrices assess image relevance; source-field checks assess factuality. Text
+remains optional derived context, not ground truth.
 
 \questionsep
 \textbf{7Gar-5.}\quad
-\revcomment{STBoost, STBoost-Ref, ``Ours,'' STBoosted BLEEP, BLEEP, Table 2, and the
-inference protocol are unclear.}
+\revcomment{Existing methodology and prior-work positioning.}
 
 \response
-See Response 2; the manuscript will match.
+No decomposition novelty is claimed; we will expand prior work.
 
 \questionsep
 \textbf{7Gar-6.}\quad
-\revcomment{Data accessibility, reproducibility, and reference formatting are
-inadequate.}
+\revcomment{Unclear STBoost terminology and inference.}
 
 \response
-Add manifest/checksums/licenses/inventory; fix references.
+Resolved in Response 2; names will match.
+
+\questionsep
+\textbf{7Gar-7.}\quad
+\revcomment{Accessibility and reproducibility.}
+
+\response
+We will add manifests, checksums, licenses, inventory, and fix references.
 
 \end{document}

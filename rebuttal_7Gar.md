@@ -48,20 +48,30 @@ To test whether this was an isolated example, we applied the same Average/Worst/
 
 BA is balanced accuracy; Gap is best-to-worst context, not Avg.-Worst. High averages coexist with collapse: scGPT reaches Worst BA 0.004, and site gaps for CONCH/UNI/H-optimus0 are 0.471--0.542. Thus, ovarian is an sMMC example of a recurring cross-modal problem. Rich context enables Average/Worst/Gap/Support audits, not bias removal. Since ovarian age is nested within sample/patient and panels differ, we call it age-associated and sample-confounded, not causal.
 
-**3. Validation of generated data. How are the bin2cell-derived cell-level profiles and the LMM-generated textual records validated? Please describe the generation pipeline in the main text and show representative example records.**
+**3. How are bin2cell targets constructed and validated?**
 
-We agree; this was omitted during revision and will be restored and summarized in the main text. **Bin-to-cell:** Appendix S2 shows the 10x workflow: official transforms register native bins to H&E; same-frame masks collect overlapping counts; unsupported cells are removed. These are deterministic cell-aligned---not direct single-cell---profiles; boundary audits show assignment sensitivity.
+Appendix S2 shows the standard 10x Visium HD workflow: official transforms register native bins to H&E; same-frame masks aggregate overlapping counts; unsupported cells are removed. We will state this in the main text, show an example, and label them derived cell-aligned targets rather than directly measured single-cell RNA.
 
-**Text:** GPT-4o only verbalizes existing fields; no new attributes are requested. We will restore the prompt, field checks, and side-by-side source/image/expression/text examples. A PLIP sample matrix (10 runs) and a CONCH organ matrix ($k=10$ captions/organ) favor matched/semantic pairs over mismatches. They test image relevance; field checks test factuality. Text is optional, not ground truth.
+**4. How are LMM-generated texts produced and validated?**
 
-**4. The spot-to-cell component uses existing methodology and is not positioned against prior work.**
+GPT-4o only consolidates supplied structured fields into fluent text; it is not asked to invent attributes. We had completed detailed audits but omitted them while shortening this secondary section through several revisions. This was a serious oversight; we apologize. We will restore the prompt, field checks, examples, and matrices:
 
-Agreed: no decomposition novelty is claimed; related work will be expanded.
+| Encoder | Unit | Similarity result |
+|---|---|---|
+| PLIP | sample; 10-run average | matched/semantic pairs score above mismatches |
+| CONCH | organ; 10 captions/organ | matched/semantic pairs score above mismatches |
+| **[AUTHOR INPUT: third encoder]** | **[unit]** | **[correlation/similarity result]** |
 
-**5. STBoost terminology, Table 2, and inference are unclear.**
+Matrices assess image relevance; source-field checks assess factuality. Text remains optional derived context, not ground truth.
 
-See Response 2; the manuscript will match.
+**5. Existing methodology and prior-work positioning.**
 
-**6. Data accessibility, reproducibility, and bibliography formatting are inadequate.**
+No decomposition novelty is claimed; we will expand prior work.
 
-Add manifest/checksums/licenses/inventory; fix references.
+**6. Unclear STBoost terminology and inference.**
+
+Resolved in Response 2; names will match.
+
+**7. Accessibility and reproducibility.**
+
+We will add manifests, checksums, licenses, inventory, and fix references.
