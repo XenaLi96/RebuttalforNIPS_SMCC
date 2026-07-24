@@ -6,6 +6,7 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{tabularx}
+\usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.38em}
@@ -120,6 +121,34 @@ processing records, which is why the table distinguishes 70 unique samples from 
 records. Public Visium HD ``measured/source units'' are pre-aggregation
 source/segmentation records; their aligned column reports canonical
 2-\(\mu\)m bin-to-cell targets. Native Xenium cells are already cell resolved.
+
+Beyond the QC-frozen pilot reported in the table, our in-house DBiC-seq
+acquisition is continuing. The broader collection currently contains
+approximately \(200{,}000\) paired cells that we can make available, with each
+cell linked to matched morphology and RNA measurements and its corresponding
+context information. This is an approximate release count rather than a
+sample-level manifest count, so we do not silently fold it into the exact audited
+totals above. If the broader in-house pool totals approximately \(200{,}000\)
+cells, it would constitute roughly \(1\%\) of the expanded aligned-cell
+inventory; we will report the exact sample count and fraction after the release
+manifest and QC freeze are complete.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth]{figures/Yale_DBiC_dataset_showcase_panel.pdf}
+\caption{\textbf{Exploratory DBiC-seq use case on an approximately
+10,000-position subset of the continuing in-house collection.}
+The four pilot samples contain 10,000 raw trap positions and 9,806 QC-paired
+cells. The panels summarize the DBiC-seq pairing design, single-cell morphology
+examples and state space in C416, and out-of-fold prediction of an RNA ribosome
+module in HD701 from image and geometry features alongside a spatial control.
+This pilot illustrates how the paired records can support analyses of relations
+among cell geometry and morphology, RNA programs, and cell or cell-line identity.
+Extending this analysis to source-provided or marker-derived cell types is a
+benchmark use case, not a result claimed by this figure.}
+\label{fig:dbic-showcase}
+\end{figure}
+\clearpage
 
 \questionsep
 \textbf{7Gar-2.}\quad
