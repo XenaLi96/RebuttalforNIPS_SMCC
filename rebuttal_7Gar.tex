@@ -1,0 +1,201 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.70in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.38em}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\revcomment}[1]{\textbf{Reviewer comment.} \emph{#1}}
+\newcommand{\response}{\textbf{Response.}}
+\newcommand{\needexp}[1]{\textcolor{red}{\textbf{[EXPERIMENT TO INSERT:} #1\textbf{]}}}
+\newcommand{\needinfo}[1]{\textcolor{red}{\textbf{[AUTHOR INPUT TO INSERT:} #1\textbf{]}}}
+
+\begin{document}
+
+\begin{center}
+{\Large Response to Reviewer 7Gar}\\[2pt]
+Submission 13175
+\end{center}
+
+\textcolor{red}{Red text marks experimental results or author-supplied facts that must be
+inserted and checked before submission.}
+
+\textbf{Opening response.}
+We thank the reviewer for identifying places where our framing ran ahead of the
+evidence. We agree that a useful benchmark must state the scientific question,
+evaluation unit, inputs, targets, metrics, and conclusion for each experiment. We
+will substantially reorganize the paper around these items and narrow claims where
+the target is computationally derived.
+
+\medskip
+\textbf{7Gar-1.}\quad
+\revcomment{The purpose and biological meaning of the scale, resolution, and context
+experiments are unclear.}
+
+\response
+We will replace the repeated three-axis narrative with the following explicit
+benchmark map:
+
+\begin{center}
+\begin{tabular}{p{0.12\linewidth}p{0.24\linewidth}p{0.30\linewidth}p{0.24\linewidth}}
+\toprule
+Axis & Question & Design & Intended conclusion \\
+\midrule
+Scale &
+Does broader training coverage improve image-to-expression prediction and encoder
+comparison? &
+Image-only prediction under fixed genes, splits, and metrics while varying training
+coverage. &
+Whether additional coverage helps, and where organ/platform heterogeneity limits
+transfer. \\
+Resolution &
+Does a cell-aligned interface expose within-region variation hidden by spot
+averaging? &
+Compare baselines and STBoost-Ref on cell-aligned targets, separately for native
+Xenium and processed Visium HD. &
+Benchmark feasibility and uncertainty, not proof of true single-cell recovery from
+histology. \\
+Context &
+Can metadata-defined shifts reveal failures hidden by pooled testing? &
+Patient/study/context-held-out evaluation with matched preprocessing and gene panel. &
+Characterize a specific distribution shift; do not infer a causal biological effect. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Figure 2 evaluates histology-image-to-gene-expression prediction. Gene-wise Pearson
+and Spearman correlations measure per-gene agreement across cells; cell-wise
+correlations measure profile agreement within cells. The horizontal ratio is the
+fraction of the available training reference set used.
+
+\needexp{Insert the audited Figure 2 scale results for every plotted ratio, with the
+exact number of training cells, test samples, repetitions/seeds, confidence
+intervals, and a statement of whether the curve supports a scaling trend. Do not
+reuse the unverified encoder/ratio table from the method manuscript.}
+
+For resolution/breadth, an audited five-organ Visium HD diagnostic yields
+STBoost-Ref gene-wise Pearson correlations of \(0.4523\), \(0.5178\), \(0.3366\),
+\(0.3643\), and \(0.3817\) for ovary, lung, breast, kidney, and tonsil,
+respectively. We will add the complete per-organ table and emphasize the substantial
+variation rather than only a pooled average.
+
+For context, we agree that the ovarian analysis is currently a case study. AK, AD,
+and AL are anonymized ovarian sample identifiers; the comparison also changes
+patient/tissue context and currently uses unequal gene panels. Therefore it does not
+isolate an age effect.
+
+\needexp{Rerun AK--AD and AK--AL using the identical shared gene panel, preprocessing,
+metrics, and uncertainty estimates; insert the result and rewrite the claim as
+``age-associated'' only if supported while explicitly retaining patient/tissue-state
+confounding.}
+
+\medskip
+\textbf{7Gar-2.}\quad
+\revcomment{The cell-level profiles and generated textual context are derived but
+not validated; the pipeline and example records should be shown.}
+
+\response
+We agree. We will distinguish platform-native measurements from derived fields.
+Xenium provides transcript coordinates and cell masks. For Visium HD, registered
+8-\(\mu\)m bin counts are aggregated to segmented H\&E cell footprints; these are
+cell-aligned computational targets, not direct single-cell measurements. Textual
+captions are metadata-grounded generated annotations and are not used as molecular
+ground truth. A representative record will show the raw provenance, local and
+context crops, coordinates, processed expression, metadata, generated text, and
+split key.
+
+\needinfo{Insert the exact boundary-bin assignment rule, segmentation model/version,
+registration procedure, QC thresholds, and the number/fraction of cells and bins
+removed by each QC step.}
+
+\needexp{Insert Visium HD validation under boundary-bin discard and mask
+erosion/dilation, with retained-cell rates, expression agreement, marker consistency,
+and downstream sensitivity; include cell-resolved external concordance where
+available.}
+
+\needexp{Insert a blinded human factuality audit of generated captions: number of
+records and raters, expertise, rubric, supported/unsupported statement rates, error
+types, and inter-rater agreement. Until then, label captions as optional unvalidated
+generated fields.}
+
+\medskip
+\textbf{7Gar-3.}\quad
+\revcomment{Please quantify the genuinely new in-house contribution relative to
+aggregated public resources such as HEST-1K and STimage-1K4M.}
+
+\response
+We agree that our current wording is ambiguous. The count of 23,943,826 refers to
+the released aligned records, not automatically to newly acquired specimens. We
+will separate (i) source measurements from public studies, (ii) any newly acquired
+in-house measurements, and (iii) newly created harmonized/derived artifacts. We will
+not equate aggregation with new biological acquisition.
+
+\needinfo{Insert a source-audited comparison table giving, for sMMC-22M overall and
+for the genuinely in-house subset, the numbers of studies, samples, patients/animals,
+organs, platforms, spots/bins/cells, and unique cells not present in HEST-1K or
+STimage-1K4M. Include source IDs and deduplication rules.}
+
+\medskip
+\textbf{7Gar-4.}\quad
+\revcomment{The spot-to-cell component uses existing bin2cell-style methodology and
+is not positioned against prior work.}
+
+\response
+We agree and will not present bin-to-cell aggregation as a new decomposition
+algorithm. The dataset contribution is the provenance-preserving harmonization,
+cell-centered multimodal interface, leakage-controlled split definitions, and
+benchmarking across organs/platforms/context. The revision will explain the
+spot/bin-to-cell construction before downstream experiments and expand related work
+on Bin2Cell and other spot-to-cell or super-resolution methods. We will state that
+derived Visium HD targets inherit the assumptions of those methods.
+
+\medskip
+\textbf{7Gar-5.}\quad
+\revcomment{STBoost, STBoost-Ref, ``Ours,'' STBoosted BLEEP, BLEEP, Table 2, and the
+inference protocol are unclear.}
+
+\response
+We will use one consistent terminology:
+
+\begin{itemize}
+  \item \textbf{STBoost} is the data-interface framework that converts a compatible
+  spot-level pipeline to cell-aligned training and evaluation records.
+  \item \textbf{BLEEP} is the published image-to-expression baseline.
+  \item \textbf{STBoosted BLEEP} is BLEEP retrained and evaluated through the
+  cell-aligned STBoost interface.
+  \item \textbf{STBoost-Ref} is our native retrieval-based reference predictor;
+  ``Ours'' in Figure 4 refers to STBoost-Ref and will be renamed accordingly.
+\end{itemize}
+
+At query time, STBoost-Ref receives only the local and wider-context histology crops
+and outputs a cell-aligned expression vector. Query expression is never an input.
+Expression is used only to build training-split reference entries. Table 2 will be
+retitled to define a ``cell unit'' as one aligned cell record and will point forward
+to the construction and split sections. We will introduce BLEEP and STBoost before
+their first use, define AK/AD/AL in the text, add the missing task/metric/ratio
+definitions to Figure 2, and remove repetitive framing.
+
+\medskip
+\textbf{7Gar-6.}\quad
+\revcomment{Data accessibility, reproducibility, and reference formatting are
+inadequate.}
+
+\response
+We agree. The revision will contain a versioned release manifest that distinguishes
+directly measured, processed, generated, and model-output fields; split files;
+checksums; licenses; preprocessing commands; and a minimal example record.
+
+\needinfo{Insert a verified anonymous URL that reviewers can open, the exact assets
+available there at rebuttal time, the release version/checksum, and the timetable for
+any remaining restricted assets.}
+
+We will also regenerate the bibliography using the required NeurIPS style so that
+author lists are not uniformly truncated to ``et al.'' and will verify every
+appendix link before submission.
+
+\end{document}

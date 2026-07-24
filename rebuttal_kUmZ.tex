@@ -1,0 +1,215 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.68in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\revcomment}[1]{\textbf{Reviewer comment.} \emph{#1}}
+\newcommand{\response}{\textbf{Response.}}
+\newcommand{\needexp}[1]{\textcolor{red}{\textbf{[EXPERIMENT TO INSERT:} #1\textbf{]}}}
+\newcommand{\needinfo}[1]{\textcolor{red}{\textbf{[AUTHOR INPUT TO INSERT:} #1\textbf{]}}}
+
+\begin{document}
+
+\begin{center}
+{\Large Response to Reviewer kUmZ}\\[2pt]
+Submission 13175
+\end{center}
+
+\textcolor{red}{Red text marks experimental results or author-supplied facts that must be
+inserted and checked before submission.}
+
+\textbf{Opening response.}
+We thank the reviewer for focusing on the central validity question: a
+cell-centered image does not by itself make the expression target a direct
+single-cell measurement. We agree and will sharpen this distinction, broaden the
+evaluation, and add the missing construction, cohort, and limitation details.
+
+\medskip
+\textbf{kUmZ-1.}\quad
+\revcomment{P2, Q2, L1: the imaging side is cell centered, but spot-level or
+interpolated expression does not establish true single-cell prediction. Please
+soften the title and abstract.}
+
+\response
+We agree. The two platforms must be described separately. Xenium provides
+natively cell-resolved transcript locations and platform-defined cell masks. Visium
+HD provides dense 8-\(\mu\)m bin counts that we register to the H\&E image and
+aggregate to segmented cell footprints. The latter is a \emph{cell-aligned
+computational target}, not direct single-cell ground truth. We will therefore avoid
+claims that Visium HD evaluation proves true single-cell expression recovery and
+will use ``toward cell-level prediction'' or ``cell-aligned prediction'' where
+appropriate. A conservative revised title is:
+\emph{sMMC-22M: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics}.
+
+\needinfo{Confirm the final revised title and every title/abstract occurrence of
+``single-cell'' that should be retained only for native Xenium measurements.}
+
+\needexp{Insert quantitative validation of Visium HD targets under alternative
+boundary-bin rules and segmentation perturbations, including retained cells,
+profile/marker agreement, and downstream sensitivity; add external agreement with a
+cell-resolved assay where available.}
+
+\medskip
+\textbf{kUmZ-2.}\quad
+\revcomment{P3 and Q1: the experiments emphasize only a few organs. If all 25 organs
+were evaluated, report per-organ and summary performance.}
+
+\response
+We did not train and validate the same complete benchmark on all 25 organs, and we
+will not imply that we did. We can currently add an audited, directly comparable
+five-organ Visium HD result:
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+Organ & Gene \(r\) & Gene \(\rho\) & Cell \(r\) & Cell \(\rho\) \\
+\midrule
+Ovary  & 0.4523 & 0.4813 & 0.8379 & 0.7785 \\
+Lung   & 0.5178 & 0.5077 & 0.6042 & 0.5452 \\
+Breast & 0.3366 & 0.2631 & 0.2345 & 0.2393 \\
+Kidney & 0.3643 & 0.3313 & 0.5112 & 0.4834 \\
+Tonsil & 0.3817 & 0.3354 & 0.8193 & 0.5670 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+This is an in-domain top-50-gene diagnostic and will be labeled as such. Its wide
+range also argues against reporting only a pooled score.
+
+\needexp{Insert the final lightweight per-organ/per-platform benchmark, keeping
+Xenium and Visium HD separate and reporting sample/cell counts, organ-macro
+averages, gene-panel overlap, and confidence intervals. If fewer than 25 organs are
+completed, state the exact evaluated subset without extrapolation.}
+
+\medskip
+\textbf{kUmZ-3.}\quad
+\revcomment{P4: the ovarian age experiment demonstrates distribution shift but does
+not advance the single-cell claim.}
+
+\response
+We agree. We will present this experiment only as a metadata-defined distribution
+shift case study. It does not validate cell-level target accuracy or establish a
+causal age effect. AK, AD, and AL are anonymized ovarian sample IDs; the current
+comparisons also differ in patient/tumour context and gene-panel size.
+
+\needexp{Rerun the ovarian comparisons on one shared gene panel with matched
+preprocessing and report cell/sample counts and uncertainty. State only an
+age-associated observation, with patient/tissue-state confounding, if it remains
+supported.}
+
+\medskip
+\textbf{kUmZ-4.}\quad
+\revcomment{P5--P7: the manuscript repeats its framing but omits alignment details;
+STBoost is defined too late, and Figure 1 contains errors.}
+
+\response
+We will use the saved space to move concrete details into the main text. The
+construction section will state how cells are obtained for each platform, how
+coordinates are registered, how Visium HD bins are assigned to footprints, and how
+QC is applied. STBoost will be introduced in the abstract and introduction as a
+data-interface framework. STBoost-Ref will be defined as the image-only
+retrieval-based predictor before its first result. At inference it receives local
+and wider-context histology crops and outputs a cell-aligned expression vector;
+query expression is not an input.
+
+\needinfo{Insert the segmentation/registration algorithm and version, exact
+boundary-bin assignment rule, cell--bin center-distance summary, QC thresholds, and
+the fraction of cells/bins retained per platform.}
+
+We will redraw Figure 1, correct ``Hierarchical'' and ``Resolution (Single \ldots),''
+complete the LLM-agent labels, expand the caption, remove the partial Figure 3
+border, and render figure text as text rather than raster. Table 1 will define
+``study split'' and point to the split appendix. Table 2 will define a ``cell unit''
+as one aligned cell record and point to the construction section. Figure 2 and its
+caption will define the training-data ratio. We will also make the suggested cuts
+around lines 107 and 115 and clearly state the public release scope in place of the
+ambiguous sentence around line 268.
+
+\medskip
+\textbf{kUmZ-5.}\quad
+\revcomment{P8: report patient/animal counts and the numbers used in cross-patient
+training and testing.}
+
+\response
+We agree that cell counts alone can exaggerate biological sample size.
+
+\needinfo{Insert total and per-organ counts of human patients, animal subjects,
+studies, specimens, and sections; for every transfer experiment, insert the
+train/validation/test patient or animal IDs and their cell counts. State how repeated
+sections from one subject are grouped to prevent leakage.}
+
+\medskip
+\textbf{kUmZ-6.}\quad
+\revcomment{P9: audit sex, ethnicity, and other traits that may be imbalanced or
+missing.}
+
+\response
+We agree and will add a coverage and missingness audit using only metadata reported
+by the source studies. We will not infer ethnicity or other sensitive attributes
+from images or names. Missingness will be reported as a limitation, and performance
+will be stratified only where group size and consent permit responsible reporting.
+
+\needexp{Insert the demographic/biological-context coverage table by platform and
+organ (sex, age, ethnicity where reported, disease state, and missingness), together
+with subgroup sample sizes and any sufficiently powered stratified performance
+analysis.}
+
+\medskip
+\textbf{kUmZ-7.}\quad
+\revcomment{Q3: compare cell-aligned performance with spot-centered performance.}
+
+\response
+This is a useful requested control. A valid comparison must use the same tissue
+region, genes, train/test split, encoder, and metric; cell predictions should be
+re-aggregated to spots so both methods are evaluated against the same measured
+spot-level target. This tests whether cell alignment preserves or improves
+spot-level consistency, but it still cannot by itself prove within-spot single-cell
+accuracy.
+
+\needexp{Insert the matched spot-versus-cell experiment: spot-centered baseline,
+cell-aligned model re-aggregated to the same spots, identical genes/splits, spatial
+buffer control, per-gene and per-spot metrics, and uncertainty.}
+
+\medskip
+\textbf{kUmZ-8.}\quad
+\revcomment{Q4: explain how spot/bin expression is matched to cells and consider
+renaming sMMC-22M to reflect the current count.}
+
+\response
+The main text will describe the full matching algorithm before the experiments and
+will use ``bin-to-cell aggregation'' rather than ``interpolation'' unless an
+interpolation step is actually performed. The current release contains exactly
+23,943,826 aligned records. We will report this exact number and a versioned
+manifest consistently; the short dataset name is a release label rather than a
+rounded claim about the current record count.
+
+\needinfo{Choose one naming policy before submission: retain ``sMMC-22M'' as a
+versioned brand and explain it once, or rename consistently throughout the paper,
+repository, figures, and release files.}
+
+\medskip
+\textbf{kUmZ-9.}\quad
+\revcomment{L2--L4: the limitations are vague about transfer tests, errors exposed
+by cell alignment, and alignment/metadata coverage.}
+
+\response
+We will replace the current limitations paragraph with explicit statements:
+(i) within-sample results may reflect spatial interpolation and do not establish
+patient-level generalization; (ii) cross-patient tests expose, but do not solve,
+biological and acquisition shifts; (iii) native Xenium and derived Visium HD targets
+have different evidentiary status; (iv) segmentation and boundary assignment can
+propagate errors to cell-aligned profiles; (v) metadata and demographic coverage are
+uneven and sometimes absent; and (vi) histology-to-expression predictions must not
+be treated as substitutes for molecular measurement.
+
+\needexp{Insert a distance-buffered split and spatial-only baseline to quantify the
+extent of within-sample spatial autocorrelation.}
+
+\end{document}
