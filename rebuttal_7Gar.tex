@@ -224,16 +224,24 @@ panels differ, we call it age-associated and sample-confounded, not causal.
 
 \questionsep
 \textbf{7Gar-3.}\quad
-\revcomment{The cell-level profiles and generated textual context are derived but
-not validated; the pipeline and example records should be shown.}
+\revcomment{Validation of generated data. How are the bin2cell-derived cell-level
+profiles and the LMM-generated textual records validated? Please describe the
+generation pipeline in the main text and show representative example records.}
 
 \response
-Agreed. Xenium is native; Visium HD targets aggregate registered
-2-\(\mu\)m bins over segmented footprints; captions are generated, not molecular
-truth. Strict assignment on lung A/B and ovary retains
-\(62.5\%/56.1\%/80.7\%\) of cells; dilation uses
-\(181.9\%--196.2\%\) of default bins. We will report target stability and caption
-factuality; until validated, captions remain optional.
+We agree; this was omitted during revision and will be restored and summarized in
+the main text.
+\textbf{Bin-to-cell:} Appendix S2 shows the 10x workflow: official transforms
+register native bins to H\&E; same-frame masks collect overlapping counts;
+unsupported cells are removed. These are deterministic cell-aligned---not direct
+single-cell---profiles; boundary audits show assignment sensitivity.
+
+\textbf{Text:} GPT-4o only verbalizes existing fields; no new attributes are
+requested. We will restore the prompt, field checks, and side-by-side
+source/image/expression/text examples. A PLIP sample matrix (10 runs) and a CONCH
+organ matrix (\(k=10\) captions/organ) favor matched/semantic pairs over
+mismatches. They test image relevance; field checks test factuality. Text is
+optional, not ground truth.
 
 \questionsep
 \textbf{7Gar-4.}\quad
@@ -241,9 +249,7 @@ factuality; until validated, captions remain optional.
 is not positioned against prior work.}
 
 \response
-Agreed. We will not claim a new decomposition method; we will emphasize
-harmonization, interface design, and evaluation, explain construction first, and
-state inherited assumptions.
+Agreed: no decomposition novelty is claimed; related work will be expanded.
 
 \questionsep
 \textbf{7Gar-5.}\quad
@@ -251,7 +257,7 @@ state inherited assumptions.
 inference protocol are unclear.}
 
 \response
-Response 2 defines the terms. We will define ``cell unit,'' AK/AD/AL, and Fig.\ 2.
+See Response 2; the manuscript will match.
 
 \questionsep
 \textbf{7Gar-6.}\quad
@@ -259,8 +265,6 @@ Response 2 defines the terms. We will define ``cell unit,'' AK/AD/AL, and Fig.\ 
 inadequate.}
 
 \response
-Agreed. We will provide a provenance manifest, splits, checksums, licenses,
-commands, and release inventory; fix bibliography style; and verify appendix
-references.
+Add manifest/checksums/licenses/inventory; fix references.
 
 \end{document}

@@ -48,18 +48,20 @@ To test whether this was an isolated example, we applied the same Average/Worst/
 
 BA is balanced accuracy; Gap is best-to-worst context, not Avg.-Worst. High averages coexist with collapse: scGPT reaches Worst BA 0.004, and site gaps for CONCH/UNI/H-optimus0 are 0.471--0.542. Thus, ovarian is an sMMC example of a recurring cross-modal problem. Rich context enables Average/Worst/Gap/Support audits, not bias removal. Since ovarian age is nested within sample/patient and panels differ, we call it age-associated and sample-confounded, not causal.
 
-**3. The derived cell profiles and generated text are not validated; describe the pipeline and show examples.**
+**3. Validation of generated data. How are the bin2cell-derived cell-level profiles and the LMM-generated textual records validated? Please describe the generation pipeline in the main text and show representative example records.**
 
-Agreed. Xenium is native; Visium HD targets aggregate registered $2\,\mu\mathrm{m}$ bins over segmented footprints; captions are generated, not molecular truth. Strict assignment on lung A/B and ovary retains 62.5%/56.1%/80.7% of cells; dilation uses 181.9%--196.2% of default bins. We will report target stability and caption factuality; until validated, captions remain optional.
+We agree; this was omitted during revision and will be restored and summarized in the main text. **Bin-to-cell:** Appendix S2 shows the 10x workflow: official transforms register native bins to H&E; same-frame masks collect overlapping counts; unsupported cells are removed. These are deterministic cell-aligned---not direct single-cell---profiles; boundary audits show assignment sensitivity.
+
+**Text:** GPT-4o only verbalizes existing fields; no new attributes are requested. We will restore the prompt, field checks, and side-by-side source/image/expression/text examples. A PLIP sample matrix (10 runs) and a CONCH organ matrix ($k=10$ captions/organ) favor matched/semantic pairs over mismatches. They test image relevance; field checks test factuality. Text is optional, not ground truth.
 
 **4. The spot-to-cell component uses existing methodology and is not positioned against prior work.**
 
-Agreed. We will not claim a new decomposition method; we will emphasize harmonization, interface design, and evaluation, explain construction first, and state inherited assumptions.
+Agreed: no decomposition novelty is claimed; related work will be expanded.
 
 **5. STBoost terminology, Table 2, and inference are unclear.**
 
-Response 2 defines the terms. We will define “cell unit,” AK/AD/AL, and Fig. 2.
+See Response 2; the manuscript will match.
 
 **6. Data accessibility, reproducibility, and bibliography formatting are inadequate.**
 
-Agreed. We will provide a provenance manifest, splits, checksums, licenses, commands, and release inventory; fix bibliography style; and verify appendix references.
+Add manifest/checksums/licenses/inventory; fix references.
