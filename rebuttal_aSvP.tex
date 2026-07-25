@@ -2,19 +2,19 @@
 \usepackage[margin=0.72in]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage[hidelinks]{hyperref}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{0.45em}
+\setlength{\parskip}{0.40em}
 \setlength{\emergencystretch}{2em}
 
 \newcommand{\revcomment}[1]{\textcolor{black}{\textbf{Reviewer comment. #1}}}
-\newcommand{\questionsep}{\par\vspace{1.25em}}
+\newcommand{\questionsep}{\par\vspace{1.15em}}
 \newcommand{\response}{\textbf{Response.}\enspace}
-\newcommand{\needexp}[1]{\textcolor{red}{\textbf{[EXPERIMENT TO INSERT:} #1\textbf{]}}}
-\newcommand{\needinfo}[1]{\textcolor{red}{\textbf{[AUTHOR INPUT TO INSERT:} #1\textbf{]}}}
+\definecolor{inhouseblue}{RGB}{225,240,255}
 
 \begin{document}
 
@@ -23,153 +23,179 @@
 Submission 13175
 \end{center}
 
-\textcolor{red}{Red text marks experimental results or author-supplied facts that must be
-inserted and checked before submission.}
-
 \textbf{Opening response.}
-We thank the reviewer for recognizing the value of a cell-aligned spatial
-transcriptomics resource at this scale. We agree that scale alone is not sufficient:
-the resource should expose concrete analysis challenges and enable conclusions that
-smaller, less diverse collections cannot support. We will therefore make the
-benchmark objectives and the effects of dataset heterogeneity more explicit.
+We sincerely thank the reviewer for recognizing the potential value of sMMC and
+for identifying the central question we had not answered clearly enough: what
+research becomes possible because the resource is larger, cell aligned, and
+context rich? This resource has accompanied me since my first PhD year, when I
+was new to spatial transcriptomics. As I approach graduation, I hope its unified
+release helps new students enter the field with fewer practical barriers.
+
+We also clarify the new primary component. The current working manifest contains
+99 unique samples (100 processing records) and 28,315,247 aligned targets. Our
+in-house DBiC-seq collection contributes 21 samples and 54,304 measured cells;
+paired-record QC removes 315, leaving 53,989 aligned cells. These records pair
+cell morphology, RNA, and cellular context. A broader continuing DBiC-seq pool
+now contains approximately 200,000 paired cells but is not counted in the table
+below.
+
+\begin{center}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\linewidth}{@{}
+>{\raggedright\arraybackslash}p{0.27\linewidth}
+>{\raggedright\arraybackslash}p{0.18\linewidth}
+>{\raggedright\arraybackslash}Xr@{}}
+\toprule
+Component & Samples & Platforms & Aligned cells after QC \\
+\midrule
+\rowcolor{inhouseblue}
+\textbf{New in-house primary data} & \textbf{21} & \textbf{DBiC-seq} &
+\textbf{53,989} \\
+\textbf{Total sMMC-28M working manifest} &
+\textbf{99 unique (100 records)} & \textbf{Xenium; Visium HD; DBiC-seq} &
+\textbf{28,315,247} \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{center}
 
 \questionsep
 \textbf{aSvP-1.}\quad
-\revcomment{The extent to which the larger, higher-resolution, and context-rich
-dataset can promote research progress is not fully explained.}
+\revcomment{The extent to which this new data can truly promote relevant
+research progress has not been fully explained.}
 
 \response
-The intended contribution is not a claim that one predictor solves
-histology-to-expression inference. Rather, sMMC-22M makes three previously difficult
-evaluations practical:
+We agree. The resource is valuable not because one predictor has solved
+histology-to-expression inference, but because it makes three previously
+difficult evaluations measurable: scaling under a fixed task,
+leakage-controlled breadth across organs, and failures caused by aggregation or
+context shift.
 
-\begin{enumerate}
-  \item \textbf{Breadth and transfer:} models can be evaluated by organ, platform,
-  study, and patient instead of only by a pooled random split.
-  \item \textbf{Cell-aligned resolution:} each record links a cell-centered local
-  image, a wider tissue-context image, coordinates, and an expression target. For
-  Xenium the molecular measurements are natively cell resolved; for Visium HD the
-  target is a boundary-aware aggregation of native 2-\(\mu\)m bins and will be described as
-  \emph{cell-aligned}, not as error-free single-cell ground truth.
-  \item \textbf{Context-aware failure analysis:} metadata allow performance to be
-  stratified rather than hiding patient, organ, or acquisition shifts in a pooled
-  score.
-\end{enumerate}
-
-As an initial breadth check, we evaluated the same image-only reference predictor
-(STBoost-Ref) on five Visium HD organs using a common in-domain top-50-gene
-diagnostic. Gene-wise Pearson correlation ranges from \(0.3366\) to \(0.5178\), while
-cell-wise Pearson correlation ranges from \(0.2345\) to \(0.8379\):
+\textbf{Scale.}
+On native-Xenium sample HHDX011, we fixed the spatial test regions,
+training-selected top-50 HVGs, and regression protocol while varying training
+cells for seven frozen encoders:
 
 \begin{center}
+\begingroup
+\small
 \begin{tabular}{lrrrr}
 \toprule
-Organ & Gene \(r\) & Gene \(\rho\) & Cell \(r\) & Cell \(\rho\) \\
+Training fraction & 5\% & 10\% & 25\% & 100\% \\
 \midrule
-Ovary  & 0.4523 & 0.4813 & 0.8379 & 0.7785 \\
-Lung   & 0.5178 & 0.5077 & 0.6042 & 0.5452 \\
-Breast & 0.3366 & 0.2631 & 0.2345 & 0.2393 \\
-Kidney & 0.3643 & 0.3313 & 0.5112 & 0.4834 \\
-Tonsil & 0.3817 & 0.3354 & 0.8193 & 0.5670 \\
+Seven-encoder mean Gene Pearson & 0.177 & 0.205 & 0.241 & 0.278 \\
 \bottomrule
 \end{tabular}
+\endgroup
 \end{center}
 
-These results should be read as a diagnostic of cross-tissue difficulty, not as a
-claim of uniformly accurate molecular prediction. They show why a multi-organ
-resource matters: a pooled mean would conceal very different gene- and cell-level
-behavior. We will add this compact summary and label the gene selection protocol
-explicitly. In a separate lung analysis of 111,772 cells, marker-derived coarse
-cell-state prediction from inferred expression reaches \(0.5935\) accuracy and
-\(0.5922\) balanced accuracy (ARI \(0.1362\), NMI \(0.2154\)). The moderate
-agreement is useful calibration: predicted expression retains some biological
-signal, but is not a substitute for direct molecular measurement.
+Every encoder improved monotonically. This shows that additional cells are
+useful within this controlled range; we do not claim a universal scaling law.
 
-We additionally audited four existing evaluations whose expression targets are
-native Xenium segmented cells. Under a fixed 70/10/20 within-sample random-cell
-split and training-selected top/HVG panels, colon (\(n=77{,}636\) test cells) and
-breast (\(n=114{,}907\)) achieved gene-wise Pearson/Spearman correlations of
-\(0.541/0.544\) and \(0.512/0.585\), respectively. Ovary
-(\(n=4{,}000\)) and skin (\(n=13{,}696\)) yielded
-\(0.406/0.459\) and \(0.509/0.384\). Recovered genes included
-TFF3/EPCAM and IGKC/JCHAIN in colon, MUC1/GATA3 in breast, and a coherent
-DES/MYH11/MYLK/ACTG2/ACTA2 smooth-muscle program in skin. These results provide
-marker-level evidence on native targets, but the random-cell split may exploit
-within-sample spatial structure and is not evidence of sample-held-out
-generalization.
+\textbf{Breadth and biological calibration.}
+We completed a leakage-controlled benchmark across 30 native-Xenium samples, 17
+organ labels, two species, and 360,000 spatially stratified cells. Each sample
+used four contiguous spatial holdouts and a 5\% train--test buffer; genes were
+selected from training data only.
 
-Against coordinate-only baselines, image-model gene-wise Pearson correlation was
-\(0.541\) versus \(0.238\) in colon, \(0.512\) versus \(0.116\) in breast,
-\(0.406\) versus \(0.285\) in ovary, and \(0.509\) versus \(0.257\) in skin.
-Across 100 spatial-block bootstrap replicates, none of the four image-model
-gene-correlation 95\% confidence intervals overlapped its coordinate-only interval.
+\begin{center}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrr@{}}
+\toprule
+Model & Gene P Top-50 & Gene P Top-200 & Gene S Top-50 & Cell P Top-50 &
+F1 Top-50 \\
+\midrule
+\textbf{Image} & \textbf{0.324} & \textbf{0.202} & \textbf{0.291} &
+\textbf{0.442} & \textbf{0.413} \\
+Coordinate only & 0.046 & 0.031 & 0.041 & 0.288 & 0.283 \\
+Spatial KNN & 0.053 & 0.029 & 0.051 & 0.268 & 0.320 \\
+Training mean & N/A & N/A & N/A & 0.305 & 0.253 \\
+\bottomrule
+\end{tabular*}
+\endgroup
+\end{center}
 
-\needexp{Insert the ongoing native-Xenium sample-held-out benchmark with
-training-mean, coordinate-only, and metadata-only baselines; report prespecified
-marker/program and coarse-state metrics, per-sample values, and uncertainty.}
+The top-50 image Gene Pearson has a biological-sample bootstrap 95\% CI of
+0.277--0.368 and exceeds coordinate and KNN controls in 28/30 samples. On
+marker/HVG overlap, image Gene Pearson is 0.201 versus 0.031 for coordinates and
+0.028 for KNN. Cell-type-stratified pseudobulk RMSE is 0.120 for image prediction
+versus 0.224/0.187/0.188 for coordinates/KNN/training mean. Because cell-type
+labels are expression derived, this is aggregate biological calibration, not
+independent ground truth.
+
+\textbf{Resolution.}
+On six native-Xenium samples, matched cell, 8-, 16-, and 55-\(\mu\)m supervision
+gives Gene Pearson 0.365, 0.365, 0.363, and 0.330. In dense lung, 55.5\%--66.4\% of
+55-\(\mu\)m pseudo-spots mix predicted cell types and contain 73.8\%--81.0\% of
+evaluated cells, whereas sparse heart shows only 3.5\%--4.1\% mixed spots and
+7.0\%--8.3\% affected cells. Thus, cell-level evaluation exposes
+density-dependent mixing hidden by coarse averaging; it is not claimed to be
+universally easier.
+
+Together, these experiments turn scale, resolution, and context from descriptive
+properties into testable variables: users can study data scaling, organ/platform
+transfer, aggregation-induced oversmoothing, spatial leakage, and
+context-specific failure.
 
 \questionsep
 \textbf{aSvP-2.}\quad
-\revcomment{The increased scale, resolution, and context may also increase
-heterogeneity. Please clarify that heterogeneity and how it influences downstream
-analysis.}
+\revcomment{The increase of data scale, resolution, and contexts typically
+associates with increased heterogeneity, which may pose critical challenges for
+data analysis. Please clarify the heterogeneity and how it may influence
+downstream analysis.}
 
 \response
-We agree. Our canonical audit separates source-package counts from final expression
-targets. The public component contains 42 native Xenium packages with 16,314,129
-target cells and 25 Visium HD source packages with 7,629,697 pre-aggregation
-source/segmentation records. The canonical 2-\(\mu\)m bin-to-cell matrices contain
-3,932,040 derived Visium HD target rows, giving 20,246,169 public aligned targets
-across 25 species--organ strata. Four in-house Yale pilot DBiC-seq cell-line
-samples add 9,806 measured and aligned cells, for a record-level total of
-20,255,975 aligned
-targets. The release therefore contains 70 unique source samples represented by 71
-processing records; these records are not independently verified studies or
-donors.
+We agree and will make heterogeneity an explicit benchmark variable rather than
+a hidden nuisance.
 
-Among the public tissue strata, the imbalance is substantial: target counts range
-from 26,366 (human heart) to
-3,559,793 (human breast), a 135-fold range; the median is 384,121
-(IQR 225,906--880,627). Gene coverage ranges from 450 to 72,302, and only 10 of
-25 strata are represented on both platforms. Organs also differ in tissue state,
-morphology, donor composition, and metadata completeness.
-Consequently, randomly pooled performance can be dominated by the largest
-organ/platform strata and can overstate generalization through spatial or
-within-sample autocorrelation.
+\begin{center}
+\begingroup
+\scriptsize
+\renewcommand{\arraystretch}{1.10}
+\begin{tabularx}{\linewidth}{@{}p{0.15\linewidth}p{0.35\linewidth}X@{}}
+\toprule
+Dimension & Observed heterogeneity & Downstream consequence \\
+\midrule
+Organ size & 26,366--3,559,793 aligned cells (135-fold) &
+Cell-weighted pooling can be dominated by large organs. \\
+Gene coverage & 450--72,302 genes &
+Full-panel metrics are not directly comparable across panels. \\
+Platform & Only 10/25 public tissue strata occur on both platforms &
+Platform and biology can be confounded. \\
+Spatial density & 55-\(\mu\)m mixing affects 7.0\%--8.3\% of cells in sparse
+heart but 73.8\%--81.0\% in dense lung &
+Spot averaging hides tissue-dependent heterogeneity. \\
+Sample transfer & Across 18 same-organ targets, top-50-HVG Gene Pearson averages
+0.170 but ranges 0.016--0.372 &
+Mean performance can conceal severe target-sample failures. \\
+Context & Ovarian AK (60+) \(\to\) AD (60+) versus AK \(\to\) AL (40-)
+changes F1 0.289 \(\to\) 0.072 &
+Pooled scores can hide subgroup collapse. \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{center}
 
-We will make these consequences operational in the benchmark:
+The ovarian comparison is age associated but sample/patient confounded, not
+causal. Incomplete donor identity also means the 18-target result is
+sample-held-out, not patient-held-out. These limitations illustrate why context
+and provenance are necessary.
 
-\begin{itemize}
-  \item report platform-separated and organ-macro averages rather than only a
-  cell-weighted pooled average;
-  \item publish split keys at the highest verified biological unit and distinguish
-  in-domain interpolation from cross-sample transfer; ``cross-patient'' will be used
-  only where independent patient IDs are documented;
-  \item report gene-panel overlap and metadata missingness for each evaluation;
-  \item attach a provenance label to every field (directly measured, processed, or
-  generated), so users can select a reliability tier appropriate to their task.
-\end{itemize}
+We will therefore: (i) report organ-macro and platform-separated results rather
+than only cell-weighted averages; (ii) distinguish spatial in-domain,
+sample-held-out, and verified patient-held-out protocols; (iii) report
+Average/Worst/Gap together with sample support; (iv) disclose gene-panel overlap
+and metadata missingness; and (v) label every field as directly measured,
+processed, generated, or model output. We will not infer missing sensitive
+attributes.
 
-\needinfo{Complete the audited heterogeneity table with evidence-backed biological
-sample and donor/patient IDs, tissue-state labels, and metadata missingness. The
-organ/platform cell counts, gene ranges, and long-tail statistics are already
-verified; donor-level claims remain unsupported until these fields are supplied.}
-
-\needexp{Insert stratified downstream results showing how performance changes across
-platforms, organs, patients/studies, panel-overlap bins, and metadata-completeness
-bins. Report macro averages and variability; do not pool all cells into one score.}
-
-We will also revise the limitations to state directly that sMMC-22M reflects the
-composition of its contributing studies, that uncommon organs and demographic
-groups may be underrepresented, and that processed Visium HD cell profiles inherit
-segmentation and aggregation uncertainty. These changes turn heterogeneity from an
-unreported nuisance into an explicit benchmark variable and a documented limitation.
-
-\questionsep
-\textbf{Planned manuscript changes.}
-We will (i) add the platform/organ composition and heterogeneity tables, (ii) add the
-five-organ result summary and the broader biological evaluation once completed,
-(iii) define all split levels and macro-averaging rules, and (iv) expand the
-limitations and field-level provenance documentation.
+These revisions also clarify the scientific value: sMMC does not remove
+heterogeneity, but makes its downstream effects visible, measurable, and
+reproducible across organs, platforms, spatial resolutions, and biological
+contexts.
 
 \end{document}

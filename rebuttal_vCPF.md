@@ -1,72 +1,81 @@
-We thank the reviewer for the careful assessment. We agree with the three central requests: quantify uncertainty in the Visium HD construction, demonstrate breadth beyond a few cases, and calibrate low correlations using biological and simple baselines. We will also distinguish in-domain interpolation from sample-held-out generalization.
+We sincerely thank the reviewer for the careful and constructive assessment. We agree with the three central requests: quantify uncertainty in Visium HD cell construction, demonstrate breadth beyond a few cases, and calibrate low correlations with biological and simple baselines. This resource has accompanied me since my first PhD year; as I approach graduation, I hope its unified release helps new students enter spatial transcriptomics with fewer practical barriers.
 
-**1. For Visium HD, how reliable is bin-to-cell aggregation? How are boundary bins assigned, and do segmentation errors affect expression profiles?**
+The resource is also continuing to grow through primary acquisition. Our in-house DBiC-seq collection contributes 21 samples and 54,304 measured cells; paired-record QC removes 315, leaving 53,989 aligned cells with paired morphology, RNA, and cellular context. The current working manifest contains 99 unique samples (100 processing records) and 28,315,247 aligned targets across Xenium, Visium HD, and DBiC-seq. A broader continuing DBiC-seq pool contains approximately 200,000 paired cells but is not counted here.
 
-Xenium supplies natively cell-resolved transcript locations and platform-defined cell masks. Visium HD instead supplies native $2\,\mu\mathrm{m}$ bins; we register them to H&E, segment cell footprints, and aggregate bin counts over the aligned footprints. We will therefore call the latter *cell-aligned computational targets*, not direct single-cell measurements.
+**1. For the Visium HD data, how reliable is the bin-to-cell aggregation? How are boundary bins assigned, and do segmentation errors noticeably affect expression profiles?**
 
-The audited rule assigns a bin when its closed $2\,\mu\mathrm{m}$ square intersects a CellViT polygon. If several polygons claim it, the bin is assigned to the nearest centroid in full-resolution coordinates; exact ties use the lower raw-cell index. The $8\,\mu\mathrm{m}$ files are legacy QC/fallback artifacts, not the canonical targets.
+We will distinguish native Xenium cells from *derived cell-aligned* Visium HD targets. Official transforms register native $2\,\mu$m bins to H&E. A closed bin square is assigned when it intersects a same-frame CellViT polygon; if several polygons claim it, the nearest full-resolution centroid wins, with raw-cell index breaking exact ties. Unsupported cells are removed. We will move this rule and a complete record example from Appendix S2 into the main text.
 
-**AUTHOR INPUT REQUIRED:** confirm the CellViT model/version, registration implementation, and released-pipeline QC thresholds.
+We audited 3,000 raw polygons per dataset (9,000 total) under 1-$\mu$m registration shifts and mask erosion/dilation:
 
-We completed boundary perturbations for lung A, lung B, and ovary. Relative to the default rule, strict-interior assignment retained 62.5%/56.1%/80.7% of cells and 16.0%/11.0%/20.5% of bins; one-bin erosion retained 46.0%/37.9%/72.0% of cells and 18.9%/12.2%/26.0% of bins. One-bin dilation retained 100.0%--100.1% of cells but increased assigned bins to 181.9%--196.2% of default. Thus, assignment is materially boundary-sensitive and must not be presented as error-free single-cell ground truth.
-
-**PENDING EXPERIMENT:** on identical common cells/genes, add expression Pearson/Spearman, HVG/marker-rank stability, coarse-state concordance, and fixed-checkpoint image-to-gene sensitivity with confidence intervals. We will report Xenium and Visium HD separately.
-
-**2. The experiments cover few cases. Can the authors summarize more organs or platforms?**
-
-We have a directly comparable five-organ Visium HD analysis using the same in-domain top-50-gene protocol:
-
-| Organ | STBoost-Ref gene $r$ | STBoost-Ref cell $r$ | BLEEP gene $r$ | BLEEP cell $r$ |
+| Visium HD sample | Raw polygons with canonical bins | Shift-bin Jaccard | Shift-expression cosine | Shift median $|\Delta\mathrm{UMI}|$ |
 |---|---:|---:|---:|---:|
-| Ovary | 0.4523 | 0.8379 | 0.4239 | 0.8212 |
-| Lung | 0.5178 | 0.6042 | 0.4241 | 0.5622 |
-| Breast | 0.3366 | 0.2345 | 0.0079 | 0.1282 |
-| Kidney | 0.3643 | 0.5112 | 0.3356 | 0.5369 |
-| Tonsil | 0.3817 | 0.8193 | 0.1809 | 0.7808 |
+| Human lung cancer | 49.4% | 0.727--0.733 | 0.954--0.957 | 11.1%--11.3% |
+| Mouse brain | 97.5% | 0.806--0.816 | 0.936--0.939 | 6.0%--6.1% |
+| Human pancreas | 50.0% | 0.706--0.714 | 0.994 | 13.0%--13.7% |
 
-This supports breadth across five tissues while exposing substantial tissue-dependent heterogeneity; it does not imply equal validation of all 25 organs. We will place gene selection, split, and sample size beside the table.
+Canonical-bin percentages use all detected polygons; unsupported polygons are excluded before release. Small shifts preserve expression direction but alter exact membership and UMIs. Erosion/dilation gives median bin Jaccard 0.462--0.720, expression cosine 0.871--0.993, and absolute UMI changes of 32.8%--66.6%. Thus, segmentation/assignment uncertainty is material. We will release assignment settings and per-sample retention/QC, avoid treating Visium HD aggregation as ground truth, and report native-Xenium evidence separately.
 
-**PENDING EXPERIMENT:** add the lightweight benchmark over the final organ set and both platforms, with per-organ/platform values, organ-macro averages, sample/cell counts, gene-panel overlap, and uncertainty. Xenium and Visium HD will remain separate.
+**2. The main experiments cover only a few representative cases. Can the authors summarize more organs or platforms?**
 
-**3. How should low gene-wise correlations be interpreted biologically? Could marker/cell-type genes and spatial-only or metadata-only baselines calibrate them?**
+Yes. We completed a leakage-controlled native-Xenium benchmark across 30 samples, 17 organ labels, two species, and 360,000 spatially stratified cells, using four contiguous spatial holdouts, a 5% buffer, and training-selected genes:
 
-We agree that the low full-panel correlations are important negative results. Sparse or weakly morphology-linked genes depress gene-wise correlation, and sample transfer also changes morphology, composition, and acquisition. In lung, STBoost-Ref obtains gene Pearson/Spearman and cell Pearson of 0.0259/0.0268/0.4112 in-domain and 0.0124/0.0137/0.2820 sample-held-out over the full panel. Histology alone is therefore not a replacement for measured expression.
-
-An explicitly post-hoc selected 50-gene diagnostic gives 0.5117/0.5069/0.5979 in-domain and 0.2986/0.2405/0.3451 held-out. Separately, marker-derived states from 111,772 lung cells achieve 0.5922 balanced accuracy (ARI 0.1362). These results indicate recoverable biological signal but caution against cell-by-cell interpretation.
-
-On native Xenium targets, existing 70/10/20 within-sample random-cell evaluations with training-only gene selection give:
-
-| Organ | Test cells | Genes | Gene $r/\rho$ | Coordinate-only $r$ | Cell $r/\rho$ |
+| Model | Gene P Top-50 | Gene P Top-200 | Gene S Top-50 | Cell P | F1 |
 |---|---:|---:|---:|---:|---:|
-| Colon | 77,636 | 10 | 0.541/0.544 | 0.238 | 0.666/0.637 |
-| Breast | 114,907 | 10 | 0.512/0.585 | 0.116 | 0.546/0.519 |
-| Ovary | 4,000 | 10 | 0.406/0.459 | 0.285 | 0.644/0.543 |
-| Skin | 13,696 | 10 | 0.509/0.384 | 0.257 | 0.508/0.443 |
+| **Image** | **0.324** | **0.202** | **0.291** | **0.442** | **0.413** |
+| Coordinate only | 0.046 | 0.031 | 0.041 | 0.288 | 0.283 |
+| Spatial KNN | 0.053 | 0.029 | 0.051 | 0.268 | 0.320 |
+| Training mean | N/A | N/A | N/A | 0.305 | 0.253 |
 
-Recovered markers include TFF3/EPCAM, IGKC/JCHAIN, MUC1/GATA3, and the DES/MYH11/MYLK smooth-muscle program. Across 100 spatial-block bootstrap replicates, image-model gene-$r$ 95% CIs were [0.518, 0.558], [0.487, 0.530], [0.377, 0.424], and [0.467, 0.525]; none overlapped the corresponding coordinate-only CIs. These quantify within-sample feasibility, not held-out-sample transfer.
+Image prediction beats coordinate and KNN controls in 28/30 samples; top-50 Gene Pearson has a biological-sample bootstrap 95% CI of 0.277--0.368. Across 18 same-organ native-Xenium target samples held out in full, image prediction obtains mean top-50-HVG Gene Pearson 0.170 (range 0.016--0.372), Cell Pearson 0.275 versus 0.205 for training mean, and F1 0.125 versus 0.031. These are sample-, not donor-held-out, results.
 
-**PENDING EXPERIMENT:** fixed-panel sample-held-out native-Xenium evaluation with training-mean, coordinate-only, and metadata-only baselines; marker/program/coarse-state metrics; Average, Worst, and Gap.
+For Visium HD breadth, eight source-sample→target-sample organ pairs give:
 
-**4. In-domain splits may reflect local interpolation and spatial autocorrelation rather than robust generalization.**
+| Eight-organ macro result | Gene P | Cell P | F1 |
+|---|---:|---:|---:|
+| UNI2-h | 0.0151 | 0.2036 | 0.0815 |
+| Training mean | N/A | 0.2422 | 0.0375 |
 
-We agree. We will relabel in-domain results as interpolation diagnostics and use sample-held-out/cross-study transfer for generalization claims. The lung full-panel cell Pearson drop from 0.4112 to 0.2820 already illustrates this gap.
+The transfer result is intentionally not hidden: UNI2-h improves F1 but not Cell Pearson over the mean baseline. We will report organ-macro and per-organ values, separate Xenium from Visium HD, and avoid cell-weighted pooled claims.
 
-**PENDING EXPERIMENT:** add a distance-buffered split and coordinate-only/spatial-neighbor baselines, reporting performance against minimum train--test distance.
+**3. Some gene-wise correlations are low, especially under transfer. How should they be interpreted biologically, and could marker/cell-type genes or spatial-only/metadata-only baselines calibrate them?**
 
-**5. The ovarian age-shift analysis is narrow and does not establish systematic evaluation of all context variables.**
+Low full-panel correlations show that histology is not a replacement for molecular measurement. They combine sparse/weakly morphology-linked genes with sample, composition, and acquisition shifts. A restricted training-selected HVG endpoint is easier and must not be conflated with all-gene transfer.
 
-Agreed. It is a showcase of how metadata can expose subgroup disparity, not evidence that every context variable has been validated. AK, AD, and AL are anonymized ovarian sample identifiers. The current comparisons also differ in patient/tumor context and gene-panel size, so they cannot identify a causal age effect.
+Biological calibration of the 30-sample spatially held-out predictions gives:
 
-**PENDING EXPERIMENT:** rerun on the identical shared gene panel and preprocessing, add sample/cell counts and uncertainty, and describe the finding as an *age-associated, sample-confounded shift* unless independent-donor support permits a stronger claim.
+| Metric | Image | Coordinate | Spatial KNN | Mean |
+|---|---:|---:|---:|---:|
+| Marker/HVG Gene Pearson $\uparrow$ | 0.201 | 0.031 | 0.028 | N/A |
+| Cell-type-stratified pseudobulk RMSE $\downarrow$ | 0.120 | 0.224 | 0.187 | 0.188 |
 
-**6. Which released fields are direct measurements, processed artifacts, or generated outputs?**
+The marker inventory overlaps training-selected HVGs, and cell-type strata are expression-derived; these results show recoverable aggregate structure, not independent cell-type validation. Under the harder bidirectional all-gene lung/ovary transfer, image Gene Pearson averages are $-0.0003/0.0020$, whereas metadata-only baselines reach 0.104/0.142; coarse-state balanced accuracy is 0.139/0.159 for image prediction versus 0.220/0.252 for metadata. This negative result demonstrates context dependence and motivates stronger patient/platform-robust methods rather than supporting unrestricted cell-wise recovery.
+
+**4. In-domain results may reflect local interpolation and spatial autocorrelation rather than robust generalization.**
+
+We agree. We will call same-sample results *spatial interpolation diagnostics*. The 30-sample experiment uses contiguous holdouts and a 5% train--test buffer, while the 18-target and eight-organ experiments hold out complete samples. Their lower and heterogeneous performance quantifies the generalization gap. “Patient-held-out” will be used only when donor identity is verified.
+
+**5. The ovarian context analysis is narrow and does not establish systematic evaluation of all variables.**
+
+Agreed. Ovarian AK (60+)→AD (60+) versus AK→AL (40-) changes F1 0.289→0.072, gene Spearman 0.036→0.006, cell Spearman 0.206→0.095, and nonzero rate 0.166→0.027. Because age is nested within sample/patient and panels differ, we will call this an *age-associated, sample-confounded shift*, not a causal age effect.
+
+To show the broader purpose of rich context, we applied Average/Worst/Gap audits to complementary cohorts:
+
+| Task / encoder | Context; split | Average BA | Worst BA | Gap |
+|---|---|---:|---:|---:|
+| Bone marrow / scGPT | assay; patient-CV | 0.962 | 0.740 | 0.258 |
+| Ten tissues / scGPT | dataset; patient-CV | 0.667--0.962 | 0.004--0.892 | max 0.975 |
+| LUAD KRAS / CONCH | site; leave-one-site | 0.499 | 0.375 | 0.542 |
+| LGG IDH / H-Optimus-0 | site; leave-one-site | 0.747 | 0.476 | 0.524 |
+
+Rich metadata enable subgroup-support and worst-context audits; they do not themselves remove bias.
+
+**6. Users need clear guidance on which fields are direct measurements and which are generated or post-processed.**
 
 | Provenance | Examples |
 |---|---|
-| Directly measured | H&E; Xenium transcript coordinates and platform cell masks; Visium HD $2\,\mu\mathrm{m}$ bin counts; source metadata as reported. |
-| Processed | Registered coordinates; segmented footprints; Visium HD bin-to-cell matrices; local/context crops; normalized matrices; split indices; communication summaries computed from molecular profiles. |
-| Generated | Metadata-grounded captions and model predictions; neither is molecular ground truth. |
+| Direct | H&E; Xenium transcript coordinates/platform masks; Visium HD $2\,\mu$m bin counts; source metadata as reported. |
+| Processed | Registration; CellViT footprints; Visium HD bin-to-cell matrices; crops; normalized matrices; splits; molecular-profile summaries. |
+| Generated | Metadata-grounded GPT-4o captions and model predictions; neither is molecular ground truth. |
 
-The revision will include a field-level manifest, release version, licenses, checksums, split definitions, and an exact inventory of available raw, processed, and generated files.
-
-**PENDING EXPERIMENT:** a stratified human factuality audit of generated captions with rubric, error categories, agreement, and supported/unsupported rates. Unless validated, captions will be labeled optional machine-generated annotations and excluded from the core benchmark.
+GPT-4o only verbalizes supplied fields. Independent PLIP/CONCH image--caption audits give matched-versus-mismatched AUC 0.993/0.988 and 100% Top-3 retrieval under both models. We will restore prompts, field checks, full examples, and audit matrices in the Appendix. Captions remain optional context and are excluded from the molecular ground truth.
