@@ -1,75 +1,92 @@
-We thank the reviewer for focusing on the central validity question: a cell-centered image does not by itself make its expression target a direct single-cell measurement. We agree and will sharpen this distinction, broaden evaluation, and add the missing construction, cohort, and limitation details.
+We thank the reviewer for identifying three places where our previous presentation was insufficiently precise: the distinction between native cell-resolved and derived cell-aligned molecular targets, the breadth of the experimental evaluation, and the evidence for what cell-level evaluation adds beyond spot-level prediction. We clarify these distinctions below, report the validation and cross-organ results that are now available, and identify the matched analyses that remain in progress. We will also calibrate the title and claims and correct all presentation issues noted by the reviewer.
 
 This resource is also personally meaningful to me. I began assembling it during the first year of my PhD, when I was new to spatial transcriptomics. The data were fragmented across platforms, most available resources were still organized at the spot level, and working with individual datasets required learning different software stacks, from Scanpy-based workflows to Xenium Ranger and other platform-specific tools. I therefore started organizing the datasets I encountered into a consistent single-cell and cell-aligned collection. Over the following years, I continued this curation alongside my research. Across successive submission rounds, the collection grew from 12 million cells to 20 million and then to the 22-million-cell version submitted here; our rebuttal-time working manifest has since reached 28 million. It also expanded from Xenium-only data to Xenium plus Visium HD and, most recently, to a growing in-house DBiC-seq collection generated with our collaborators. Along the way, it has supported several of my published studies and many projects by my co-authors. Watching the resource mature has paralleled my own growth as a researcher and has exposed me to recurring challenges across platforms, resolution, and biological context. These experiences are why, as I approach graduation, I hope to make the resource broadly available soon in a unified, accessible form, particularly for students entering the field who face the same practical barriers that I did.
 
-**1. The imaging side is cell centered, but spot-level or interpolated expression does not establish true single-cell prediction. Please soften the title and abstract.**
+**1. Native cell-resolved versus derived cell-aligned targets (P2, Q2, Q4 and L1–L2).**
 
-Agreed. Xenium supplies natively cell-resolved transcript locations and platform-defined masks. Visium HD supplies native $2\,\mu\mathrm{m}$ bin counts, which we register to H&E and aggregate over segmented cell footprints. We will call the latter *cell-aligned computational targets*, not direct single-cell ground truth, and use “toward cell-level prediction” or “cell-aligned prediction” where appropriate. A conservative title is *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
+The premise that all source datasets provide only spot-level expression is not correct, although we agree that our presentation did not foreground the distinction sufficiently. The submitted public inventory contains 23,943,826 upstream/source records: 16,314,129 Xenium cells defined by platform-provided cell boundaries and transcript coordinates, and 7,629,697 Visium HD source/segmentation records. After bin-to-cell aggregation, the corresponding native-plus-derived expression matrices contain 20,246,169 target rows: 16,314,129 native Xenium cells and 3,932,040 derived Visium HD cell-aligned profiles. We will report these counting layers separately rather than calling every record a directly measured single cell.
 
-For lung A, lung B, and ovary, strict-interior assignment retains 62.5%/56.1%/80.7% of default cells and 16.0%/11.0%/20.5% of bins. One-bin erosion retains 46.0%/37.9%/72.0% of cells, whereas dilation retains essentially all cells but increases assigned bins to 181.9%--196.2% of default. This sensitivity reinforces the cell-aligned rather than direct-single-cell claim.
+**Native-cell validation.** We evaluated four native-Xenium examples using a fixed 70/10/20 random-cell split (seed 42) and ten training-selected biological genes. Gene Pearson/Spearman was 0.541/0.544 for colon HCCD035 (77,636 test cells), 0.512/0.585 for breast HBCA041 (114,907), 0.406/0.459 for ovary HOCW023 (4,000), and 0.509/0.384 for skin HSDX009 (13,696). The corresponding cell Pearson values were 0.666, 0.546, 0.644, and 0.508, with F1 scores of 0.760, 0.766, 0.515, and 0.310. Against a coordinate-only baseline, image-model gene Pearson was 0.541 versus 0.238, 0.512 versus 0.116, 0.406 versus 0.285, and 0.509 versus 0.257; the 100-replicate spatial-block bootstrap intervals did not overlap in any sample. These results establish within-sample feasibility on genuine segmented-cell targets, but they do not establish sample-held-out generalization.
 
-**PENDING EXPERIMENT:** add matched-cell expression/marker/state agreement and fixed-checkpoint downstream sensitivity with confidence intervals for these perturbations.
+We therefore also ran bidirectional sample-held-out native-Xenium tests in lung and ovary (two held-out samples per organ). This harder result is substantially less favorable: UNI2-h all-gene Pearson averages were −0.0003 in lung and 0.0020 in ovary, and coarse-state balanced accuracies were 0.139 and 0.159. Metadata-only baselines reached all-gene Pearson of 0.104 and 0.142 and balanced accuracy of 0.220 and 0.252, respectively. ResNet50 and H-Optimus-0 were likewise near zero on all-gene Pearson. We will report these negative results: native target validity and cross-sample image-to-expression learnability are distinct questions, and the latter remains unsolved by the evaluated predictors.
 
-**AUTHOR INPUT REQUIRED:** approve the final title and audit every use of “single-cell,” retaining it only for native measurements or appropriately qualified goals.
+Accordingly, we will use “native cell-resolved” for Xenium, “derived cell-aligned” for Visium HD, and “toward cell-level prediction” for claims spanning both platforms. We will not imply that every target is an independently measured whole-transcriptome single-cell ground truth. A conservative revised title is *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
 
-**2. The experiments emphasize few organs. If all 25 were evaluated, report per-organ and summary performance.**
+**AUTHOR INPUT REQUIRED:** confirm the final title and audit every title/abstract use of “single-cell,” retaining it only for native measurements or appropriately qualified goals.
 
-We did not train and validate one complete benchmark on all 25 organs and will not imply otherwise. We can add this directly comparable five-organ Visium HD in-domain top-50-gene diagnostic:
+**2. Cross-organ evaluation and independent biological units (P3, Q1, P8 and L4).**
 
-| Organ | Gene $r$ | Gene $\rho$ | Cell $r$ | Cell $\rho$ |
-|---|---:|---:|---:|---:|
-| Ovary | 0.4523 | 0.4813 | 0.8379 | 0.7785 |
-| Lung | 0.5178 | 0.5077 | 0.6042 | 0.5452 |
-| Breast | 0.3366 | 0.2631 | 0.2345 | 0.2393 |
-| Kidney | 0.3643 | 0.3313 | 0.5112 | 0.4834 |
-| Tonsil | 0.3817 | 0.3354 | 0.8193 | 0.5670 |
+We agree that the main text emphasized representative organs without a compact cross-organ summary. We first add the same-protocol four-method comparison below. All four methods are currently available for five organs; the remaining three organ names are retained explicitly and will not be filled with results from a different protocol.
 
-The wide range argues against a cell-weighted pooled score. Separately, native-Xenium within-sample diagnostics give gene Pearson/Spearman of 0.541/0.544 (colon; 77,636 test cells), 0.512/0.585 (breast; 114,907), 0.406/0.459 (ovary; 4,000), and 0.509/0.384 (skin; 13,696), recovering TFF3/EPCAM, MUC1/GATA3, and DES/MYH11/MYLK signals. Image-model versus coordinate-only gene Pearson is 0.541/0.238, 0.512/0.116, 0.406/0.285, and 0.509/0.257; their 100-replicate spatial-block bootstrap intervals do not overlap. These results show native-target within-sample feasibility, not held-out-sample generalization.
+*Table 1. Strict cell-level comparison. BL, GH, SC, and OR denote BLEEP, GHIST, sCellST, and our method, respectively. Bold marks the best available result within each organ and metric.*
 
-**PENDING EXPERIMENT:** add platform-separated lightweight per-organ and native-Xenium sample-held-out summaries with organ-macro averages, baselines, support, and uncertainty.
+| Organ | Gene P BL | Gene P GH | Gene P SC | Gene P OR | Gene S BL | Gene S GH | Gene S SC | Gene S OR | Cell P BL | Cell P GH | Cell P SC | Cell P OR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Human ovary | 0.4239 | 0.4523 | 0.0800 | **0.6451** | 0.4396 | 0.4813 | 0.0640 | **0.6049** | 0.8212 | 0.7382 | 0.6858 | **0.8379** |
+| Human lung | 0.4241 | 0.4754 | 0.1255 | **0.5178** | 0.4310 | 0.4814 | 0.1748 | **0.5077** | 0.5622 | 0.5787 | 0.4704 | **0.6042** |
+| Human breast | 0.0079 | 0.0487 | 0.0032 | **0.5118** | 0.0051 | 0.0495 | 0.0070 | **0.5849** | 0.1282 | 0.1832 | 0.1240 | **0.5465** |
+| Mouse kidney | 0.3356 | 0.3040 | 0.0236 | **0.3643** | **0.3468** | 0.2781 | 0.0264 | 0.3313 | **0.5369** | 0.5285 | 0.2601 | 0.5112 |
+| Human tonsil | 0.1809 | 0.1591 | 0.0088 | **0.3817** | 0.1794 | 0.1488 | 0.0084 | **0.3354** | 0.7808 | 0.6107 | 0.7199 | **0.8193** |
+| Human pancreas | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| Mouse brain | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| Mouse embryo | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 
-**3. The ovarian age experiment demonstrates distribution shift but does not advance the single-cell claim.**
+On the five completed organs, our method is best in 13 of 15 organ–metric comparisons. The two exceptions are kidney gene Spearman and kidney cell Pearson, where BLEEP is best. We will preserve these per-organ results rather than report a cell-weighted pooled average.
 
-Agreed. We will present it only as a metadata-defined performance-bias showcase. AK, AD, and AL are anonymized ovarian sample IDs. Comparing AK (60+) $\to$ AD (60+) against AK (60+) $\to$ AL (40-), F1 changes from 0.289 to 0.072, gene Spearman from 0.036 to 0.006, cell Spearman from 0.206 to 0.095, and predicted nonzero rate from 0.166 to 0.027. This motivates Average, Worst-context, Gap, and Support reporting, but it neither validates cell-target accuracy nor establishes a causal age effect. Age is currently nested within patient/sample and tissue context, and panels differ.
+Separately, we completed a lightweight eight-organ Visium HD breadth benchmark under one matched sample-held-out protocol: a frozen UNI2-h encoder, seed 42, 20,000 source-reference cells, 2,000 validation cells, at most 5,000 target-test cells, five epochs, all shared genes, and an identical training-mean baseline. Every organ used 5,000 target-test cells.
 
-**PENDING EXPERIMENT:** rerun with one shared gene panel and matched preprocessing, report cells/samples and uncertainty, and retain only the claim of an *age-associated, sample-confounded shift* unless independent-donor support permits more.
+*Table 2. Eight-organ Visium HD sample-held-out breadth benchmark. TM is the training-mean baseline; its gene-wise Pearson is undefined because its prediction is constant across test cells.*
 
-**4. The paper repeats framing but omits alignment details; STBoost is defined late, and Figure 1 contains errors.**
+| Organ | Pair | UNI2-h Gene P | UNI2-h Cell P | UNI2-h F1 | TM Cell P | TM F1 |
+|---|---|---:|---:|---:|---:|---:|
+| Human breast | j→m | 0.0272 | 0.1109 | 0.1794 | 0.1108 | 0.1215 |
+| Human ovary | ad→ak | 0.0267 | 0.4593 | 0.1161 | 0.4906 | 0.0561 |
+| Human lung | k→d | 0.0143 | 0.2121 | 0.0960 | 0.1455 | 0.0236 |
+| Human pancreas | g→ag | 0.0040 | 0.0090 | 0.0389 | 0.0023 | 0.0168 |
+| Human tonsil | u→i | 0.0141 | 0.2769 | 0.0708 | 0.3264 | 0.0346 |
+| Mouse brain | e→ah | 0.0243 | 0.2016 | 0.0623 | 0.2238 | 0.0179 |
+| Mouse embryo | b→ai | 0.0048 | 0.0913 | 0.0369 | 0.1683 | 0.0134 |
+| Mouse kidney | a→aj | 0.0049 | 0.2678 | 0.0513 | 0.4696 | 0.0159 |
+| **Organ-macro mean** | — | **0.0151** | **0.2036** | **0.0815** | **0.2422** | **0.0375** |
 
-We will replace repetition with construction details. For Visium HD, the audited rule assigns a closed native $2\,\mu\mathrm{m}$ bin square that intersects a CellViT polygon. Multiple claims go to the nearest centroid in full-resolution coordinates; exact ties use the lower raw-cell index. We will state registration, segmentation, and QC separately by platform.
+UNI2-h improves organ-macro F1 (0.0815 versus 0.0375) and produces nonzero gene-wise correlation, but it does not beat the mean baseline in macro cell Pearson (0.2036 versus 0.2422). Performance also varies widely: UNI2-h gene Pearson ranges from 0.0040 (pancreas) to 0.0272 (breast), cell Pearson from 0.0090 (pancreas) to 0.4593 (ovary), and F1 from 0.0369 (embryo) to 0.1794 (breast). This heterogeneity is itself important and will be reported rather than hidden by pooling.
 
-STBoost will be introduced in the abstract/introduction as a model-agnostic cell-aligned data interface. STBoost-Ref will be defined before its first result as an image-only retrieval predictor: at inference it receives local and wider-context histology crops, never query expression, and returns a cell-aligned vector.
+The rebuttal-time working manifest contains 28,315,247 post-QC aligned targets across 99 unique source samples (100 versioned processing records), including 21 in-house DBiC-seq samples with 54,304 measured cells and 53,989 after QC. However, “sample” is not interchangeable with “donor.” The eight-organ experiment uses eight distinct source–target sample pairs (16 source samples); we will call it sample-held-out unless donor identity is verified. The revised manifest will report patient/donor/animal, specimen, and section support and keep repeated sections from one biological subject in the same split.
 
-**AUTHOR INPUT REQUIRED:** verify CellViT/registration versions, cell--bin center-distance statistics, QC thresholds, and retention by platform.
+**AUTHOR INPUT REQUIRED:** insert verified human donor/patient and animal totals and per-organ grouping from source metadata; do not infer missing identities.
 
-We will redraw Figure 1 and correct its labels/caption; remove the Figure 3 border and rasterized text; define “study split” in Table 1 and “cell unit” as one aligned multimodal record in Table 2; define Fig. 2’s task, metric, and training ratio; make the suggested textual cuts; and state the public release scope explicitly.
+**3. Why cell-level evaluation matters (P4, Q3 and L3).**
 
-**5. Report patient/animal counts and the cross-patient train/test composition.**
+We agree that a direct comparison is needed, but higher raw correlation at cell level is not the correct success criterion. Spot averaging reduces biological and measurement variance and therefore generally makes prediction numerically easier. The relevant question is whether averaging conceals within-region cellular heterogeneity that cell-level evaluation can detect.
 
-Agreed: millions of cells do not imply millions of independent biological units. The canonical manifest will report studies, specimens, sections, verified patients/donors or animals, and missing identifiers by organ/platform. Every transfer experiment will list train/validation/test biological units and cell counts; repeated sections from one subject will remain in one split.
+Our completed preliminary lung diagnostic illustrates the first point but is not yet the matched test needed for the second. We aggregated sample k into 8,781 pseudo-spots, each formed from a $7\times7$ grid of native $8\,\mu\mathrm{m}$ blocks, and evaluated 1,630 right-third test pseudo-spots. Original BLEEP pseudo-spot Pearson was 0.416 for IGKC, 0.721 for MT-CO3, and 0.570 for SCGB1A1, compared with 0.014, 0.336, and −0.006, respectively, in the previous K→D cell-level output. Because these outputs use different training/evaluation settings and the cell targets are derived from Visium HD, this is evidence that aggregation can inflate raw correlation, not evidence that cell-level prediction is more accurate.
 
-**AUTHOR INPUT REQUIRED:** complete these identifiers from source metadata. We will call a split “cross-patient” only where patient identity is verified; otherwise it will be “sample-held-out.”
+The decisive experiment will instead aggregate native Xenium cells into matched pseudo-spots and use identical tissue regions, genes, encoder/head, and splits for spot- and native-cell-supervised predictors. We will report within-pseudo-spot expression-variance recovery, marker separation among neighboring cell types, within-spot cell-pair ordering, coarse-state balanced accuracy, and prediction oversmoothing. Until that matched experiment is complete, we will remove the unsupported claim that our present results already demonstrate specific errors hidden by spot averaging.
 
-**6. Audit sex, ethnicity, and other traits that may be imbalanced or missing.**
+**PENDING EXPERIMENT:** complete the matched native-Xenium pseudo-spot experiment with sample/donor bootstrap uncertainty and insert its direct heterogeneity results.
 
-Agreed. We will report coverage and missingness using only source-reported metadata and will not infer sensitive attributes from images or names. Stratified results will be shown only where support and consent permit responsible analysis.
+**4. Cell localization, expression assignment, and quality control (P6 and Q4).**
 
-**PENDING ANALYSIS:** add platform/organ coverage for sex, age, ethnicity where reported, disease state, and missingness, with subgroup sample counts and sufficiently supported stratified performance.
+For Xenium, we use platform-provided cell boundaries and transcript coordinates. For Visium HD, we apply the official spatial transform to register the native bin grid to histology, obtain H&E cell footprints using CellViT, and aggregate bin counts over cell footprints. In the audited implementation, a closed native $2\,\mu\mathrm{m}$ bin square is assigned when it intersects a polygon. If more than one cell claims a bin, the nearest CellViT centroid in full-resolution coordinates wins; an exact tie uses the lower raw-cell index. We will state these rules, registration, segmentation, and QC separately by platform before the experiments.
 
-**7. Compare cell-aligned and spot-centered performance.**
+We tested the default rule, strict exclusion of all boundary-touching bins, one-bin mask erosion, and one-bin dilation on lung A, lung B, and ovary. Their default assignments contained 126,629, 162,215, and 82,174 cells, respectively, with 1,650,497, 2,007,114, and 1,366,939 assigned bins. Strict-interior assignment retained 62.5%, 56.1%, and 80.7% of cells but only 16.0%, 11.0%, and 20.5% of bins; erosion retained 46.0%, 37.9%, and 72.0% of cells. Dilation retained essentially all cells and increased assigned bins to 184.4%, 196.2%, and 181.9% of default. These results reveal material boundary sensitivity; they do not yet justify a robustness claim. We will therefore expose assignment settings and report sensitivity rather than treating the default aggregation as ground truth.
 
-This is an important control. In native Xenium lung or breast, we will spatially aggregate measured cells into pseudo-spots, construct spot-centered images and expression, and train the same encoder/head under spot and native-cell supervision. Because averaging makes spot prediction easier, the key question is not whether cell correlation exceeds spot correlation. We will test whether cell supervision recovers within-pseudo-spot expression variance, marker separation among neighboring cell types, within-spot expression ordering, and coarse-state balanced accuracy, and whether the spot predictor makes heterogeneous neighboring cells artificially similar.
+**PENDING EXPERIMENT:** for the completed perturbations, insert matched-cell UMI/gene retention, expression and marker-rank concordance, coarse-state agreement, and fixed-checkpoint downstream changes with donor/sample or spatial-block uncertainty.
 
-**PENDING EXPERIMENT:** complete this matched pseudo-spot study with identical regions, genes, splits, encoder, metrics, spatial-buffer control, and donor/sample bootstrap uncertainty.
+**AUTHOR INPUT REQUIRED:** verify the CellViT and registration versions, QC thresholds, and segmentation/centroid consistency statistics.
 
-**8. Explain how expression is matched to cells and consider renaming sMMC-22M.**
+**5. Scope of the context analysis and demographic metadata (P4 and P9).**
 
-The matching rule is summarized in Response 4 and will appear before downstream experiments. We will say “bin-to-cell aggregation,” not “interpolation,” unless interpolation is performed. The rebuttal-time working manifest contains 28,315,247 post-QC aligned targets across 99 unique samples (100 versioned processing records), including 21 in-house DBiC-seq samples with 54,304 measured cells and 53,989 after paired-record QC. It also includes 12 newly added public Visium HD samples. All counting layers and changes from the submitted manifest will be explicit.
+We agree that the ovarian experiment neither validates molecular single-cell resolution nor supports a causal age claim. Its narrower purpose is to show a metadata-defined transfer failure hidden by pooled evaluation. Comparing AK (60+)→AD (60+) with AK (60+)→AL (40−), F1 decreases from 0.289 to 0.072, gene Spearman from 0.036 to 0.006, cell Spearman from 0.206 to 0.095, and predicted nonzero rate from 0.166 to 0.027. Because age is nested within sample/patient and tissue context and the panels differ, we will rename this a *sample/age-confounded context shift*, not an age effect, and use it only to motivate Average, Worst-context, Gap, and Support reporting.
 
-**AUTHOR INPUT REQUIRED:** choose either a stable versioned brand or consistent renaming to sMMC-28M across manuscript, repository, figures, and release files.
+Our manifest audit also shows that donor/patient identity, age, sex, and disease are not consistently documented across source studies, and ethnicity is absent or undocumented in the current source manifests. We will report coverage and missingness rather than infer sensitive attributes from images or names, remove the statement that no demographic bias is anticipated, and stratify performance only where independent-donor support and consent permit responsible analysis.
 
-**9. The limitations are vague about transfer, errors hidden by spot averaging, and metadata/alignment coverage.**
+**PENDING EXPERIMENT:** rerun the ovarian comparison on one shared gene panel with matched preprocessing and uncertainty; add the source-reported context coverage/missingness table and only sufficiently supported subgroup analyses.
 
-We will state explicitly that: (i) within-sample results may exploit spatial autocorrelation; (ii) held-out tests expose but do not solve biological/acquisition shifts; (iii) native Xenium and derived Visium HD targets have different evidentiary status; (iv) segmentation and boundary rules propagate expression uncertainty; (v) spot averaging may conceal within-region cell-state errors, which Response 7 will test; (vi) metadata/demographic coverage is uneven; and (vii) predictions are not substitutes for molecular measurement.
+**6. Terminology, figures, and presentation (P5, P7 and minor comments).**
 
-**PENDING EXPERIMENT:** add a distance-buffered split and spatial-only baseline to quantify within-sample spatial autocorrelation.
+We will define STBoost at first use as a model-agnostic interface for training histology-to-expression methods on cell-aligned records. STBoost-Ref is our image-only retrieval predictor; “Ours” in the benchmark refers to STBoost-Ref, whereas “STBoosted BLEEP” is BLEEP retrained through the interface. At inference, STBoost-Ref receives local and wider-context histology crops, never query expression, and returns a cell-aligned expression vector.
+
+Figure 1 was manually designed and edited by the authors in Sketch; it was not AI-generated. We will nevertheless correct “Hierarchical” and “Resolution (Single …),” complete the LLM-agent labels, improve the layout and caption, remove the Figure 3 border, and export figure text as vector elements. We will also define “study split,” “cell unit,” and Figure 2’s training ratio; remove the identified redundant framing text; correct all typographical and citation/link issues; and state precisely which data, metadata, and processed artifacts are released. The revised limitations will state that within-sample results may exploit spatial autocorrelation, sample-held-out tests expose but do not solve acquisition and biological shifts, native Xenium and derived Visium HD targets have different evidentiary status, boundary assignment propagates uncertainty, metadata coverage is uneven, and predictions are not substitutes for molecular measurement.
+
+**Closing.** In summary, the revised framing will distinguish native Xenium measurements from derived Visium HD targets, support breadth claims with per-organ and independent-sample results, and ground the value of cell-level evaluation in direct cell-versus-spot evidence rather than terminology alone.
