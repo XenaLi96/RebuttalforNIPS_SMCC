@@ -34,10 +34,10 @@ We thank the reviewer for identifying three places where our previous presentati
 was insufficiently precise: the distinction between native cell-resolved and
 derived cell-aligned molecular targets, the breadth of the experimental evaluation,
 and the evidence for what cell-level evaluation adds beyond spot-level prediction.
-We clarify these distinctions below, report the validation and cross-organ results
-that are now available, and identify the matched analyses that remain in progress.
-We will also calibrate the title and claims and correct all presentation issues
-noted by the reviewer.
+We clarify these distinctions below, report the spatially separated native-Xenium,
+cross-sample, cross-organ, pseudo-spot, and assignment-audit results that are now
+available, and state the limitations that remain. We will also calibrate the title
+and claims and correct all presentation issues noted by the reviewer.
 
 \questionsep
 \textbf{kUmZ-1. Figure 1 design and molecular-target provenance.}\quad
@@ -114,28 +114,69 @@ matrices contain 20,246,169 target rows: 16,314,129 native Xenium cells and
 3,932,040 derived Visium HD cell-aligned profiles. We will report these counting
 layers separately rather than calling every record a directly measured single cell.
 
-\textbf{Native-cell validation.}
-We evaluated four native-Xenium examples using a fixed 70/10/20 random-cell split
-(seed 42) and ten training-selected biological genes. Gene Pearson/Spearman was
-0.541/0.544 for colon HCCD035 (77,636 test cells), 0.512/0.585 for breast HBCA041
-(114,907), 0.406/0.459 for ovary HOCW023 (4,000), and 0.509/0.384 for skin HSDX009
-(13,696). The corresponding cell Pearson values were 0.666, 0.546, 0.644, and
-0.508, with F1 scores of 0.760, 0.766, 0.515, and 0.310. Against a coordinate-only
-baseline, image-model gene Pearson was 0.541 versus 0.238, 0.512 versus 0.116,
-0.406 versus 0.285, and 0.509 versus 0.257; the 100-replicate spatial-block
-bootstrap intervals did not overlap in any sample. These results establish
-within-sample feasibility on genuine segmented-cell targets, but they do not
-establish sample-held-out generalization.
+\textbf{Native-cell validation under spatial separation.}
+We replaced the earlier random-cell diagnostic with a leakage-controlled
+evaluation of 30 H\&E-aligned native-Xenium samples. The samples span 17 organ
+labels, 25 source-condition labels, and two species. We spatially stratified at
+most 12,000 cells per sample (360,000 cells in total), used four contiguous edge
+holdouts (x-high, x-low, y-high, and y-low), and removed a 5\% coordinate-span
+buffer between the training and test regions. Target genes were selected using
+only each training partition. Frozen CONCH image features were evaluated with the
+same PCA--Ridge head against coordinate-only, eight-nearest-spatial-neighbor, and
+training-mean controls.
 
-We therefore also ran bidirectional sample-held-out native-Xenium tests in lung
-and ovary (two held-out samples per organ). This harder result is substantially
-less favorable: UNI2-h all-gene Pearson averages were \(-0.0003\) in lung and
-0.0020 in ovary, and coarse-state balanced accuracies were 0.139 and 0.159.
-Metadata-only baselines reached all-gene Pearson of 0.104 and 0.142 and balanced
-accuracy of 0.220 and 0.252, respectively. ResNet50 and H-Optimus-0 were likewise
-near zero on all-gene Pearson. We will report these negative results: native target
-validity and cross-sample image-to-expression learnability are distinct questions,
-and the latter remains unsolved by the evaluated predictors.
+\begin{center}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.10}
+\textit{Native-Xenium spatial-blocked summary. All values except the top-200
+column use the top-50 training-selected HVGs. Training-mean gene-wise
+correlation is undefined because its prediction is constant across test
+cells.}\\[3pt]
+\begin{tabular}{lrrrrr}
+\toprule
+Model & Top-50 Gene P & Top-200 Gene P & Gene S & Cell P & F1 \\
+\midrule
+\textbf{Image} & \textbf{0.324} & \textbf{0.202} & \textbf{0.291} &
+\textbf{0.442} & \textbf{0.413} \\
+Coordinate only & 0.046 & 0.031 & 0.041 & 0.288 & 0.283 \\
+Spatial KNN & 0.053 & 0.029 & 0.051 & 0.268 & 0.320 \\
+Training mean & N/A & N/A & N/A & 0.305 & 0.253 \\
+\bottomrule
+\end{tabular}
+\endgroup
+\end{center}
+
+The top-50 image Gene Pearson has a biological-sample bootstrap 95\% CI of
+0.277--0.368. Image prediction exceeded both coordinate and spatial-neighbor
+controls in 28 of 30 samples; the two exceptions, human liver (image \(-0.002\))
+and mouse bone (0.030), are retained rather than excluded. The paired
+sample-level image-versus-coordinate and image-versus-KNN comparisons remain
+significant after Holm correction (adjusted \(p\leq1.9\times10^{-8}\)). We do
+not perform a Gene-Pearson test against the constant training-mean predictor.
+
+We also examined whether the moderate gene-wise correlations retain aggregate
+biological structure. On the overlap between training-selected HVGs and the
+available marker inventory, image Gene Pearson was 0.201. Using available
+expression-derived predicted cell-type labels to stratify test cells, the
+image-model pseudobulk RMSE was 0.120, compared with 0.187 for spatial KNN,
+0.188 for the training mean, and 0.224 for coordinates. We treat this only as
+preliminary biological calibration, not independent cell-type validation: the
+labels are expression-derived, one sample lacks a usable annotation, and the
+mouse marker inventory must be re-aggregated with a species-specific list before
+a final marker table is reported.
+
+Generalization remains endpoint-dependent. The same-organ top-50-HVG
+sample-held-out campaign reported in kUmZ-2 retains a positive transferable
+signal, whereas our earlier bidirectional \textbf{all-gene} UNI2-h tests in lung
+and ovary remain substantially less favorable: all-gene Pearson averages were
+\(-0.0003\) and 0.0020, and coarse-state balanced accuracies were 0.139 and
+0.159. Metadata-only baselines reached all-gene Pearson of 0.104 and 0.142 and
+balanced accuracy of 0.220 and 0.252. These results are not interchangeable:
+the former tests a training-selected variable-gene endpoint, whereas the latter
+tests the much harder full shared panel. We will report both and will not claim
+that current predictors solve unrestricted cross-sample expression recovery.
 
 Accordingly, we will use ``native cell-resolved'' for Xenium, ``derived
 cell-aligned'' for Visium HD, and ``toward cell-level prediction'' for claims
@@ -216,6 +257,20 @@ paired morphology, RNA, and cellular context. Acquisition has continued since
 submission; the broader pool now contains approximately 200,000 paired cells and
 will be reported separately in the final manifest with exact sample/cell counts,
 checksums, and fractions.
+
+We additionally performed a native-Xenium same-organ leave-one-sample-out
+evaluation on 18 target samples from human breast, lung, ovary, pancreas, and
+skin and mouse whole pup. For each target, all other available samples from the
+same species--organ group formed the training set; the complete target sample was
+held out, and the top 50 variable genes were selected from training data only.
+Frozen CONCH/PCA--Ridge achieved mean Gene Pearson 0.170 (range 0.016--0.372
+across targets). Mean Cell Pearson was 0.275 versus 0.205 for the training-mean
+control, with image prediction higher in 14/18 targets; mean F1 was 0.125 versus
+0.031, with image prediction higher in 17/18. The training-mean Gene Pearson is
+not reported because a constant prediction makes that correlation undefined.
+This is a \textbf{sample-held-out}, not donor-held-out, result; it supports
+transferable signal for a restricted training-selected endpoint but not
+unrestricted patient-level generalization.
 
 We also agree that the main text emphasized representative organs without a
 compact cross-organ summary. We therefore report the in-domain and cross-patient
@@ -360,28 +415,49 @@ measurement variance and therefore generally makes prediction numerically easier
 The relevant question is whether averaging conceals within-region cellular
 heterogeneity that cell-level evaluation can detect.
 
-Our completed preliminary lung diagnostic illustrates the first point but is not
-yet the matched test needed for the second. We aggregated sample k into 8,781
-pseudo-spots, each formed from a \(7\times7\) grid of native 8-\(\mu\)m blocks,
-and evaluated 1,630 right-third test pseudo-spots. Original BLEEP pseudo-spot
-Pearson was 0.416 for IGKC, 0.721 for MT-CO3, and 0.570 for SCGB1A1, compared
-with 0.014, 0.336, and \(-0.006\), respectively, in the previous K\(\rightarrow\)D
-cell-level output. Because these outputs use different training/evaluation settings
-and the cell targets are derived from Visium HD, this is evidence that aggregation
-can inflate raw correlation, not evidence that cell-level prediction is more
-accurate.
+We therefore completed a matched native-Xenium analysis on six samples. Within
+each sample, the cell-level and 8, 16, and \(55\,\mu\mathrm{m}\) pseudo-spot
+predictors used the same contiguous spatial holdouts, training-selected top-50
+HVGs, frozen CONCH features, and PCA--Ridge head. For a pseudo-spot predictor,
+cell expression and image embeddings were averaged within each spatial grid
+during training; the resulting spot prediction was then broadcast to its
+constituent test cells so that every resolution was evaluated against the same
+native-cell targets.
 
-The decisive experiment will instead aggregate native Xenium cells into matched
-pseudo-spots and use identical tissue regions, genes, encoder/head, and splits for
-spot- and native-cell-supervised predictors. We will report within-pseudo-spot
-expression-variance recovery, marker separation among neighboring cell types,
-within-spot cell-pair ordering, coarse-state balanced accuracy, and prediction
-oversmoothing. Until that matched experiment is complete, we will remove the
-unsupported claim that our present results already demonstrate specific errors
-hidden by spot averaging.
+\begin{center}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{7pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{lr}
+\toprule
+Supervision/evaluation resolution & Gene Pearson \\
+\midrule
+Native cell & \textbf{0.365} \\
+\(8\,\mu\mathrm{m}\) pseudo-spot & 0.365 \\
+\(16\,\mu\mathrm{m}\) pseudo-spot & 0.363 \\
+\(55\,\mu\mathrm{m}\) pseudo-spot & 0.330 \\
+\bottomrule
+\end{tabular}
+\endgroup
+\end{center}
 
-\needexp{Complete the matched native-Xenium pseudo-spot experiment with
-sample/donor bootstrap uncertainty and insert its direct heterogeneity results.}
+All six samples decreased at \(55\,\mu\mathrm{m}\), but the magnitude was
+density-dependent: mouse brain FFMB028 decreased from 0.467 to 0.355 and lung
+HLCX022 from 0.318 to 0.261, whereas mouse whole pup WMPP017 changed only from
+0.397 to 0.392. In the full-density HLCX022 audit, \(55\,\mu\mathrm{m}\) grids
+mixed cell-type labels in 55.5--66.4\% of test spots and affected 73.8--81.0\%
+of test cells across the four spatial holdouts; the corresponding HHDX011 values
+were only 3.5--4.1\% and 7.0--8.3\%. Thus, coarse aggregation can produce
+substantial mixing and oversmoothing in dense heterogeneous tissue, while
+providing little change in sparse tissue.
+
+This result does not show that cell-level prediction is universally more
+accurate. Moreover, the present pseudo-spot image representation averages
+constituent cell embeddings rather than using a newly extracted spot-centered
+crop. We therefore restrict the conclusion to density-dependent target mixing
+and loss of cell-level discrimination, and we will not claim a universal
+cell-over-spot accuracy advantage.
 
 \questionsep
 \textbf{kUmZ-4. Cell localization, expression assignment, and quality control.}\quad
@@ -410,9 +486,37 @@ of default. These results reveal material boundary sensitivity; they do not yet
 justify a robustness claim. We will therefore expose assignment settings and
 report sensitivity rather than treating the default aggregation as ground truth.
 
-\needexp{For the completed perturbations, insert matched-cell UMI/gene retention,
-expression and marker-rank concordance, coarse-state agreement, and fixed-checkpoint
-downstream changes with donor/sample or spatial-block uncertainty.}
+As a complementary audit, we uniformly reservoir-sampled 3,000 CellViT polygons
+from each of three Visium HD datasets and tested their overlap with the available
+filtered native \(2\,\mu\mathrm{m}\) bins under \(1\,\mu\mathrm{m}\) erosion,
+dilation, and x/y shifts.
+
+\begin{center}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{lrrrr}
+\toprule
+Dataset & No intersecting bins & Median bins & x-shift Jaccard &
+x-shift cosine \\
+\midrule
+Human lung cancer (\texttt{d}) & 50.6\% & 12 & 0.727 & 0.954 \\
+Mouse brain (\texttt{e}) & 2.5\% & 24 & 0.806 & 0.936 \\
+Human pancreas (\texttt{g}) & 50.0\% & 9 & 0.706 & 0.994 \\
+\bottomrule
+\end{tabular}
+\endgroup
+\end{center}
+
+The high cosine among successfully matched profiles does not cancel the selection
+problem that approximately half of the sampled lung and pancreas polygons
+intersected no filtered bins. Conversely, the mouse-brain result shows that this
+failure rate is not universal. This complementary audit is polygon-wise and does
+not reproduce competition when multiple polygons claim the same bin; it therefore
+cannot validate the full conflict-resolution pipeline. We will expose per-sample
+assignment coverage and perturbation QC and retain native Xenium and derived
+Visium HD evidence as separate categories.
 
 \needinfo{Verify the CellViT and registration versions, QC thresholds, and
 segmentation/centroid consistency statistics.}
