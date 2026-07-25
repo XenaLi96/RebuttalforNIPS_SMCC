@@ -1,6 +1,6 @@
-We sincerely thank the reviewer for the careful and constructive assessment. We agree with the three central requests: quantify uncertainty in Visium HD cell construction, demonstrate breadth beyond a few cases, and calibrate low correlations with biological and simple baselines. This resource has accompanied me since my first PhD year; as I approach graduation, I hope its unified release helps new students enter spatial transcriptomics with fewer practical barriers.
+We sincerely thank the reviewer. The three requests sharpen the revision: audit Visium HD construction, demonstrate breadth, and biologically calibrate low correlations. This resource has accompanied me since my first PhD year; near graduation, I hope its release helps newcomers enter spatial transcriptomics.
 
-The resource is also continuing to grow through primary acquisition. Our in-house DBiC-seq collection contributes 21 samples and 54,304 measured cells; paired-record QC removes 315, leaving 53,989 aligned cells with paired morphology, RNA, and cellular context. The current working manifest contains 99 unique samples (100 processing records) and 28,315,247 aligned targets across Xenium, Visium HD, and DBiC-seq. A broader continuing DBiC-seq pool contains approximately 200,000 paired cells but is not counted here.
+Our 21-sample in-house DBiC-seq collection adds 54,304 measured/53,989 post-QC cells with paired morphology, RNA, and context. The working manifest contains 99 unique samples (100 records) and 28,315,247 targets; a broader continuing DBiC-seq pool of approximately 200,000 paired cells is not counted here.
 
 **1. For the Visium HD data, how reliable is the bin-to-cell aggregation? How are boundary bins assigned, and do segmentation errors noticeably affect expression profiles?**
 
@@ -14,20 +14,44 @@ We audited 3,000 raw polygons per dataset (9,000 total) under 1-$\mu$m registrat
 | Mouse brain | 97.5% | 0.806--0.816 | 0.936--0.939 | 6.0%--6.1% |
 | Human pancreas | 50.0% | 0.706--0.714 | 0.994 | 13.0%--13.7% |
 
-Canonical-bin percentages use all detected polygons; unsupported polygons are excluded before release. Small shifts preserve expression direction but alter exact membership and UMIs. Erosion/dilation gives median bin Jaccard 0.462--0.720, expression cosine 0.871--0.993, and absolute UMI changes of 32.8%--66.6%. Thus, segmentation/assignment uncertainty is material. We will release assignment settings and per-sample retention/QC, avoid treating Visium HD aggregation as ground truth, and report native-Xenium evidence separately.
+Percentages use all detected polygons; unsupported polygons are excluded. Shifts preserve expression direction but alter membership/UMIs; erosion/dilation gives Jaccard 0.462--0.720, cosine 0.871--0.993, and $|\Delta\mathrm{UMI}|$ 32.8%--66.6%. Thus, uncertainty is material. We will release settings/QC, avoid ground-truth language, and report Xenium separately.
 
 **2. The main experiments cover only a few representative cases. Can the authors summarize more organs or platforms?**
 
-Yes. We completed a leakage-controlled native-Xenium benchmark across 30 samples, 17 organ labels, two species, and 360,000 spatially stratified cells, using four contiguous spatial holdouts, a 5% buffer, and training-selected genes:
+Yes. We now report all 25 release categories under the matched top-50-HVG, four-spatial-holdout protocol:
 
-| Model | Gene P Top-50 | Gene P Top-200 | Gene S Top-50 | Cell P | F1 |
-|---|---:|---:|---:|---:|---:|
-| **Image** | **0.324** | **0.202** | **0.291** | **0.442** | **0.413** |
-| Coordinate only | 0.046 | 0.031 | 0.041 | 0.288 | 0.283 |
-| Spatial KNN | 0.053 | 0.029 | 0.051 | 0.268 | 0.320 |
-| Training mean | N/A | N/A | N/A | 0.305 | 0.253 |
+| Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
+|---|---:|---:|---:|---:|---:|---:|
+| **Bone (mouse)** | 0.030 | **0.124** | 0.055 | 0.037 | 0.180 | 0.240 |
+| Brain (human + mouse) | **0.399** | 0.010 | 0.036 | 0.371 | 0.570 | 0.752 |
+| Breast (human) | **0.400** | 0.053 | 0.035 | 0.375 | 0.433 | 0.487 |
+| Cervical (human) | **0.178** | 0.017 | 0.014 | 0.157 | 0.247 | 0.026 |
+| **Colon (mouse)** | **0.615** | -0.137 | 0.072 | 0.588 | 0.739 | 0.744 |
+| Colorectal (human) | **0.431** | 0.056 | 0.083 | 0.419 | 0.532 | 0.623 |
+| **Embryo (mouse)** | **0.278** | 0.037 | 0.045 | 0.251 | 0.517 | 0.342 |
+| Head (zebrafish) | **0.216** | 0.022 | 0.031 | 0.193 | 0.429 | 0.287 |
+| Heart (human) | **0.292** | 0.010 | 0.021 | 0.266 | 0.688 | 0.304 |
+| Kidney (human) | **0.402** | 0.019 | 0.017 | 0.361 | 0.471 | 0.460 |
+| Liver (human) | -0.002 | 0.003 | **0.010** | -0.002 | 0.561 | 0.400 |
+| Lung (human) | **0.359** | 0.065 | 0.053 | 0.317 | 0.402 | 0.457 |
+| Lymph Node (human) | **0.141** | 0.043 | 0.013 | 0.131 | 0.164 | 0.023 |
+| Ovarian (human) | **0.250** | 0.122 | 0.104 | 0.239 | 0.312 | 0.234 |
+| Ovarian glands (human) | **0.402** | 0.059 | 0.043 | 0.391 | 0.559 | 0.756 |
+| Pancreas (human) | **0.324** | 0.090 | 0.068 | 0.272 | 0.505 | 0.275 |
+| Pancreatic (human) | **0.366** | 0.080 | 0.051 | 0.341 | 0.540 | 0.694 |
+| Pancreatic duct gland (human) | **0.331** | 0.091 | 0.100 | 0.282 | 0.408 | 0.386 |
+| Plant (*A. thaliana*) | -0.011 | 0.004 | **0.012** | -0.009 | 0.385 | 0.052 |
+| Prostate (human) | **0.263** | -0.015 | 0.025 | 0.244 | 0.263 | 0.083 |
+| Seed (soybean) | -0.020 | -0.003 | **0.008** | -0.018 | 0.314 | 0.037 |
+| Skin (human) | **0.359** | 0.048 | 0.086 | 0.299 | 0.437 | 0.368 |
+| **Small Intestine (mouse)** | **0.572** | -0.104 | 0.067 | 0.548 | 0.701 | 0.715 |
+| Tonsil (human) | **0.294** | 0.028 | 0.018 | 0.249 | 0.462 | 0.399 |
+| Xenograft (human + mouse) | **0.387** | 0.041 | 0.049 | 0.362 | 0.526 | 0.589 |
+| **30-sample macro** | **0.324** | 0.046 | 0.053 | **0.291** | **0.442** | **0.413** |
 
-Image prediction beats coordinate and KNN controls in 28/30 samples; top-50 Gene Pearson has a biological-sample bootstrap 95% CI of 0.277--0.368. Across 18 same-organ native-Xenium target samples held out in full, image prediction obtains mean top-50-HVG Gene Pearson 0.170 (range 0.016--0.372), Cell Pearson 0.275 versus 0.205 for training mean, and F1 0.125 versus 0.031. These are sample-, not donor-held-out, results.
+*Bold category labels denote mouse-only evaluations; mixed-species and non-mouse categories are explicit. Bold values in the three Gene-Pearson columns mark the best baseline. The 30-sample macro uses 360,000 spatially stratified cells; its top-200 image Gene Pearson is 0.202 and top-50 bootstrap 95% CI is 0.277--0.368.*
+
+Image is strongest in 21/25 category rows; the four failures remain visible rather than being removed. Across 18 complete same-organ held-out targets, image top-50-HVG Gene Pearson averages 0.170 (0.016--0.372), Cell Pearson is 0.275 versus 0.205 for training mean, and F1 is 0.125 versus 0.031. These are sample-, not donor-held-out, results. The updated benchmark code, fixed splits, configurations, and evaluation scripts are now available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75).
 
 For Visium HD breadth, eight source-sample→target-sample organ pairs give:
 
@@ -78,4 +102,4 @@ Rich metadata enable subgroup-support and worst-context audits; they do not them
 | Processed | Registration; CellViT footprints; Visium HD bin-to-cell matrices; crops; normalized matrices; splits; molecular-profile summaries. |
 | Generated | Metadata-grounded GPT-4o captions and model predictions; neither is molecular ground truth. |
 
-GPT-4o only verbalizes supplied fields. Independent PLIP/CONCH image--caption audits give matched-versus-mismatched AUC 0.993/0.988 and 100% Top-3 retrieval under both models. We will restore prompts, field checks, full examples, and audit matrices in the Appendix. Captions remain optional context and are excluded from the molecular ground truth.
+GPT-4o only verbalizes supplied fields. PLIP/CONCH audits give AUC 0.993/0.988 and 100% Top-3 retrieval. We will restore prompts, field checks, examples, and matrices in the Appendix. Captions remain optional context, not molecular ground truth.

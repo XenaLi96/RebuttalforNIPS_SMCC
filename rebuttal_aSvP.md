@@ -19,16 +19,42 @@ We agree. The resource is valuable not because one predictor has solved histolog
 
 Every encoder improved monotonically. This shows that additional cells are useful within this controlled range; we do not claim a universal scaling law.
 
-**Breadth and biological calibration.** We completed a leakage-controlled benchmark across 30 native-Xenium samples, 17 organ labels, two species, and 360,000 spatially stratified cells. Each sample used four contiguous spatial holdouts and a 5% train--test buffer; genes were selected from training data only.
+**Breadth and biological calibration.** We now report all 25 release categories under the matched top-50-HVG, four-spatial-holdout protocol. The final row retains the primary 30-sample native-Xenium macro.
 
-| Model | Gene P Top-50 | Gene P Top-200 | Gene S Top-50 | Cell P Top-50 | F1 Top-50 |
-|---|---:|---:|---:|---:|---:|
-| **Image** | **0.324** | **0.202** | **0.291** | **0.442** | **0.413** |
-| Coordinate only | 0.046 | 0.031 | 0.041 | 0.288 | 0.283 |
-| Spatial KNN | 0.053 | 0.029 | 0.051 | 0.268 | 0.320 |
-| Training mean | N/A | N/A | N/A | 0.305 | 0.253 |
+| Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
+|---|---:|---:|---:|---:|---:|---:|
+| **Bone (mouse)** | 0.030 | **0.124** | 0.055 | 0.037 | 0.180 | 0.240 |
+| Brain (human + mouse) | **0.399** | 0.010 | 0.036 | 0.371 | 0.570 | 0.752 |
+| Breast (human) | **0.400** | 0.053 | 0.035 | 0.375 | 0.433 | 0.487 |
+| Cervical (human) | **0.178** | 0.017 | 0.014 | 0.157 | 0.247 | 0.026 |
+| **Colon (mouse)** | **0.615** | -0.137 | 0.072 | 0.588 | 0.739 | 0.744 |
+| Colorectal (human) | **0.431** | 0.056 | 0.083 | 0.419 | 0.532 | 0.623 |
+| **Embryo (mouse)** | **0.278** | 0.037 | 0.045 | 0.251 | 0.517 | 0.342 |
+| Head (zebrafish) | **0.216** | 0.022 | 0.031 | 0.193 | 0.429 | 0.287 |
+| Heart (human) | **0.292** | 0.010 | 0.021 | 0.266 | 0.688 | 0.304 |
+| Kidney (human) | **0.402** | 0.019 | 0.017 | 0.361 | 0.471 | 0.460 |
+| Liver (human) | -0.002 | 0.003 | **0.010** | -0.002 | 0.561 | 0.400 |
+| Lung (human) | **0.359** | 0.065 | 0.053 | 0.317 | 0.402 | 0.457 |
+| Lymph Node (human) | **0.141** | 0.043 | 0.013 | 0.131 | 0.164 | 0.023 |
+| Ovarian (human) | **0.250** | 0.122 | 0.104 | 0.239 | 0.312 | 0.234 |
+| Ovarian glands (human) | **0.402** | 0.059 | 0.043 | 0.391 | 0.559 | 0.756 |
+| Pancreas (human) | **0.324** | 0.090 | 0.068 | 0.272 | 0.505 | 0.275 |
+| Pancreatic (human) | **0.366** | 0.080 | 0.051 | 0.341 | 0.540 | 0.694 |
+| Pancreatic duct gland (human) | **0.331** | 0.091 | 0.100 | 0.282 | 0.408 | 0.386 |
+| Plant (*A. thaliana*) | -0.011 | 0.004 | **0.012** | -0.009 | 0.385 | 0.052 |
+| Prostate (human) | **0.263** | -0.015 | 0.025 | 0.244 | 0.263 | 0.083 |
+| Seed (soybean) | -0.020 | -0.003 | **0.008** | -0.018 | 0.314 | 0.037 |
+| Skin (human) | **0.359** | 0.048 | 0.086 | 0.299 | 0.437 | 0.368 |
+| **Small Intestine (mouse)** | **0.572** | -0.104 | 0.067 | 0.548 | 0.701 | 0.715 |
+| Tonsil (human) | **0.294** | 0.028 | 0.018 | 0.249 | 0.462 | 0.399 |
+| Xenograft (human + mouse) | **0.387** | 0.041 | 0.049 | 0.362 | 0.526 | 0.589 |
+| **30-sample macro** | **0.324** | 0.046 | 0.053 | **0.291** | **0.442** | **0.413** |
 
-The top-50 image Gene Pearson has a biological-sample bootstrap 95% CI of 0.277--0.368 and exceeds coordinate and KNN controls in 28/30 samples. On marker/HVG overlap, image Gene Pearson is 0.201 versus 0.031 for coordinates and 0.028 for KNN. Cell-type-stratified pseudobulk RMSE is 0.120 for image prediction versus 0.224/0.187/0.188 for coordinates/KNN/training mean. Because cell-type labels are expression derived, this is aggregate biological calibration, not independent ground truth.
+*Bold category labels denote mouse-only evaluations; mixed-species and non-mouse categories are explicit. Bold values in the three Gene-Pearson columns mark the best baseline. The 30-sample macro uses 360,000 spatially stratified cells, a 5% train--test buffer, and training-selected genes; its top-200 image Gene Pearson is 0.202 and top-50 bootstrap 95% CI is 0.277--0.368.*
+
+The updated benchmark code, fixed splits, configurations, and evaluation scripts for this table are now available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75).
+
+Image prediction exceeds coordinate and KNN controls in 28/30 samples. On marker/HVG overlap, image Gene Pearson is 0.201 versus 0.031 for coordinates and 0.028 for KNN. Cell-type-stratified pseudobulk RMSE is 0.120 for image prediction versus 0.224/0.187/0.188 for coordinates/KNN/training mean. Because cell-type labels are expression derived, this is aggregate biological calibration, not independent ground truth.
 
 **Resolution.** On six native-Xenium samples, matched cell/8/16/55-$\mu$m supervision gives Gene Pearson 0.365/0.365/0.363/0.330. In dense lung, 55.5%--66.4% of 55-$\mu$m pseudo-spots mix predicted cell types and contain 73.8%--81.0% of evaluated cells, whereas sparse heart shows only 3.5%--4.1% mixed spots and 7.0%--8.3% affected cells. Thus, cell-level evaluation exposes density-dependent mixing hidden by coarse averaging; it is not claimed to be universally easier.
 

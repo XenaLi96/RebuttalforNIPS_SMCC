@@ -1,5 +1,5 @@
 \documentclass[10pt]{article}
-\usepackage[margin=0.72in]{geometry}
+\usepackage[margin=0.68in]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[table]{xcolor}
@@ -95,32 +95,81 @@ Every encoder improved monotonically. This shows that additional cells are
 useful within this controlled range; we do not claim a universal scaling law.
 
 \textbf{Breadth and biological calibration.}
-We completed a leakage-controlled benchmark across 30 native-Xenium samples, 17
-organ labels, two species, and 360,000 spatially stratified cells. Each sample
-used four contiguous spatial holdouts and a 5\% train--test buffer; genes were
-selected from training data only.
+We now report all 25 release categories under the matched top-50-HVG,
+four-spatial-holdout protocol. The final row retains the primary 30-sample
+native-Xenium macro.
 
+\newpage
 \begin{center}
 \begingroup
-\scriptsize
-\setlength{\tabcolsep}{3pt}
-\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrr@{}}
+\footnotesize
+\setlength{\tabcolsep}{4.2pt}
+\renewcommand{\arraystretch}{1.04}
+\textit{\textbf{Table 1. Per-organ cell-aligned breadth benchmark.}
+Rows follow the 25-category release taxonomy. Results use top-50
+training-selected HVGs, four contiguous spatial holdouts, and a 5\%
+train--test buffer; the final row retains the 30-sample native-Xenium macro
+from the primary campaign.}\\[5pt]
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
 \toprule
-Model & Gene P Top-50 & Gene P Top-200 & Gene S Top-50 & Cell P Top-50 &
-F1 Top-50 \\
+& \multicolumn{3}{c}{Gene Pearson}
+& \multicolumn{3}{c}{Image prediction} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+\shortstack[l]{Release category\\(evaluated species)} &
+Image &
+\shortstack{Coordinate\\only} &
+\shortstack{Spatial\\KNN} &
+\shortstack{Gene\\Spearman} &
+\shortstack{Cell\\Pearson} &
+F1 \\
 \midrule
-\textbf{Image} & \textbf{0.324} & \textbf{0.202} & \textbf{0.291} &
-\textbf{0.442} & \textbf{0.413} \\
-Coordinate only & 0.046 & 0.031 & 0.041 & 0.288 & 0.283 \\
-Spatial KNN & 0.053 & 0.029 & 0.051 & 0.268 & 0.320 \\
-Training mean & N/A & N/A & N/A & 0.305 & 0.253 \\
+\textbf{Bone (mouse)} & 0.030 & \textbf{0.124} & 0.055 & 0.037 & 0.180 & 0.240 \\
+Brain (human + mouse) & \textbf{0.399} & 0.010 & 0.036 & 0.371 & 0.570 & 0.752 \\
+Breast (human) & \textbf{0.400} & 0.053 & 0.035 & 0.375 & 0.433 & 0.487 \\
+Cervical (human) & \textbf{0.178} & 0.017 & 0.014 & 0.157 & 0.247 & 0.026 \\
+\textbf{Colon (mouse)} & \textbf{0.615} & -0.137 & 0.072 & 0.588 & 0.739 & 0.744 \\
+Colorectal (human) & \textbf{0.431} & 0.056 & 0.083 & 0.419 & 0.532 & 0.623 \\
+\textbf{Embryo (mouse)} & \textbf{0.278} & 0.037 & 0.045 & 0.251 & 0.517 & 0.342 \\
+Head (zebrafish) & \textbf{0.216} & 0.022 & 0.031 & 0.193 & 0.429 & 0.287 \\
+Heart (human) & \textbf{0.292} & 0.010 & 0.021 & 0.266 & 0.688 & 0.304 \\
+Kidney (human) & \textbf{0.402} & 0.019 & 0.017 & 0.361 & 0.471 & 0.460 \\
+Liver (human) & -0.002 & 0.003 & \textbf{0.010} & -0.002 & 0.561 & 0.400 \\
+Lung (human) & \textbf{0.359} & 0.065 & 0.053 & 0.317 & 0.402 & 0.457 \\
+Lymph Node (human) & \textbf{0.141} & 0.043 & 0.013 & 0.131 & 0.164 & 0.023 \\
+Ovarian (human) & \textbf{0.250} & 0.122 & 0.104 & 0.239 & 0.312 & 0.234 \\
+Ovarian glands (human) & \textbf{0.402} & 0.059 & 0.043 & 0.391 & 0.559 & 0.756 \\
+Pancreas (human) & \textbf{0.324} & 0.090 & 0.068 & 0.272 & 0.505 & 0.275 \\
+Pancreatic (human) & \textbf{0.366} & 0.080 & 0.051 & 0.341 & 0.540 & 0.694 \\
+Pancreatic duct gland (human) & \textbf{0.331} & 0.091 & 0.100 & 0.282 & 0.408 & 0.386 \\
+Plant (\textit{A. thaliana}) & -0.011 & 0.004 & \textbf{0.012} & -0.009 & 0.385 & 0.052 \\
+Prostate (human) & \textbf{0.263} & -0.015 & 0.025 & 0.244 & 0.263 & 0.083 \\
+Seed (soybean) & -0.020 & -0.003 & \textbf{0.008} & -0.018 & 0.314 & 0.037 \\
+Skin (human) & \textbf{0.359} & 0.048 & 0.086 & 0.299 & 0.437 & 0.368 \\
+\textbf{Small Intestine (mouse)} & \textbf{0.572} & -0.104 & 0.067 & 0.548 & 0.701 & 0.715 \\
+Tonsil (human) & \textbf{0.294} & 0.028 & 0.018 & 0.249 & 0.462 & 0.399 \\
+Xenograft (human + mouse) & \textbf{0.387} & 0.041 & 0.049 & 0.362 & 0.526 & 0.589 \\
+\midrule
+\textbf{30-sample macro} & \textbf{0.324} & 0.046 & 0.053 &
+\textbf{0.291} & \textbf{0.442} & \textbf{0.413} \\
 \bottomrule
 \end{tabular*}
+
+\parbox{0.98\linewidth}{\scriptsize\textit{Bold category labels denote
+mouse-only evaluations; mixed-species and non-mouse categories are labeled
+explicitly. Bold numeric entries in the three Gene-Pearson columns mark the best
+of image, coordinate-only, and spatial KNN. The final macro row summarizes the
+30-sample native-Xenium campaign: its top-200 image Gene Pearson is 0.202, and
+the top-50 value has a biological-sample bootstrap 95\% CI of 0.277--0.368.
+Training-mean Gene Pearson is undefined and is not shown.}}
 \endgroup
 \end{center}
 
-The top-50 image Gene Pearson has a biological-sample bootstrap 95\% CI of
-0.277--0.368 and exceeds coordinate and KNN controls in 28/30 samples. On
+The updated benchmark code, fixed splits, configurations, and evaluation scripts
+for this table are now available in our
+\href{https://anonymous.4open.science/r/sMMC-22M-DB75}{anonymous GitHub
+repository}.
+
+Image prediction exceeds coordinate and KNN controls in 28/30 samples. On
 marker/HVG overlap, image Gene Pearson is 0.201 versus 0.031 for coordinates and
 0.028 for KNN. Cell-type-stratified pseudobulk RMSE is 0.120 for image prediction
 versus 0.224/0.187/0.188 for coordinates/KNN/training mean. Because cell-type
