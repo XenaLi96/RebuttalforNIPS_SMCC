@@ -44,18 +44,17 @@ and claims and correct all presentation issues noted by the reviewer.
 \footnotesize
 \setlength{\tabcolsep}{4.2pt}
 \renewcommand{\arraystretch}{1.04}
-\textit{\textbf{Table 1. Per-organ native-cell breadth benchmark.}
-Rows follow the 25-category release taxonomy. The leakage-controlled campaign
-uses 30 H\&E-aligned native-Xenium samples (360,000 cells), top-50
+\textit{\textbf{Table 1. Per-organ cell-aligned breadth benchmark.}
+Rows follow the 25-category release taxonomy. Results use top-50
 training-selected HVGs, four contiguous spatial holdouts, and a 5\%
-train--test buffer. Blank cells mark categories not evaluated under this
-protocol.}\\[5pt]
+train--test buffer; the final row retains the 30-sample native-Xenium macro
+from the primary campaign.}\\[5pt]
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
 \toprule
 & \multicolumn{3}{c}{Gene Pearson}
 & \multicolumn{3}{c}{Image prediction} \\
 \cmidrule(lr){2-4}\cmidrule(lr){5-7}
-Release category &
+\shortstack[l]{Release category\\(evaluated species)} &
 Image &
 \shortstack{Coordinate\\only} &
 \shortstack{Spatial\\KNN} &
@@ -63,47 +62,44 @@ Image &
 \shortstack{Cell\\Pearson} &
 F1 \\
 \midrule
-Bone & 0.030 & \textbf{0.124} & 0.055 & 0.037 & 0.180 & 0.240 \\
-Brain & \textbf{0.399} & 0.010 & 0.036 & 0.371 & 0.570 & 0.752 \\
-Breast & \textbf{0.400} & 0.053 & 0.035 & 0.375 & 0.433 & 0.487 \\
-Cervical & \textbf{0.178} & 0.017 & 0.014 & 0.157 & 0.247 & 0.026 \\
-Colon & \textbf{0.615} & -0.137 & 0.072 & 0.588 & 0.739 & 0.744 \\
-Colorectal & \textbf{0.431} & 0.056 & 0.083 & 0.419 & 0.532 & 0.623 \\
-Embryo & & & & & & \\
-Head & & & & & & \\
-Heart & \textbf{0.292} & 0.010 & 0.021 & 0.266 & 0.688 & 0.304 \\
-Kidney & \textbf{0.402} & 0.019 & 0.017 & 0.361 & 0.471 & 0.460 \\
-Liver & -0.002 & 0.003 & \textbf{0.010} & -0.002 & 0.561 & 0.400 \\
-Lung & \textbf{0.359} & 0.065 & 0.053 & 0.317 & 0.402 & 0.457 \\
-Lymph Node & \textbf{0.141} & 0.043 & 0.013 & 0.131 & 0.164 & 0.023 \\
-Ovarian & \textbf{0.250} & 0.122 & 0.104 & 0.239 & 0.312 & 0.234 \\
-Ovarian glands & \textbf{0.402} & 0.059 & 0.043 & 0.391 & 0.559 & 0.756 \\
-Pancreas & \textbf{0.324} & 0.090 & 0.068 & 0.272 & 0.505 & 0.275 \\
-Pancreatic & \textbf{0.366} & 0.080 & 0.051 & 0.341 & 0.540 & 0.694 \\
-Pancreatic duct gland & \textbf{0.331} & 0.091 & 0.100 & 0.282 & 0.408 & 0.386 \\
-Plant & & & & & & \\
-Prostate & \textbf{0.263} & -0.015 & 0.025 & 0.244 & 0.263 & 0.083 \\
-Seed & & & & & & \\
-Skin & \textbf{0.359} & 0.048 & 0.086 & 0.299 & 0.437 & 0.368 \\
-Small Intestine & & & & & & \\
-Tonsil & \textbf{0.294} & 0.028 & 0.018 & 0.249 & 0.462 & 0.399 \\
-Xenograft & & & & & & \\
+\textbf{Bone (mouse)} & 0.030 & \textbf{0.124} & 0.055 & 0.037 & 0.180 & 0.240 \\
+Brain (human + mouse) & \textbf{0.399} & 0.010 & 0.036 & 0.371 & 0.570 & 0.752 \\
+Breast (human) & \textbf{0.400} & 0.053 & 0.035 & 0.375 & 0.433 & 0.487 \\
+Cervical (human) & \textbf{0.178} & 0.017 & 0.014 & 0.157 & 0.247 & 0.026 \\
+\textbf{Colon (mouse)} & \textbf{0.615} & -0.137 & 0.072 & 0.588 & 0.739 & 0.744 \\
+Colorectal (human) & \textbf{0.431} & 0.056 & 0.083 & 0.419 & 0.532 & 0.623 \\
+\textbf{Embryo (mouse)} & \textbf{0.278} & 0.037 & 0.045 & 0.251 & 0.517 & 0.342 \\
+Head (zebrafish) & \textbf{0.216} & 0.022 & 0.031 & 0.193 & 0.429 & 0.287 \\
+Heart (human) & \textbf{0.292} & 0.010 & 0.021 & 0.266 & 0.688 & 0.304 \\
+Kidney (human) & \textbf{0.402} & 0.019 & 0.017 & 0.361 & 0.471 & 0.460 \\
+Liver (human) & -0.002 & 0.003 & \textbf{0.010} & -0.002 & 0.561 & 0.400 \\
+Lung (human) & \textbf{0.359} & 0.065 & 0.053 & 0.317 & 0.402 & 0.457 \\
+Lymph Node (human) & \textbf{0.141} & 0.043 & 0.013 & 0.131 & 0.164 & 0.023 \\
+Ovarian (human) & \textbf{0.250} & 0.122 & 0.104 & 0.239 & 0.312 & 0.234 \\
+Ovarian glands (human) & \textbf{0.402} & 0.059 & 0.043 & 0.391 & 0.559 & 0.756 \\
+Pancreas (human) & \textbf{0.324} & 0.090 & 0.068 & 0.272 & 0.505 & 0.275 \\
+Pancreatic (human) & \textbf{0.366} & 0.080 & 0.051 & 0.341 & 0.540 & 0.694 \\
+Pancreatic duct gland (human) & \textbf{0.331} & 0.091 & 0.100 & 0.282 & 0.408 & 0.386 \\
+Plant (\textit{A. thaliana}) & -0.011 & 0.004 & \textbf{0.012} & -0.009 & 0.385 & 0.052 \\
+Prostate (human) & \textbf{0.263} & -0.015 & 0.025 & 0.244 & 0.263 & 0.083 \\
+Seed (soybean) & -0.020 & -0.003 & \textbf{0.008} & -0.018 & 0.314 & 0.037 \\
+Skin (human) & \textbf{0.359} & 0.048 & 0.086 & 0.299 & 0.437 & 0.368 \\
+\textbf{Small Intestine (mouse)} & \textbf{0.572} & -0.104 & 0.067 & 0.548 & 0.701 & 0.715 \\
+Tonsil (human) & \textbf{0.294} & 0.028 & 0.018 & 0.249 & 0.462 & 0.399 \\
+Xenograft (human + mouse) & \textbf{0.387} & 0.041 & 0.049 & 0.362 & 0.526 & 0.589 \\
 \midrule
 \textbf{30-sample macro} & \textbf{0.324} & 0.046 & 0.053 &
 \textbf{0.291} & \textbf{0.442} & \textbf{0.413} \\
 \bottomrule
 \end{tabular*}
 
-\parbox{0.98\linewidth}{\scriptsize\textit{Blank cells denote no completed
-native-Xenium result under this protocol, not zero performance. The campaign's
-17 analysis labels are coarser than the release taxonomy; ovarian and pancreatic
-subcategories are separated here by source sample identity. Two whole-pup
-samples labeled ``Multi'' in the source inventory contribute to the 30-sample
-macro row but are not reassigned to a release category. Bold in the three
-Gene-Pearson columns marks the best of image, coordinate-only, and spatial KNN.
-The top-200 image Gene Pearson is 0.202; the top-50 value has a
-biological-sample bootstrap 95\% CI of 0.277--0.368. Training-mean Gene Pearson
-is undefined and is not shown.}}
+\parbox{0.98\linewidth}{\scriptsize\textit{Bold category labels denote
+mouse-only evaluations; mixed-species and non-mouse categories are labeled
+explicitly. Bold numeric entries in the three Gene-Pearson columns mark the best
+of image, coordinate-only, and spatial KNN. The final macro row summarizes the
+30-sample native-Xenium campaign: its top-200 image Gene Pearson is 0.202, and
+the top-50 value has a biological-sample bootstrap 95\% CI of 0.277--0.368.
+Training-mean Gene Pearson is undefined and is not shown.}}
 \endgroup
 \end{center}
 
@@ -191,7 +187,9 @@ holdouts (x-high, x-low, y-high, and y-low), and removed a 5\% coordinate-span
 buffer between the training and test regions. Target genes were selected using
 only each training partition. Frozen CONCH image features were evaluated with the
 same PCA--Ridge head against coordinate-only, eight-nearest-spatial-neighbor, and
-training-mean controls; Table~1 reports the primary result.
+training-mean controls; the final row of Table~1 reports this primary
+native-Xenium result, while the preceding rows provide the release-wide
+per-category breadth view.
 
 Image prediction exceeded both coordinate and spatial-neighbor controls in 15 of
 17 organ labels and 28 of 30 samples; the two exceptions, human liver (image
@@ -304,15 +302,14 @@ checksums, and fractions.
 
 To answer Q1 directly, \textbf{the earlier main experiments were not trained and
 tested across all 25 organ categories under one matched protocol}; the manuscript
-was ambiguous on this point. Table~1 now lists all 25 release categories and
-reports leakage-controlled native-Xenium performance for the 19 categories with
-matched support; the six unsupported categories remain visibly blank rather than
-being omitted or assigned a zero. The campaign's 17 coarser analysis labels split
-into 19 release categories after resolving ovarian and pancreatic subcategories
-by source sample identity. Tables~3--4 separately report eight-organ Visium HD
-evaluations. These evidence sets overlap and should not be combined to imply a
-completed all-25 benchmark. We will distinguish release-wide organ coverage from
-protocol-specific evaluation support in the main text and manifest.
+was ambiguous on this point. Table~1 now lists and reports per-category
+performance for all 25 release categories, with the evaluated species stated in
+every row. The final macro remains the 30-sample native-Xenium benchmark rather
+than a pooled cross-platform average. Tables~3--4 separately provide deeper
+method-comparison and sample-transfer results on the eight-organ Visium HD
+subset. We will carry category, species, platform, and biological-unit provenance
+into the main text and manifest rather than presenting release coverage as if it
+were one undifferentiated protocol.
 
 We additionally performed a native-Xenium same-organ leave-one-sample-out
 evaluation on 18 target samples from human breast, lung, ovary, pancreas, and

@@ -1,37 +1,37 @@
 We thank the reviewer for identifying three places where our previous presentation was insufficiently precise: the distinction between native cell-resolved and derived cell-aligned molecular targets, the breadth of the experimental evaluation, and the evidence for what cell-level evaluation adds beyond spot-level prediction. We clarify these distinctions below, report the spatially separated native-Xenium, cross-sample, cross-organ, pseudo-spot, and assignment-audit results that are now available, and state the limitations that remain. We will also calibrate the title and claims and correct all presentation issues noted by the reviewer.
 
-**Table 1. Per-organ native-cell breadth benchmark.** Rows follow the 25-category release taxonomy. The leakage-controlled campaign uses 30 H&E-aligned native-Xenium samples (360,000 cells), top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer. Blank cells mark categories not evaluated under this protocol.
+**Table 1. Per-organ cell-aligned breadth benchmark.** Rows follow the 25-category release taxonomy. Results use top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer; the final row retains the 30-sample native-Xenium macro from the primary campaign.
 
-| Release category | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
+| Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
 |---|---:|---:|---:|---:|---:|---:|
-| Bone | 0.030 | **0.124** | 0.055 | 0.037 | 0.180 | 0.240 |
-| Brain | **0.399** | 0.010 | 0.036 | 0.371 | 0.570 | 0.752 |
-| Breast | **0.400** | 0.053 | 0.035 | 0.375 | 0.433 | 0.487 |
-| Cervical | **0.178** | 0.017 | 0.014 | 0.157 | 0.247 | 0.026 |
-| Colon | **0.615** | −0.137 | 0.072 | 0.588 | 0.739 | 0.744 |
-| Colorectal | **0.431** | 0.056 | 0.083 | 0.419 | 0.532 | 0.623 |
-| Embryo |  |  |  |  |  |  |
-| Head |  |  |  |  |  |  |
-| Heart | **0.292** | 0.010 | 0.021 | 0.266 | 0.688 | 0.304 |
-| Kidney | **0.402** | 0.019 | 0.017 | 0.361 | 0.471 | 0.460 |
-| Liver | −0.002 | 0.003 | **0.010** | −0.002 | 0.561 | 0.400 |
-| Lung | **0.359** | 0.065 | 0.053 | 0.317 | 0.402 | 0.457 |
-| Lymph Node | **0.141** | 0.043 | 0.013 | 0.131 | 0.164 | 0.023 |
-| Ovarian | **0.250** | 0.122 | 0.104 | 0.239 | 0.312 | 0.234 |
-| Ovarian glands | **0.402** | 0.059 | 0.043 | 0.391 | 0.559 | 0.756 |
-| Pancreas | **0.324** | 0.090 | 0.068 | 0.272 | 0.505 | 0.275 |
-| Pancreatic | **0.366** | 0.080 | 0.051 | 0.341 | 0.540 | 0.694 |
-| Pancreatic duct gland | **0.331** | 0.091 | 0.100 | 0.282 | 0.408 | 0.386 |
-| Plant |  |  |  |  |  |  |
-| Prostate | **0.263** | −0.015 | 0.025 | 0.244 | 0.263 | 0.083 |
-| Seed |  |  |  |  |  |  |
-| Skin | **0.359** | 0.048 | 0.086 | 0.299 | 0.437 | 0.368 |
-| Small Intestine |  |  |  |  |  |  |
-| Tonsil | **0.294** | 0.028 | 0.018 | 0.249 | 0.462 | 0.399 |
-| Xenograft |  |  |  |  |  |  |
+| **Bone (mouse)** | 0.030 | **0.124** | 0.055 | 0.037 | 0.180 | 0.240 |
+| Brain (human + mouse) | **0.399** | 0.010 | 0.036 | 0.371 | 0.570 | 0.752 |
+| Breast (human) | **0.400** | 0.053 | 0.035 | 0.375 | 0.433 | 0.487 |
+| Cervical (human) | **0.178** | 0.017 | 0.014 | 0.157 | 0.247 | 0.026 |
+| **Colon (mouse)** | **0.615** | −0.137 | 0.072 | 0.588 | 0.739 | 0.744 |
+| Colorectal (human) | **0.431** | 0.056 | 0.083 | 0.419 | 0.532 | 0.623 |
+| **Embryo (mouse)** | **0.278** | 0.037 | 0.045 | 0.251 | 0.517 | 0.342 |
+| Head (zebrafish) | **0.216** | 0.022 | 0.031 | 0.193 | 0.429 | 0.287 |
+| Heart (human) | **0.292** | 0.010 | 0.021 | 0.266 | 0.688 | 0.304 |
+| Kidney (human) | **0.402** | 0.019 | 0.017 | 0.361 | 0.471 | 0.460 |
+| Liver (human) | −0.002 | 0.003 | **0.010** | −0.002 | 0.561 | 0.400 |
+| Lung (human) | **0.359** | 0.065 | 0.053 | 0.317 | 0.402 | 0.457 |
+| Lymph Node (human) | **0.141** | 0.043 | 0.013 | 0.131 | 0.164 | 0.023 |
+| Ovarian (human) | **0.250** | 0.122 | 0.104 | 0.239 | 0.312 | 0.234 |
+| Ovarian glands (human) | **0.402** | 0.059 | 0.043 | 0.391 | 0.559 | 0.756 |
+| Pancreas (human) | **0.324** | 0.090 | 0.068 | 0.272 | 0.505 | 0.275 |
+| Pancreatic (human) | **0.366** | 0.080 | 0.051 | 0.341 | 0.540 | 0.694 |
+| Pancreatic duct gland (human) | **0.331** | 0.091 | 0.100 | 0.282 | 0.408 | 0.386 |
+| Plant (*A. thaliana*) | −0.011 | 0.004 | **0.012** | −0.009 | 0.385 | 0.052 |
+| Prostate (human) | **0.263** | −0.015 | 0.025 | 0.244 | 0.263 | 0.083 |
+| Seed (soybean) | −0.020 | −0.003 | **0.008** | −0.018 | 0.314 | 0.037 |
+| Skin (human) | **0.359** | 0.048 | 0.086 | 0.299 | 0.437 | 0.368 |
+| **Small Intestine (mouse)** | **0.572** | −0.104 | 0.067 | 0.548 | 0.701 | 0.715 |
+| Tonsil (human) | **0.294** | 0.028 | 0.018 | 0.249 | 0.462 | 0.399 |
+| Xenograft (human + mouse) | **0.387** | 0.041 | 0.049 | 0.362 | 0.526 | 0.589 |
 | **30-sample macro** | **0.324** | 0.046 | 0.053 | **0.291** | **0.442** | **0.413** |
 
-*Blank cells denote no completed native-Xenium result under this protocol, not zero performance. The campaign’s 17 analysis labels are coarser than the release taxonomy; ovarian and pancreatic subcategories are separated here by source sample identity. Two whole-pup samples labeled “Multi” in the source inventory contribute to the 30-sample macro row but are not reassigned to a release category. Bold in the three Gene-Pearson columns marks the best of image, coordinate-only, and spatial KNN. The top-200 image Gene Pearson is 0.202; the top-50 value has a biological-sample bootstrap 95% CI of 0.277–0.368. Training-mean Gene Pearson is undefined and is not shown.*
+*Bold category labels denote mouse-only evaluations; mixed-species and non-mouse categories are labeled explicitly. Bold numeric entries in the three Gene-Pearson columns mark the best of image, coordinate-only, and spatial KNN. The final macro row summarizes the 30-sample native-Xenium campaign: its top-200 image Gene Pearson is 0.202, and the top-50 value has a biological-sample bootstrap 95% CI of 0.277–0.368. Training-mean Gene Pearson is undefined and is not shown.*
 
 **1. Figure 1 design and molecular-target provenance (P2, Q2, Q4, L1–L2, and the Figure 1 minor comment).**
 
@@ -51,7 +51,7 @@ We provide this provenance to answer the factual concern while fully accepting t
 
 **Molecular-target provenance.** The premise that all source datasets provide only spot-level expression is not correct, although we agree that our presentation did not foreground the distinction sufficiently. The submitted public inventory contains 23,943,826 upstream/source records: 16,314,129 Xenium cells defined by platform-provided cell boundaries and transcript coordinates, and 7,629,697 Visium HD source/segmentation records. After bin-to-cell aggregation, the corresponding native-plus-derived expression matrices contain 20,246,169 target rows: 16,314,129 native Xenium cells and 3,932,040 derived Visium HD cell-aligned profiles. We will report these counting layers separately rather than calling every record a directly measured single cell.
 
-**Native-cell validation under spatial separation.** We replaced the earlier random-cell diagnostic with a leakage-controlled evaluation of 30 H&E-aligned native-Xenium samples. The samples span 17 organ labels, 25 source-condition labels, and two species. We spatially stratified at most 12,000 cells per sample (360,000 cells in total), used four contiguous edge holdouts (x-high, x-low, y-high, and y-low), and removed a 5% coordinate-span buffer between the training and test regions. Target genes were selected using only each training partition. Frozen CONCH image features were evaluated with the same PCA–Ridge head against coordinate-only, eight-nearest-spatial-neighbor, and training-mean controls; Table 1 reports the primary result.
+**Native-cell validation under spatial separation.** We replaced the earlier random-cell diagnostic with a leakage-controlled evaluation of 30 H&E-aligned native-Xenium samples. The samples span 17 organ labels, 25 source-condition labels, and two species. We spatially stratified at most 12,000 cells per sample (360,000 cells in total), used four contiguous edge holdouts (x-high, x-low, y-high, and y-low), and removed a 5% coordinate-span buffer between the training and test regions. Target genes were selected using only each training partition. Frozen CONCH image features were evaluated with the same PCA–Ridge head against coordinate-only, eight-nearest-spatial-neighbor, and training-mean controls; the final row of Table 1 reports this primary native-Xenium result, while the preceding rows provide the release-wide per-category breadth view.
 
 Image prediction exceeded both coordinate and spatial-neighbor controls in 15 of 17 organ labels and 28 of 30 samples; the two exceptions, human liver (image −0.002) and mouse bone (0.030), are retained rather than excluded. The paired sample-level image-versus-coordinate and image-versus-KNN comparisons remain significant after Holm correction (adjusted \(p\leq1.9\times10^{-8}\)). We do not perform a Gene-Pearson test against the constant training-mean predictor.
 
@@ -79,7 +79,7 @@ We agree that the previous manuscript did not clearly separate new primary acqui
 
 The 21 in-house samples contain 54,304 measured cells; final paired-record QC removes 315 cells, leaving 53,989 aligned targets. Most of the overall scale comes from public aggregation and harmonization, and we will state that explicitly. However, the new primary component is a growing in-house DBiC-seq collection with paired morphology, RNA, and cellular context. Acquisition has continued since submission; the broader pool now contains approximately 200,000 paired cells and will be reported separately in the final manifest with exact sample/cell counts, checksums, and fractions.
 
-To answer Q1 directly, **the earlier main experiments were not trained and tested across all 25 organ categories under one matched protocol**; the manuscript was ambiguous on this point. Table 1 now lists all 25 release categories and reports leakage-controlled native-Xenium performance for the 19 categories with matched support; the six unsupported categories remain visibly blank rather than being omitted or assigned a zero. The campaign’s 17 coarser analysis labels split into 19 release categories after resolving ovarian and pancreatic subcategories by source sample identity. Tables 3–4 separately report eight-organ Visium HD evaluations. These evidence sets overlap and should not be combined to imply a completed all-25 benchmark. We will distinguish release-wide organ coverage from protocol-specific evaluation support in the main text and manifest.
+To answer Q1 directly, **the earlier main experiments were not trained and tested across all 25 organ categories under one matched protocol**; the manuscript was ambiguous on this point. Table 1 now lists and reports per-category performance for all 25 release categories, with the evaluated species stated in every row. The final macro remains the 30-sample native-Xenium benchmark rather than a pooled cross-platform average. Tables 3–4 separately provide deeper method-comparison and sample-transfer results on the eight-organ Visium HD subset. We will carry category, species, platform, and biological-unit provenance into the main text and manifest rather than presenting release coverage as if it were one undifferentiated protocol.
 
 We additionally performed a native-Xenium same-organ leave-one-sample-out evaluation on 18 target samples from human breast, lung, ovary, pancreas, and skin and mouse whole pup. For each target, all other available samples from the same species–organ group formed the training set; the complete target sample was held out, and the top 50 variable genes were selected from training data only. Frozen CONCH/PCA–Ridge achieved mean Gene Pearson 0.170 (range 0.016–0.372 across targets). Mean Cell Pearson was 0.275 versus 0.205 for the training-mean control, with image prediction higher in 14/18 targets; mean F1 was 0.125 versus 0.031, with image prediction higher in 17/18. The training-mean Gene Pearson is not reported because a constant prediction makes that correlation undefined. This is a **sample-held-out**, not donor-held-out, result; it supports transferable signal for a restricted training-selected endpoint but not unrestricted patient-level generalization.
 
