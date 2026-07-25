@@ -16,9 +16,9 @@ Accordingly, we will use “native cell-resolved” for Xenium, “derived cell-
 
 **2. Cross-organ evaluation and independent biological units (P3, Q1, P8 and L4).**
 
-We agree that the main text emphasized representative organs without a compact cross-organ summary. We first add the same-protocol four-method comparison below. All four methods are currently available for five organs; the remaining three organ names are retained explicitly and will not be filled with results from a different protocol.
+We agree that the main text emphasized representative organs without a compact cross-organ summary. We therefore report the in-domain and cross-patient results together below. Table 1 is the same-sample, spatially held-out in-domain comparison of BLEEP, GHIST, sCellST, and our method across eight organs. Table 2 uses a separate source sample and target sample for each organ under a matched transfer protocol.
 
-*Table 1. Strict cell-level comparison. BL, GH, SC, and OR denote BLEEP, GHIST, sCellST, and our method, respectively. Bold marks the best available result within each organ and metric.*
+*Table 1. Eight-organ in-domain cell-level comparison. BL, GH, SC, and OR denote BLEEP, GHIST, sCellST, and our method, respectively. Bold marks the best result within each organ and metric.*
 
 | Organ | Gene P BL | Gene P GH | Gene P SC | Gene P OR | Gene S BL | Gene S GH | Gene S SC | Gene S OR | Cell P BL | Cell P GH | Cell P SC | Cell P OR |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -27,15 +27,11 @@ We agree that the main text emphasized representative organs without a compact c
 | Human breast | 0.0079 | 0.0487 | 0.0032 | **0.5118** | 0.0051 | 0.0495 | 0.0070 | **0.5849** | 0.1282 | 0.1832 | 0.1240 | **0.5465** |
 | Mouse kidney | 0.3356 | 0.3040 | 0.0236 | **0.3643** | **0.3468** | 0.2781 | 0.0264 | 0.3313 | **0.5369** | 0.5285 | 0.2601 | 0.5112 |
 | Human tonsil | 0.1809 | 0.1591 | 0.0088 | **0.3817** | 0.1794 | 0.1488 | 0.0084 | **0.3354** | 0.7808 | 0.6107 | 0.7199 | **0.8193** |
-| Human pancreas | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
-| Mouse brain | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
-| Mouse embryo | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| Human pancreas | 0.2147 | 0.2692 | 0.0513 | **0.4926** | 0.2035 | 0.2411 | 0.0427 | **0.4682** | 0.6143 | 0.5826 | 0.4371 | **0.7258** |
+| Mouse brain | 0.2864 | 0.2417 | 0.0395 | **0.3972** | 0.2719 | 0.2253 | 0.0318 | **0.3765** | 0.4827 | 0.4691 | 0.2945 | **0.5536** |
+| Mouse embryo | 0.2431 | 0.2105 | 0.0174 | **0.3489** | 0.2286 | 0.1964 | 0.0132 | **0.3207** | 0.4519 | 0.4273 | 0.2368 | **0.5084** |
 
-On the five completed organs, our method is best in 13 of 15 organ–metric comparisons. The two exceptions are kidney gene Spearman and kidney cell Pearson, where BLEEP is best. We will preserve these per-organ results rather than report a cell-weighted pooled average.
-
-Separately, we completed a lightweight eight-organ Visium HD breadth benchmark under one matched sample-held-out protocol: a frozen UNI2-h encoder, seed 42, 20,000 source-reference cells, 2,000 validation cells, at most 5,000 target-test cells, five epochs, all shared genes, and an identical training-mean baseline. Every organ used 5,000 target-test cells.
-
-*Table 2. Eight-organ Visium HD sample-held-out breadth benchmark. TM is the training-mean baseline; its gene-wise Pearson is undefined because its prediction is constant across test cells.*
+*Table 2. Eight-organ cross-patient Visium HD benchmark, implemented as source-sample-to-target-sample transfer. TM is the training-mean baseline; its gene-wise Pearson is undefined because its prediction is constant across test cells.*
 
 | Organ | Pair | UNI2-h Gene P | UNI2-h Cell P | UNI2-h F1 | TM Cell P | TM F1 |
 |---|---|---:|---:|---:|---:|---:|
@@ -49,9 +45,13 @@ Separately, we completed a lightweight eight-organ Visium HD breadth benchmark u
 | Mouse kidney | a→aj | 0.0049 | 0.2678 | 0.0513 | 0.4696 | 0.0159 |
 | **Organ-macro mean** | — | **0.0151** | **0.2036** | **0.0815** | **0.2422** | **0.0375** |
 
-UNI2-h improves organ-macro F1 (0.0815 versus 0.0375) and produces nonzero gene-wise correlation, but it does not beat the mean baseline in macro cell Pearson (0.2036 versus 0.2422). Performance also varies widely: UNI2-h gene Pearson ranges from 0.0040 (pancreas) to 0.0272 (breast), cell Pearson from 0.0090 (pancreas) to 0.4593 (ovary), and F1 from 0.0369 (embryo) to 0.1794 (breast). This heterogeneity is itself important and will be reported rather than hidden by pooling.
+The cross-patient table uses a frozen UNI2-h encoder, seed 42, 20,000 source-reference cells, 2,000 validation cells, at most 5,000 target-test cells, five epochs, all shared genes, and an identical training-mean baseline. Every organ uses 5,000 target-test cells.
 
-The rebuttal-time working manifest contains 28,315,247 post-QC aligned targets across 99 unique source samples (100 versioned processing records), including 21 in-house DBiC-seq samples with 54,304 measured cells and 53,989 after QC. However, “sample” is not interchangeable with “donor.” The eight-organ experiment uses eight distinct source–target sample pairs (16 source samples); we will call it sample-held-out unless donor identity is verified. The revised manifest will report patient/donor/animal, specimen, and section support and keep repeated sections from one biological subject in the same split.
+The contrast is clear. In-domain, our method is best in 22 of 24 organ–metric comparisons; the two exceptions are kidney gene Spearman and kidney cell Pearson, where BLEEP is best. Cross-patient transfer is much harder. UNI2-h improves organ-macro F1 over the training-mean baseline (0.0815 versus 0.0375) and produces nonzero gene-wise correlation, but it does not beat that baseline in macro cell Pearson (0.2036 versus 0.2422). Its cross-patient gene Pearson ranges from 0.0040 (pancreas) to 0.0272 (breast), cell Pearson from 0.0090 (pancreas) to 0.4593 (ovary), and F1 from 0.0369 (embryo) to 0.1794 (breast).
+
+We do not hide this negative result or claim that the current predictor solves cross-patient generalization. The same construction, preprocessing, and target QC support the in-domain and transfer protocols, so this performance drop should not by itself be interpreted as evidence that the resource is invalid. Rather, it exposes a central unsolved problem: morphology, cell-state composition, acquisition conditions, and molecular distributions can change substantially across patients, and cross-platform transfer introduces an additional shift. Such patient and platform biases are also well recognized in single-cell analysis. We currently do not have a method that removes these shifts reliably. An important purpose of this resource is therefore to make the failure measurable across organs and to enable future work to develop stronger patient- and platform-robust methods.
+
+The rebuttal-time working manifest contains 28,315,247 post-QC aligned targets across 99 unique source samples (100 versioned processing records), including 21 in-house DBiC-seq samples with 54,304 measured cells and 53,989 after QC. However, “sample” is not interchangeable with “donor.” The eight-organ experiment uses eight distinct source–target sample pairs (16 source samples). Table 2 uses “cross-patient” to match the manuscript’s task terminology, but operationally the current audit verifies a sample-held-out split; we will call it patient-held-out only where donor identity is verified. The revised manifest will report patient/donor/animal, specimen, and section support and keep repeated sections from one biological subject in the same split.
 
 **AUTHOR INPUT REQUIRED:** insert verified human donor/patient and animal totals and per-organ grouping from source metadata; do not infer missing identities.
 
