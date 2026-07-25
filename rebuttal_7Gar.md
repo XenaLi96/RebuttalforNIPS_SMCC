@@ -1,5 +1,7 @@
 We thank the reviewer for identifying places where our framing ran ahead of the evidence. We agree that a useful benchmark must state the scientific question, evaluation unit, inputs, targets, metrics, and conclusion for each experiment. We will substantially reorganize the paper around these items and narrow claims where the target is computationally derived.
 
+This resource is personally meaningful: it has accompanied me since my first PhD year, when I was new to spatial transcriptomics. It has supported my research and collaborations. Near graduation, I hope its unified release helps students enter the field.
+
 **1. In-house data scale. Please quantify precisely how much new in-house data is contributed relative to HEST-1K and STimage-1K4M (samples, tissues, platforms, spots/cells), ideally as a comparison table. What fraction of the resource is genuinely new vs. aggregated?**
 
 We agree that the previous manuscript did not clearly separate new primary acquisition from aggregation and processing. We will revise the paper to make the release history and provenance explicit. Across three submission rounds, the resource has grown from sMMC-12M to sMMC-20M, then to the submitted sMMC-22M manifest, and now to a rebuttal-time sMMC-28M working manifest. This growth comes from two sources: continuously added public spatial-transcriptomics cohorts with sample-level provenance checks, and new in-house DBiC-seq data with paired morphology, RNA, and cellular context from our co-authors.
