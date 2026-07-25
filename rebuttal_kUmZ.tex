@@ -6,6 +6,7 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{graphicx}
+\usepackage{tabularx}
 \usepackage[hidelinks]{hyperref}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.35em}
@@ -16,6 +17,7 @@
 \newcommand{\response}{\textbf{Response.}\enspace}
 \newcommand{\needexp}[1]{\textcolor{red}{\textbf{[EXPERIMENT TO INSERT:} #1\textbf{]}}}
 \newcommand{\needinfo}[1]{\textcolor{red}{\textbf{[AUTHOR INPUT TO INSERT:} #1\textbf{]}}}
+\definecolor{inhouseblue}{RGB}{225,240,255}
 
 \begin{document}
 
@@ -38,12 +40,70 @@ We will also calibrate the title and claims and correct all presentation issues
 noted by the reviewer.
 
 \questionsep
-\textbf{kUmZ-1. Native cell-resolved versus derived cell-aligned targets.}\quad
-\revcomment{P2, Q2, Q4 and L1--L2: a cell-centered image does not make a
-spot-derived expression target a true single-cell measurement; clarify the target
-provenance and soften the title and claims.}
+\textbf{kUmZ-1. Figure 1 design and molecular-target provenance.}\quad
+\revcomment{P2, Q2, Q4, L1--L2, and the Figure 1 minor comment: clarify whether
+Figure 1 was AI-generated, distinguish native cell-resolved from derived
+cell-aligned targets, and soften the title and claims.}
 
 \response
+\textbf{Figure 1 design provenance.}
+We appreciate the reviewer raising the possibility that Figure~1 was AI-generated,
+and we agree that its typographical errors and unfinished labels could have created
+that impression. We would nevertheless like to clarify the factual record:
+\textbf{Figure~1 was not AI-generated.} I designed and edited it manually in
+Sketch. The complete working file contains 84 editable layers. The first
+screenshot below exposes individual cell circles as separate ``Oval'' layers; the
+second preserves multiple Figure~1 versions and shows all 84 editable layers
+selected at once. Every circle, line, arrow, and layout element was placed
+manually. The figure underwent three separate revision rounds, with more than one
+week of cumulative design and editing time; it was not produced through a
+one-prompt generative workflow. The original-resolution evidence files and
+checksums are provided in the
+\href{https://anonymous.4open.science/r/sMMC-22M-DB75}{anonymous artifact
+repository}, under \texttt{figure1\_design\_evidence/}.
+
+\begin{center}
+\includegraphics[width=0.40\linewidth]{figure1_design_evidence/figure1_individual_layers.jpg}
+\hfill
+\includegraphics[width=0.40\linewidth]{figure1_design_evidence/figure1_versions_and_selection.jpg}
+
+\parbox{0.97\linewidth}{\scriptsize\textit{Figure 1 construction evidence from the
+original Sketch workspace. Left: individual vector objects are exposed as
+separately editable layers. Right: multiple preserved versions and all 84
+editable layers selected simultaneously.}}
+\end{center}
+
+\needinfo{Reconnect and verify the anonymous repository URL above, and confirm
+that \texttt{figure1\_design\_evidence/} is visible before submission. The URL
+currently returns \texttt{not\_connected}.}
+
+The care invested in this figure reflects why this resource is personally
+meaningful to me. I began assembling it during the first year of my PhD, when I
+was new to spatial transcriptomics. The data were fragmented across platforms,
+most available resources were still organized at the spot level, and working with
+individual datasets required learning different software stacks, from Scanpy-based
+workflows to Xenium Ranger and other platform-specific tools. I therefore started
+organizing the datasets I encountered into a consistent single-cell and
+cell-aligned collection. Over the following years, I continued this curation
+alongside my research. Across successive submission rounds, the collection grew
+from 12 million cells to 20 million and then to the 22-million-cell version
+submitted here; our rebuttal-time working manifest has since reached 28 million.
+It also expanded from Xenium-only data to Xenium plus Visium HD and, most
+recently, to a growing in-house DBiC-seq collection generated with our
+collaborators. Along the way, it has supported several of my published studies and
+many projects by my co-authors. Watching the resource mature has paralleled my own
+growth as a researcher and has exposed me to recurring challenges across
+platforms, resolution, and biological context. These experiences are why, as I
+approach graduation, I hope to make the resource broadly available soon in a
+unified, accessible form, particularly for students entering the field who face
+the same practical barriers that I did.
+
+We provide this provenance to answer the factual concern while fully accepting the
+reviewer's clarity criticism. We will correct ``Hierarchical'' and ``Resolution
+(Single \ldots),'' complete the LLM-agent labels, and improve the layout and
+caption.
+
+\textbf{Molecular-target provenance.}
 The premise that all source datasets provide only spot-level expression is not
 correct, although we agree that our presentation did not foreground the distinction
 sufficiently. The submitted public inventory contains 23,943,826 upstream/source
@@ -94,19 +154,82 @@ counts do not report the number of independent patients, animals, samples, or
 train/test units.}
 
 \response
-We agree that the main text emphasized representative organs without a compact
-cross-organ summary. We therefore report the in-domain and cross-patient results
-together below. Table~1 is the same-sample, spatially held-out in-domain comparison
-of STBoosted BLEEP, GHIST, sCellST, and STBoost-Ref across eight organs. Table~2 uses a
-separate source sample and target sample for each organ under a matched transfer
-protocol.
+We agree that the previous manuscript did not clearly separate new primary
+acquisition from public aggregation and processing. Across three submission
+rounds, the resource grew from sMMC-12M to sMMC-20M, then to the submitted
+sMMC-22M manifest, and now to a rebuttal-time sMMC-28M working manifest. Table~1
+separates mutually exclusive HEST-1K overlap, STimage-1K4M-only overlap, other
+public data, and new in-house primary data.
+
+\begin{center}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\textit{Table 1. sMMC-28M working-manifest scale and provenance audit.}\\[3pt]
+\begin{tabularx}{\linewidth}{
+  >{\raggedright\arraybackslash}p{0.22\linewidth}
+  >{\raggedright\arraybackslash}p{0.12\linewidth}
+  >{\raggedright\arraybackslash}X
+  >{\raggedright\arraybackslash}p{0.15\linewidth}
+  >{\raggedleft\arraybackslash}p{0.17\linewidth}}
+\toprule
+Category & Slides/samples & Organs / cell-line origin & Platforms &
+Aligned target cells after QC \\
+\midrule
+\rowcolor{inhouseblue}
+New in-house primary data &
+21 &
+mouse-embryo; cervical; lung &
+DBiC-seq &
+53,989 \\
+Public, overlapping HEST-1K &
+32 unique slides (33 records) &
+22 species--organ strata &
+Xenium; Visium HD &
+11,051,149 \\
+Public, overlapping STimage-1K4M only &
+2 &
+2 species--organ strata &
+Visium HD &
+213,405 \\
+Other public data &
+44 &
+16 species--organ strata &
+Xenium; Visium HD &
+16,996,704 \\
+\textbf{Total sMMC-28M} &
+\textbf{99 unique samples (100 records)} &
+\textbf{25 tissue strata + 3 cell-line origins} &
+\textbf{Xenium; Visium HD; DBiC-seq} &
+\textbf{28,315,247} \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{center}
+
+The 21 in-house samples contain 54,304 measured cells; final paired-record QC
+removes 315 cells, leaving 53,989 aligned targets. Most of the overall scale comes
+from public aggregation and harmonization, and we will state that explicitly.
+However, the new primary component is a growing in-house DBiC-seq collection with
+paired morphology, RNA, and cellular context. Acquisition has continued since
+submission; the broader pool now contains approximately 200,000 paired cells and
+will be reported separately in the final manifest with exact sample/cell counts,
+checksums, and fractions.
+
+We also agree that the main text emphasized representative organs without a
+compact cross-organ summary. We therefore report the in-domain and cross-patient
+results together below. Table~2 is the same-sample, spatially held-out in-domain
+comparison of STBoosted BLEEP, GHIST, sCellST, and STBoost-Ref across eight
+organs. Table~3 uses a separate source sample and target sample for each organ
+under a matched transfer protocol.
 
 \begin{center}
 \begingroup
 \scriptsize
 \setlength{\tabcolsep}{2.2pt}
 \renewcommand{\arraystretch}{1.08}
-\textit{Table 1. Eight-organ in-domain cell-level comparison. BL denotes
+\textit{Table 2. Eight-organ in-domain cell-level comparison. BL denotes
 STBoosted BLEEP (the published BLEEP architecture retrained under the same
 cell-aligned protocol); GH and SC denote GHIST and sCellST, respectively.
 Bold marks the best result within each organ and metric.}\\[3pt]
@@ -162,7 +285,7 @@ Mouse embryo
 \footnotesize
 \setlength{\tabcolsep}{3.6pt}
 \renewcommand{\arraystretch}{1.08}
-\textit{Table 2. Eight-organ cross-patient Visium HD benchmark, implemented as
+\textit{Table 3. Eight-organ cross-patient Visium HD benchmark, implemented as
 source-sample-to-target-sample transfer. TM is the training-mean baseline; its
 gene-wise Pearson is undefined because its prediction is constant across test
 cells.}\\[3pt]
@@ -213,12 +336,10 @@ not have a method that removes these shifts reliably. An important purpose of th
 resource is therefore to make the failure measurable across organs and to enable
 future work to develop stronger patient- and platform-robust methods.
 
-The rebuttal-time working manifest contains 28,315,247 post-QC aligned targets
-across 99 unique source samples (100 versioned processing records), including
-21 in-house DBiC-seq samples with 54,304 measured cells and 53,989 after QC.
-However, ``sample'' is not interchangeable with ``donor.'' The eight-organ
-experiment uses eight distinct source--target sample pairs (16 source samples).
-Table~2 uses ``cross-patient'' to match the manuscript's task terminology, but
+The scale table reports 99 unique source samples, but ``sample'' is not
+interchangeable with ``donor.'' The eight-organ experiment uses eight distinct
+source--target sample pairs (16 source samples). Table~3 uses ``cross-patient''
+to match the manuscript's task terminology, but
 operationally the current audit verifies a sample-held-out split; we will call it
 patient-held-out only where donor identity is verified. The revised manifest will
 report patient/donor/animal, specimen, and section support and keep repeated
@@ -312,6 +433,44 @@ within sample/patient and tissue context and the panels differ, we will rename t
 a \emph{sample/age-confounded context shift}, not an age effect, and use it only to
 motivate Average, Worst-context, Gap, and Support reporting.
 
+To test whether this was an isolated example, we applied the same
+Average/Worst/Gap audit to frozen biomedical encoders in complementary
+context-rich public cohorts:
+
+\begin{center}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabularx}{\linewidth}{@{}p{0.11\linewidth}X p{0.18\linewidth}rrr@{}}
+\toprule
+Domain & Task / encoder & Context; split & Avg.\ BA & Worst BA & Gap \\
+\midrule
+Single-cell & Bone marrow / Geneformer & assay; patient-CV
+& 0.938 & 0.669 & 0.327 \\
+Single-cell & Bone marrow / scGPT & assay; patient-CV
+& 0.962 & 0.740 & 0.258 \\
+Single-cell & Bone marrow / scVI-style & assay; patient-CV
+& 0.932 & 0.616 & 0.373 \\
+Single-cell & Ten tissues / scGPT & dataset; patient-CV
+& 0.667--0.962 & 0.004--0.892 & max 0.975 \\
+Pathology & LUAD KRAS / CONCH & site; leave-one-site
+& 0.499 & 0.375 & 0.542 \\
+Pathology & LGG IDH / UNI & site; leave-one-site
+& 0.682 & 0.464 & 0.471 \\
+Pathology & LGG IDH / H-Optimus-0 & site; leave-one-site
+& 0.747 & 0.476 & 0.524 \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{center}
+
+BA is balanced accuracy; Gap is best-to-worst context, not Average minus Worst.
+High averages coexist with collapse: scGPT reaches Worst BA 0.004, and site gaps
+for CONCH, UNI, and H-Optimus-0 are 0.471--0.542. Thus, the ovarian result is an
+sMMC example of a recurring cross-modal problem. Context-aware metadata enable
+Average/Worst/Gap/Support audits; they do not by themselves remove bias.
+
 Our manifest audit also shows that donor/patient identity, age, sex, and disease
 are not consistently documented across source studies, and ethnicity is absent or
 undocumented in the current source manifests. We will report coverage and
@@ -334,73 +493,21 @@ interface. BLEEP is the published spot-level image--expression contrastive
 retrieval baseline. STBoosted BLEEP is BLEEP retrained through this interface,
 whereas STBoost-Ref is our native image-only, retrieval-based reference predictor.
 To remove the ambiguity noted by the reviewer, we eliminate the bare ``Ours''
-label and use STBoost-Ref explicitly in Table~1, figures, and prose. At inference,
+label and use STBoost-Ref explicitly in Table~2, figures, and prose. At inference,
 STBoost-Ref receives local and wider-context histology crops, never query
 expression, and returns a cell-aligned expression vector.
 
-We appreciate the reviewer raising the possibility that Figure~1 was AI-generated,
-and we agree that its typographical errors and unfinished labels could have created
-that impression. We would nevertheless like to clarify the factual record:
-\textbf{Figure~1 was not AI-generated.} I designed and edited it manually in
-Sketch. The complete working file contains 84 editable layers. The first
-screenshot below exposes individual cell circles as separate ``Oval'' layers; the
-second preserves multiple Figure~1 versions and shows all 84 editable layers
-selected at once. Every circle, line, arrow, and layout element was placed
-manually. The figure underwent three
-separate revision rounds, with more than one week of cumulative design and editing
-time; it was not produced through a one-prompt generative workflow. The
-original-resolution evidence files and checksums are provided in the
-\href{https://anonymous.4open.science/r/sMMC-22M-DB75}{anonymous artifact
-repository}, under \texttt{figure1\_design\_evidence/}.
-
-\begin{center}
-\includegraphics[width=0.40\linewidth]{figure1_design_evidence/figure1_individual_layers.jpg}
-\hfill
-\includegraphics[width=0.40\linewidth]{figure1_design_evidence/figure1_versions_and_selection.jpg}
-
-\parbox{0.97\linewidth}{\scriptsize\textit{Figure 1 construction evidence from the
-original Sketch workspace. Left: individual vector objects are exposed as
-separately editable layers. Right: multiple preserved versions and all 84
-editable layers selected simultaneously.}}
-\end{center}
-
-\needinfo{Reconnect and verify the anonymous repository URL above, and confirm
-that \texttt{figure1\_design\_evidence/} is visible before submission. The URL
-currently returns \texttt{not\_connected}.}
-
-The care invested in this figure reflects why this resource is personally
-meaningful to me. I began assembling it during the first year of my PhD, when I
-was new to spatial transcriptomics. The data were
-fragmented across platforms, most available resources were still organized at the
-spot level, and working with individual datasets required learning different
-software stacks, from Scanpy-based workflows to Xenium Ranger and other
-platform-specific tools. I therefore started organizing the datasets I encountered
-into a consistent single-cell and cell-aligned collection. Over the following
-years, I continued this curation alongside my research. Across successive
-submission rounds, the collection grew from 12 million cells to 20 million and
-then to the 22-million-cell version submitted here; our rebuttal-time working
-manifest has since reached 28 million. It also expanded from Xenium-only data to
-Xenium plus Visium HD and, most recently, to a growing in-house DBiC-seq
-collection generated with our collaborators. Along the way, it has supported
-several of my published studies and many projects by my co-authors. Watching the
-resource mature has paralleled my own growth as a researcher and has exposed me
-to recurring challenges across platforms, resolution, and biological context.
-These experiences are why, as I approach graduation, I hope to make the resource
-broadly available soon in a unified, accessible form, particularly for students
-entering the field who face the same practical barriers that I did.
-
-We provide this provenance to answer the factual concern while fully accepting the
-reviewer's clarity criticism. We will correct ``Hierarchical'' and ``Resolution
-(Single \ldots),'' complete the LLM-agent labels, improve the layout and caption,
-remove the Figure 3 border, and export figure text as vector elements. We will also
-define ``study split,'' ``cell unit,'' and Figure 2's training ratio; remove the
-identified redundant framing text; correct all typographical and citation/link
-issues; and state precisely which data, metadata, and processed artifacts are
-released. The revised limitations will state that within-sample results may exploit
-spatial autocorrelation, sample-held-out tests expose but do not solve acquisition
-and biological shifts, native Xenium and derived Visium HD targets have different
-evidentiary status, boundary assignment propagates uncertainty, metadata coverage
-is uneven, and predictions are not substitutes for molecular measurement.
+The Figure~1 design provenance and planned corrections are addressed first in
+kUmZ-1. For the remaining presentation issues, we will remove the Figure~3 border,
+export figure text as vector elements, define ``study split,'' ``cell unit,'' and
+Figure~2's training ratio, remove the identified redundant framing text, correct
+all typographical and citation/link issues, and state precisely which data,
+metadata, and processed artifacts are released. The revised limitations will state
+that within-sample results may exploit spatial autocorrelation, sample-held-out
+tests expose but do not solve acquisition and biological shifts, native Xenium and
+derived Visium HD targets have different evidentiary status, boundary assignment
+propagates uncertainty, metadata coverage is uneven, and predictions are not
+substitutes for molecular measurement.
 
 \par\vspace{0.35em}
 \textbf{Closing.}
