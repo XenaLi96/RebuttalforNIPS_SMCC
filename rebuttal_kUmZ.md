@@ -18,9 +18,9 @@ Accordingly, we will use “native cell-resolved” for Xenium, “derived cell-
 
 We agree that the main text emphasized representative organs without a compact cross-organ summary. We therefore report the in-domain and cross-patient results together below. Table 1 is the same-sample, spatially held-out in-domain comparison of BLEEP, GHIST, sCellST, and our method across eight organs. Table 2 uses a separate source sample and target sample for each organ under a matched transfer protocol.
 
-*Table 1. Eight-organ in-domain cell-level comparison. BL, GH, SC, and OR denote BLEEP, GHIST, sCellST, and our method, respectively. Bold marks the best result within each organ and metric.*
+*Table 1. Eight-organ in-domain cell-level comparison. BL, GH, and SC denote BLEEP, GHIST, and sCellST evaluated under the same cell-aligned protocol; Ours denotes STBoost-Ref. BL is the cell-aligned BLEEP instantiation termed STBoosted BLEEP elsewhere in the paper. Bold marks the best result within each organ and metric.*
 
-| Organ | Gene P BL | Gene P GH | Gene P SC | Gene P OR | Gene S BL | Gene S GH | Gene S SC | Gene S OR | Cell P BL | Cell P GH | Cell P SC | Cell P OR |
+| Organ | Gene P BL | Gene P GH | Gene P SC | Gene P Ours | Gene S BL | Gene S GH | Gene S SC | Gene S Ours | Cell P BL | Cell P GH | Cell P SC | Cell P Ours |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | Human ovary | 0.4239 | 0.4523 | 0.0800 | **0.6451** | 0.4396 | 0.4813 | 0.0640 | **0.6049** | 0.8212 | 0.7382 | 0.6858 | **0.8379** |
 | Human lung | 0.4241 | 0.4754 | 0.1255 | **0.5178** | 0.4310 | 0.4814 | 0.1748 | **0.5077** | 0.5622 | 0.5787 | 0.4704 | **0.6042** |
@@ -85,7 +85,7 @@ Our manifest audit also shows that donor/patient identity, age, sex, and disease
 
 **6. Terminology, figures, and presentation (P5, P7 and minor comments).**
 
-We will define STBoost at first use as a model-agnostic interface for training histology-to-expression methods on cell-aligned records. STBoost-Ref is our image-only retrieval predictor; “Ours” in the benchmark refers to STBoost-Ref, whereas “STBoosted BLEEP” is BLEEP retrained through the interface. At inference, STBoost-Ref receives local and wider-context histology crops, never query expression, and returns a cell-aligned expression vector.
+We will define STBoost at first use as a model-agnostic interface for training histology-to-expression methods on cell-aligned records. STBoost-Ref is our image-only retrieval predictor, whereas STBoosted BLEEP is the published BLEEP architecture retrained through the same interface. To remove the ambiguity noted by the reviewer, revised figures and prose will use these explicit names rather than a bare “Ours” label. The compact in-domain table retains “Ours” only because of its width and defines it directly as STBoost-Ref in the caption. At inference, STBoost-Ref receives local and wider-context histology crops, never query expression, and returns a cell-aligned expression vector.
 
 Figure 1 was manually designed and edited by the authors in Sketch; it was not AI-generated. We will nevertheless correct “Hierarchical” and “Resolution (Single …),” complete the LLM-agent labels, improve the layout and caption, remove the Figure 3 border, and export figure text as vector elements. We will also define “study split,” “cell unit,” and Figure 2’s training ratio; remove the identified redundant framing text; correct all typographical and citation/link issues; and state precisely which data, metadata, and processed artifacts are released. The revised limitations will state that within-sample results may exploit spatial autocorrelation, sample-held-out tests expose but do not solve acquisition and biological shifts, native Xenium and derived Visium HD targets have different evidentiary status, boundary assignment propagates uncertainty, metadata coverage is uneven, and predictions are not substitutes for molecular measurement.
 

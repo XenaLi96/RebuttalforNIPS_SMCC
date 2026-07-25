@@ -125,16 +125,18 @@ protocol.
 \scriptsize
 \setlength{\tabcolsep}{2.2pt}
 \renewcommand{\arraystretch}{1.08}
-\textit{Table 1. Eight-organ in-domain cell-level comparison. BL, GH, SC, and OR
-denote BLEEP, GHIST, sCellST, and our method, respectively. Bold marks the best
-result within each organ and metric.}\\[3pt]
+\textit{Table 1. Eight-organ in-domain cell-level comparison. BL, GH, and SC
+denote BLEEP, GHIST, and sCellST evaluated under the same cell-aligned protocol;
+Ours denotes STBoost-Ref. BL is the cell-aligned BLEEP instantiation termed
+STBoosted BLEEP elsewhere in the paper. Bold marks the best result within each
+organ and metric.}\\[3pt]
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrrrrrrrr@{}}
 \toprule
 & \multicolumn{4}{c}{Gene Pearson}
 & \multicolumn{4}{c}{Gene Spearman}
 & \multicolumn{4}{c}{Cell Pearson} \\
 \cmidrule(lr){2-5}\cmidrule(lr){6-9}\cmidrule(lr){10-13}
-Organ & BL & GH & SC & OR & BL & GH & SC & OR & BL & GH & SC & OR \\
+Organ & BL & GH & SC & Ours & BL & GH & SC & Ours & BL & GH & SC & Ours \\
 \midrule
 Human ovary
 & 0.4239 & 0.4523 & 0.0800 & \textbf{0.6451}
@@ -347,10 +349,13 @@ framing, fix Figure 1 and other presentation issues, and clarify the release sco
 \response
 We will define STBoost at first use as a model-agnostic interface for training
 histology-to-expression methods on cell-aligned records. STBoost-Ref is our
-image-only retrieval predictor; ``Ours'' in the benchmark refers to STBoost-Ref,
-whereas ``STBoosted BLEEP'' is BLEEP retrained through the interface. At inference,
-STBoost-Ref receives local and wider-context histology crops, never query
-expression, and returns a cell-aligned expression vector.
+image-only retrieval predictor, whereas STBoosted BLEEP is the published BLEEP
+architecture retrained through the same interface. To remove the ambiguity noted
+by the reviewer, revised figures and prose will use these explicit names rather
+than a bare ``Ours'' label. The compact in-domain table retains ``Ours'' only
+because of its width and defines it directly as STBoost-Ref in the caption. At
+inference, STBoost-Ref receives local and wider-context histology crops, never
+query expression, and returns a cell-aligned expression vector.
 
 Figure 1 was manually designed and edited by the authors in Sketch; it was not
 AI-generated. We will nevertheless correct ``Hierarchical'' and ``Resolution
