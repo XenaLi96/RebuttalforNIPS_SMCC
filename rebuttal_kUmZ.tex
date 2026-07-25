@@ -5,6 +5,7 @@
 \usepackage[table]{xcolor}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.35em}
@@ -35,26 +36,6 @@ We clarify these distinctions below, report the validation and cross-organ resul
 that are now available, and identify the matched analyses that remain in progress.
 We will also calibrate the title and claims and correct all presentation issues
 noted by the reviewer.
-
-This resource is also personally meaningful to me. I began assembling it during
-the first year of my PhD, when I was new to spatial transcriptomics. The data were
-fragmented across platforms, most available resources were still organized at the
-spot level, and working with individual datasets required learning different
-software stacks, from Scanpy-based workflows to Xenium Ranger and other
-platform-specific tools. I therefore started organizing the datasets I encountered
-into a consistent single-cell and cell-aligned collection. Over the following
-years, I continued this curation alongside my research. Across successive
-submission rounds, the collection grew from 12 million cells to 20 million and
-then to the 22-million-cell version submitted here; our rebuttal-time working
-manifest has since reached 28 million. It also expanded from Xenium-only data to
-Xenium plus Visium HD and, most recently, to a growing in-house DBiC-seq
-collection generated with our collaborators. Along the way, it has supported
-several of my published studies and many projects by my co-authors. Watching the
-resource mature has paralleled my own growth as a researcher and has exposed me
-to recurring challenges across platforms, resolution, and biological context.
-These experiences are why, as I approach graduation, I hope to make the resource
-broadly available soon in a unified, accessible form, particularly for students
-entering the field who face the same practical barriers that I did.
 
 \questionsep
 \textbf{kUmZ-1. Native cell-resolved versus derived cell-aligned targets.}\quad
@@ -357,8 +338,59 @@ label and use STBoost-Ref explicitly in Table~1, figures, and prose. At inferenc
 STBoost-Ref receives local and wider-context histology crops, never query
 expression, and returns a cell-aligned expression vector.
 
-Figure 1 was manually designed and edited by the authors in Sketch; it was not
-AI-generated. We will nevertheless correct ``Hierarchical'' and ``Resolution
+We appreciate the reviewer raising the possibility that Figure~1 was AI-generated,
+and we agree that its typographical errors and unfinished labels could have created
+that impression. We would nevertheless like to clarify the factual record:
+\textbf{Figure~1 was not AI-generated.} I designed and edited it manually in
+Sketch. The complete working file contains 89 editable layers. The first
+screenshot below exposes individual cell circles as separate ``Oval'' layers; the
+second preserves multiple Figure~1 versions and shows 84 editable objects selected
+at once. The latter is a selection count, not the total layer count. Every circle,
+line, arrow, and layout element was placed manually. The figure underwent three
+separate revision rounds, with more than one week of cumulative design and editing
+time; it was not produced through a one-prompt generative workflow. The
+original-resolution evidence files and checksums are provided in the
+\href{https://anonymous.4open.science/r/sMMC-22M-DB75}{anonymous artifact
+repository}, under \texttt{figure1\_design\_evidence/}.
+
+\begin{center}
+\includegraphics[width=0.40\linewidth]{figure1_design_evidence/figure1_individual_layers.jpg}
+\hfill
+\includegraphics[width=0.40\linewidth]{figure1_design_evidence/figure1_versions_and_selection.jpg}
+
+\parbox{0.97\linewidth}{\scriptsize\textit{Figure 1 construction evidence from the
+original Sketch workspace. Left: individual vector objects are exposed as
+separately editable layers. Right: multiple preserved versions and 84
+simultaneously selected objects; the complete working file contains 89 layers.}}
+\end{center}
+
+\needinfo{Reconnect and verify the anonymous repository URL above, and confirm
+that \texttt{figure1\_design\_evidence/} is visible before submission. The URL
+currently returns \texttt{not\_connected}.}
+
+The care invested in this figure reflects why this resource is personally
+meaningful to me. I began assembling it during the first year of my PhD, when I
+was new to spatial transcriptomics. The data were
+fragmented across platforms, most available resources were still organized at the
+spot level, and working with individual datasets required learning different
+software stacks, from Scanpy-based workflows to Xenium Ranger and other
+platform-specific tools. I therefore started organizing the datasets I encountered
+into a consistent single-cell and cell-aligned collection. Over the following
+years, I continued this curation alongside my research. Across successive
+submission rounds, the collection grew from 12 million cells to 20 million and
+then to the 22-million-cell version submitted here; our rebuttal-time working
+manifest has since reached 28 million. It also expanded from Xenium-only data to
+Xenium plus Visium HD and, most recently, to a growing in-house DBiC-seq
+collection generated with our collaborators. Along the way, it has supported
+several of my published studies and many projects by my co-authors. Watching the
+resource mature has paralleled my own growth as a researcher and has exposed me
+to recurring challenges across platforms, resolution, and biological context.
+These experiences are why, as I approach graduation, I hope to make the resource
+broadly available soon in a unified, accessible form, particularly for students
+entering the field who face the same practical barriers that I did.
+
+We provide this provenance to answer the factual concern while fully accepting the
+reviewer's clarity criticism. We will correct ``Hierarchical'' and ``Resolution
 (Single \ldots),'' complete the LLM-agent labels, improve the layout and caption,
 remove the Figure 3 border, and export figure text as vector elements. We will also
 define ``study split,'' ``cell unit,'' and Figure 2's training ratio; remove the
@@ -370,7 +402,7 @@ and biological shifts, native Xenium and derived Visium HD targets have differen
 evidentiary status, boundary assignment propagates uncertainty, metadata coverage
 is uneven, and predictions are not substitutes for molecular measurement.
 
-\questionsep
+\par\vspace{0.35em}
 \textbf{Closing.}
 In summary, the revised framing will distinguish native Xenium measurements from
 derived Visium HD targets, support breadth claims with per-organ and
