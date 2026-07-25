@@ -116,7 +116,7 @@ train/test units.}
 We agree that the main text emphasized representative organs without a compact
 cross-organ summary. We therefore report the in-domain and cross-patient results
 together below. Table~1 is the same-sample, spatially held-out in-domain comparison
-of BLEEP, GHIST, sCellST, and our method across eight organs. Table~2 uses a
+of STBoosted BLEEP, GHIST, sCellST, and STBoost-Ref across eight organs. Table~2 uses a
 separate source sample and target sample for each organ under a matched transfer
 protocol.
 
@@ -125,18 +125,19 @@ protocol.
 \scriptsize
 \setlength{\tabcolsep}{2.2pt}
 \renewcommand{\arraystretch}{1.08}
-\textit{Table 1. Eight-organ in-domain cell-level comparison. BL, GH, and SC
-denote BLEEP, GHIST, and sCellST evaluated under the same cell-aligned protocol;
-Ours denotes STBoost-Ref. BL is the cell-aligned BLEEP instantiation termed
-STBoosted BLEEP elsewhere in the paper. Bold marks the best result within each
-organ and metric.}\\[3pt]
+\textit{Table 1. Eight-organ in-domain cell-level comparison. BL denotes
+STBoosted BLEEP (the published BLEEP architecture retrained under the same
+cell-aligned protocol); GH and SC denote GHIST and sCellST, respectively.
+Bold marks the best result within each organ and metric.}\\[3pt]
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrrrrrrrr@{}}
 \toprule
 & \multicolumn{4}{c}{Gene Pearson}
 & \multicolumn{4}{c}{Gene Spearman}
 & \multicolumn{4}{c}{Cell Pearson} \\
 \cmidrule(lr){2-5}\cmidrule(lr){6-9}\cmidrule(lr){10-13}
-Organ & BL & GH & SC & Ours & BL & GH & SC & Ours & BL & GH & SC & Ours \\
+Organ & BL & GH & SC & \shortstack{STBoost-\\Ref}
+& BL & GH & SC & \shortstack{STBoost-\\Ref}
+& BL & GH & SC & \shortstack{STBoost-\\Ref} \\
 \midrule
 Human ovary
 & 0.4239 & 0.4523 & 0.0800 & \textbf{0.6451}
@@ -210,9 +211,9 @@ source-reference cells, 2,000 validation cells, at most 5,000 target-test cells,
 five epochs, all shared genes, and an identical training-mean baseline. Every organ
 uses 5,000 target-test cells.
 
-The contrast is clear. In-domain, our method is best in 22 of 24 organ--metric
+The contrast is clear. In-domain, STBoost-Ref is best in 22 of 24 organ--metric
 comparisons; the two exceptions are kidney gene Spearman and kidney cell Pearson,
-where BLEEP is best. Cross-patient transfer is much harder. UNI2-h improves
+where STBoosted BLEEP is best. Cross-patient transfer is much harder. UNI2-h improves
 organ-macro F1 over the training-mean baseline (0.0815 versus 0.0375) and produces
 nonzero gene-wise correlation, but it does not beat that baseline in macro cell
 Pearson (0.2036 versus 0.2422). Its cross-patient gene Pearson ranges from 0.0040
@@ -347,15 +348,14 @@ table and only sufficiently supported subgroup analyses.}
 framing, fix Figure 1 and other presentation issues, and clarify the release scope.}
 
 \response
-We will define STBoost at first use as a model-agnostic interface for training
-histology-to-expression methods on cell-aligned records. STBoost-Ref is our
-image-only retrieval predictor, whereas STBoosted BLEEP is the published BLEEP
-architecture retrained through the same interface. To remove the ambiguity noted
-by the reviewer, revised figures and prose will use these explicit names rather
-than a bare ``Ours'' label. The compact in-domain table retains ``Ours'' only
-because of its width and defines it directly as STBoost-Ref in the caption. At
-inference, STBoost-Ref receives local and wider-context histology crops, never
-query expression, and returns a cell-aligned expression vector.
+We will define STBoost at first use as the model-agnostic cell-aligned data
+interface. BLEEP is the published spot-level image--expression contrastive
+retrieval baseline. STBoosted BLEEP is BLEEP retrained through this interface,
+whereas STBoost-Ref is our native image-only, retrieval-based reference predictor.
+To remove the ambiguity noted by the reviewer, we eliminate the bare ``Ours''
+label and use STBoost-Ref explicitly in Table~1, figures, and prose. At inference,
+STBoost-Ref receives local and wider-context histology crops, never query
+expression, and returns a cell-aligned expression vector.
 
 Figure 1 was manually designed and edited by the authors in Sketch; it was not
 AI-generated. We will nevertheless correct ``Hierarchical'' and ``Resolution
