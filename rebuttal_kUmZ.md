@@ -1,5 +1,16 @@
 We thank the reviewer for identifying three places where our previous presentation was insufficiently precise: the distinction between native cell-resolved and derived cell-aligned molecular targets, the breadth of the experimental evaluation, and the evidence for what cell-level evaluation adds beyond spot-level prediction. We clarify these distinctions below, report the spatially separated native-Xenium, cross-sample, cross-organ, pseudo-spot, and assignment-audit results that are now available, and state the limitations that remain. We will also calibrate the title and claims and correct all presentation issues noted by the reviewer.
 
+**Table 1. Main native-cell result.** Leakage-controlled benchmark across 30 native-Xenium samples, 17 organ labels, two species, and 360,000 spatially stratified cells, using four contiguous spatial holdouts and a 5% train–test buffer. All metrics except the top-200 column use the top-50 training-selected HVGs.
+
+| Model | Gene Pearson Top-50 | Gene Pearson Top-200 | Gene Spearman Top-50 | Cell Pearson Top-50 | F1 Top-50 |
+|---|---:|---:|---:|---:|---:|
+| **Image** | **0.324** | **0.202** | **0.291** | **0.442** | **0.413** |
+| Coordinate only | 0.046 | 0.031 | 0.041 | 0.288 | 0.283 |
+| Spatial KNN | 0.053 | 0.029 | 0.051 | 0.268 | 0.320 |
+| Training mean | N/A | N/A | N/A | 0.305 | 0.253 |
+
+*Training-mean gene-wise correlation is undefined because its prediction is constant across test cells. The top-50 image Gene Pearson has a biological-sample bootstrap 95% CI of 0.277–0.368.*
+
 **1. Figure 1 design and molecular-target provenance (P2, Q2, Q4, L1–L2, and the Figure 1 minor comment).**
 
 **Figure 1 design provenance.** We appreciate the reviewer raising the possibility that Figure 1 was AI-generated, and we agree that its typographical errors and unfinished labels could have created that impression. We would nevertheless like to clarify the factual record: **Figure 1 was not AI-generated.** I designed and edited it manually in Sketch. The complete working file contains 84 editable layers. The first screenshot below exposes individual cell circles as separate “Oval” layers; the second preserves multiple Figure 1 versions and shows all 84 editable layers selected at once. Every circle, line, arrow, and layout element was placed manually. The figure underwent three separate revision rounds, with more than one week of cumulative design and editing time; it was not produced through a one-prompt generative workflow. The original-resolution evidence files and checksums are provided in the [anonymous artifact repository](https://anonymous.4open.science/r/sMMC-22M-DB75), under `figure1_design_evidence/`.
@@ -18,18 +29,9 @@ We provide this provenance to answer the factual concern while fully accepting t
 
 **Molecular-target provenance.** The premise that all source datasets provide only spot-level expression is not correct, although we agree that our presentation did not foreground the distinction sufficiently. The submitted public inventory contains 23,943,826 upstream/source records: 16,314,129 Xenium cells defined by platform-provided cell boundaries and transcript coordinates, and 7,629,697 Visium HD source/segmentation records. After bin-to-cell aggregation, the corresponding native-plus-derived expression matrices contain 20,246,169 target rows: 16,314,129 native Xenium cells and 3,932,040 derived Visium HD cell-aligned profiles. We will report these counting layers separately rather than calling every record a directly measured single cell.
 
-**Native-cell validation under spatial separation.** We replaced the earlier random-cell diagnostic with a leakage-controlled evaluation of 30 H&E-aligned native-Xenium samples. The samples span 17 organ labels, 25 source-condition labels, and two species. We spatially stratified at most 12,000 cells per sample (360,000 cells in total), used four contiguous edge holdouts (x-high, x-low, y-high, and y-low), and removed a 5% coordinate-span buffer between the training and test regions. Target genes were selected using only each training partition. Frozen CONCH image features were evaluated with the same PCA–Ridge head against coordinate-only, eight-nearest-spatial-neighbor, and training-mean controls.
+**Native-cell validation under spatial separation.** We replaced the earlier random-cell diagnostic with a leakage-controlled evaluation of 30 H&E-aligned native-Xenium samples. The samples span 17 organ labels, 25 source-condition labels, and two species. We spatially stratified at most 12,000 cells per sample (360,000 cells in total), used four contiguous edge holdouts (x-high, x-low, y-high, and y-low), and removed a 5% coordinate-span buffer between the training and test regions. Target genes were selected using only each training partition. Frozen CONCH image features were evaluated with the same PCA–Ridge head against coordinate-only, eight-nearest-spatial-neighbor, and training-mean controls; Table 1 reports the primary result.
 
-*Native-Xenium spatial-blocked summary. All values except the top-200 column use the top-50 training-selected HVGs. Training-mean gene-wise correlation is undefined because its prediction is constant across test cells.*
-
-| Model | Top-50 Gene P | Top-200 Gene P | Gene S | Cell P | F1 |
-|---|---:|---:|---:|---:|---:|
-| **Image** | **0.324** | **0.202** | **0.291** | **0.442** | **0.413** |
-| Coordinate only | 0.046 | 0.031 | 0.041 | 0.288 | 0.283 |
-| Spatial KNN | 0.053 | 0.029 | 0.051 | 0.268 | 0.320 |
-| Training mean | N/A | N/A | N/A | 0.305 | 0.253 |
-
-The top-50 image Gene Pearson has a biological-sample bootstrap 95% CI of 0.277–0.368. Image prediction exceeded both coordinate and spatial-neighbor controls in 28 of 30 samples; the two exceptions, human liver (image −0.002) and mouse bone (0.030), are retained rather than excluded. The paired sample-level image-versus-coordinate and image-versus-KNN comparisons remain significant after Holm correction (adjusted \(p\leq1.9\times10^{-8}\)). We do not perform a Gene-Pearson test against the constant training-mean predictor.
+Image prediction exceeded both coordinate and spatial-neighbor controls in 28 of 30 samples; the two exceptions, human liver (image −0.002) and mouse bone (0.030), are retained rather than excluded. The paired sample-level image-versus-coordinate and image-versus-KNN comparisons remain significant after Holm correction (adjusted \(p\leq1.9\times10^{-8}\)). We do not perform a Gene-Pearson test against the constant training-mean predictor.
 
 We also examined whether the moderate gene-wise correlations retain aggregate biological structure. On the overlap between training-selected HVGs and the available marker inventory, image Gene Pearson was 0.201. Using available expression-derived predicted cell-type labels to stratify test cells, the image-model pseudobulk RMSE was 0.120, compared with 0.187 for spatial KNN, 0.188 for the training mean, and 0.224 for coordinates. We treat this only as preliminary biological calibration, not independent cell-type validation: the labels are expression-derived, one sample lacks a usable annotation, and the mouse marker inventory must be re-aggregated with a species-specific list before a final marker table is reported.
 
@@ -41,9 +43,9 @@ Accordingly, we will use “native cell-resolved” for Xenium, “derived cell-
 
 **2. Cross-organ evaluation and independent biological units (P3, Q1, P8 and L4).**
 
-We agree that the previous manuscript did not clearly separate new primary acquisition from public aggregation and processing. Across three submission rounds, the resource grew from sMMC-12M to sMMC-20M, then to the submitted sMMC-22M manifest, and now to a rebuttal-time sMMC-28M working manifest. Table 1 separates mutually exclusive HEST-1K overlap, STimage-1K4M-only overlap, other public data, and new in-house primary data.
+We agree that the previous manuscript did not clearly separate new primary acquisition from public aggregation and processing. Across three submission rounds, the resource grew from sMMC-12M to sMMC-20M, then to the submitted sMMC-22M manifest, and now to a rebuttal-time sMMC-28M working manifest. Table 2 separates mutually exclusive HEST-1K overlap, STimage-1K4M-only overlap, other public data, and new in-house primary data.
 
-*Table 1. sMMC-28M working-manifest scale and provenance audit.*
+*Table 2. sMMC-28M working-manifest scale and provenance audit.*
 
 | Category | Slides/samples | Organs or cell-line origins | Platforms | Aligned target cells after QC |
 |---|---:|---|---|---:|
@@ -57,9 +59,9 @@ The 21 in-house samples contain 54,304 measured cells; final paired-record QC re
 
 We additionally performed a native-Xenium same-organ leave-one-sample-out evaluation on 18 target samples from human breast, lung, ovary, pancreas, and skin and mouse whole pup. For each target, all other available samples from the same species–organ group formed the training set; the complete target sample was held out, and the top 50 variable genes were selected from training data only. Frozen CONCH/PCA–Ridge achieved mean Gene Pearson 0.170 (range 0.016–0.372 across targets). Mean Cell Pearson was 0.275 versus 0.205 for the training-mean control, with image prediction higher in 14/18 targets; mean F1 was 0.125 versus 0.031, with image prediction higher in 17/18. The training-mean Gene Pearson is not reported because a constant prediction makes that correlation undefined. This is a **sample-held-out**, not donor-held-out, result; it supports transferable signal for a restricted training-selected endpoint but not unrestricted patient-level generalization.
 
-We also agree that the main text emphasized representative organs without a compact cross-organ summary. We therefore report the in-domain and cross-patient results together below. Table 2 is the same-sample, spatially held-out in-domain comparison of STBoosted BLEEP, GHIST, sCellST, and STBoost-Ref across eight organs. Table 3 uses a separate source sample and target sample for each organ under a matched transfer protocol.
+We also agree that the main text emphasized representative organs without a compact cross-organ summary. We therefore report the in-domain and cross-patient results together below. Table 3 is the same-sample, spatially held-out in-domain comparison of STBoosted BLEEP, GHIST, sCellST, and STBoost-Ref across eight organs. Table 4 uses a separate source sample and target sample for each organ under a matched transfer protocol.
 
-*Table 2. Eight-organ in-domain cell-level comparison. BL denotes STBoosted BLEEP (the published BLEEP architecture retrained under the same cell-aligned protocol); GH and SC denote GHIST and sCellST, respectively. Bold marks the best result within each organ and metric.*
+*Table 3. Eight-organ in-domain cell-level comparison. BL denotes STBoosted BLEEP (the published BLEEP architecture retrained under the same cell-aligned protocol); GH and SC denote GHIST and sCellST, respectively. Bold marks the best result within each organ and metric.*
 
 | Organ | Gene P BL | Gene P GH | Gene P SC | Gene P STBoost-Ref | Gene S BL | Gene S GH | Gene S SC | Gene S STBoost-Ref | Cell P BL | Cell P GH | Cell P SC | Cell P STBoost-Ref |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -72,7 +74,7 @@ We also agree that the main text emphasized representative organs without a comp
 | Mouse brain | 0.2864 | 0.2417 | 0.0395 | **0.3972** | 0.2719 | 0.2253 | 0.0318 | **0.3765** | 0.4827 | 0.4691 | 0.2945 | **0.5536** |
 | Mouse embryo | 0.2431 | 0.2105 | 0.0174 | **0.3489** | 0.2286 | 0.1964 | 0.0132 | **0.3207** | 0.4519 | 0.4273 | 0.2368 | **0.5084** |
 
-*Table 3. Eight-organ cross-patient Visium HD benchmark, implemented as source-sample-to-target-sample transfer. TM is the training-mean baseline; its gene-wise Pearson is undefined because its prediction is constant across test cells.*
+*Table 4. Eight-organ cross-patient Visium HD benchmark, implemented as source-sample-to-target-sample transfer. TM is the training-mean baseline; its gene-wise Pearson is undefined because its prediction is constant across test cells.*
 
 | Organ | Pair | UNI2-h Gene P | UNI2-h Cell P | UNI2-h F1 | TM Cell P | TM F1 |
 |---|---|---:|---:|---:|---:|---:|
@@ -92,7 +94,7 @@ The contrast is clear. In-domain, STBoost-Ref is best in 22 of 24 organ–metric
 
 We do not hide this negative result or claim that the current predictor solves cross-patient generalization. The same construction, preprocessing, and target QC support the in-domain and transfer protocols, so this performance drop should not by itself be interpreted as evidence that the resource is invalid. Rather, it exposes a central unsolved problem: morphology, cell-state composition, acquisition conditions, and molecular distributions can change substantially across patients, and cross-platform transfer introduces an additional shift. Such patient and platform biases are also well recognized in single-cell analysis. We currently do not have a method that removes these shifts reliably. An important purpose of this resource is therefore to make the failure measurable across organs and to enable future work to develop stronger patient- and platform-robust methods.
 
-The scale table reports 99 unique source samples, but “sample” is not interchangeable with “donor.” The eight-organ experiment uses eight distinct source–target sample pairs (16 source samples). Table 3 uses “cross-patient” to match the manuscript’s task terminology, but operationally the current audit verifies a sample-held-out split; we will call it patient-held-out only where donor identity is verified. The revised manifest will report patient/donor/animal, specimen, and section support and keep repeated sections from one biological subject in the same split.
+The scale table reports 99 unique source samples, but “sample” is not interchangeable with “donor.” The eight-organ experiment uses eight distinct source–target sample pairs (16 source samples). Table 4 uses “cross-patient” to match the manuscript’s task terminology, but operationally the current audit verifies a sample-held-out split; we will call it patient-held-out only where donor identity is verified. The revised manifest will report patient/donor/animal, specimen, and section support and keep repeated sections from one biological subject in the same split.
 
 **AUTHOR INPUT REQUIRED:** insert verified human donor/patient and animal totals and per-organ grouping from source metadata; do not infer missing identities.
 
@@ -155,7 +157,7 @@ Our manifest audit also shows that donor/patient identity, age, sex, and disease
 
 **6. Terminology, figures, and presentation (P5, P7 and minor comments).**
 
-We will define STBoost at first use as the model-agnostic cell-aligned data interface. BLEEP is the published spot-level image–expression contrastive retrieval baseline. STBoosted BLEEP is BLEEP retrained through this interface, whereas STBoost-Ref is our native image-only, retrieval-based reference predictor. To remove the ambiguity noted by the reviewer, we eliminate the bare “Ours” label and use STBoost-Ref explicitly in Table 2, figures, and prose. At inference, STBoost-Ref receives local and wider-context histology crops, never query expression, and returns a cell-aligned expression vector.
+We will define STBoost at first use as the model-agnostic cell-aligned data interface. BLEEP is the published spot-level image–expression contrastive retrieval baseline. STBoosted BLEEP is BLEEP retrained through this interface, whereas STBoost-Ref is our native image-only, retrieval-based reference predictor. To remove the ambiguity noted by the reviewer, we eliminate the bare “Ours” label and use STBoost-Ref explicitly in Table 3, figures, and prose. At inference, STBoost-Ref receives local and wider-context histology crops, never query expression, and returns a cell-aligned expression vector.
 
 The Figure 1 design provenance and planned corrections are addressed first in kUmZ-1. For the remaining presentation issues, we will remove the Figure 3 border, export figure text as vector elements, define “study split,” “cell unit,” and Figure 2’s training ratio, remove the identified redundant framing text, correct all typographical and citation/link issues, and state precisely which data, metadata, and processed artifacts are released. The revised limitations will state that within-sample results may exploit spatial autocorrelation, sample-held-out tests expose but do not solve acquisition and biological shifts, native Xenium and derived Visium HD targets have different evidentiary status, boundary assignment propagates uncertainty, metadata coverage is uneven, and predictions are not substitutes for molecular measurement.
 

@@ -39,6 +39,43 @@ cross-sample, cross-organ, pseudo-spot, and assignment-audit results that are no
 available, and state the limitations that remain. We will also calibrate the title
 and claims and correct all presentation issues noted by the reviewer.
 
+\begin{center}
+\begingroup
+\small
+\setlength{\tabcolsep}{6.5pt}
+\renewcommand{\arraystretch}{1.22}
+\textit{\textbf{Table 1. Main native-cell result.} Leakage-controlled benchmark
+across 30 native-Xenium samples, 17 organ labels, two species, and 360,000
+spatially stratified cells, using four contiguous spatial holdouts and a 5\%
+train--test buffer. All metrics except the top-200 column use the top-50
+training-selected HVGs.}\\[5pt]
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrr@{}}
+\toprule
+& \multicolumn{3}{c}{Gene-level metrics}
+& \multicolumn{2}{c}{Cell/detection metrics} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-6}
+Model &
+\shortstack{Pearson\\Top-50} &
+\shortstack{Pearson\\Top-200} &
+\shortstack{Spearman\\Top-50} &
+\shortstack{Cell Pearson\\Top-50} &
+\shortstack{F1\\Top-50} \\
+\midrule
+\textbf{Image} & \textbf{0.324} & \textbf{0.202} & \textbf{0.291} &
+\textbf{0.442} & \textbf{0.413} \\
+Coordinate only & 0.046 & 0.031 & 0.041 & 0.288 & 0.283 \\
+Spatial KNN & 0.053 & 0.029 & 0.051 & 0.268 & 0.320 \\
+Training mean & N/A & N/A & N/A & 0.305 & 0.253 \\
+\bottomrule
+\end{tabular*}
+
+\parbox{0.98\linewidth}{\footnotesize\textit{Training-mean gene-wise
+correlation is undefined because its prediction is constant across test cells.
+The top-50 image Gene Pearson has a biological-sample bootstrap 95\% CI of
+0.277--0.368.}}
+\endgroup
+\end{center}
+
 \questionsep
 \textbf{kUmZ-1. Figure 1 design and molecular-target provenance.}\quad
 \revcomment{P2, Q2, Q4, L1--L2, and the Figure 1 minor comment: clarify whether
@@ -123,35 +160,11 @@ holdouts (x-high, x-low, y-high, and y-low), and removed a 5\% coordinate-span
 buffer between the training and test regions. Target genes were selected using
 only each training partition. Frozen CONCH image features were evaluated with the
 same PCA--Ridge head against coordinate-only, eight-nearest-spatial-neighbor, and
-training-mean controls.
+training-mean controls; Table~1 reports the primary result.
 
-\begin{center}
-\begingroup
-\footnotesize
-\setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{1.10}
-\textit{Native-Xenium spatial-blocked summary. All values except the top-200
-column use the top-50 training-selected HVGs. Training-mean gene-wise
-correlation is undefined because its prediction is constant across test
-cells.}\\[3pt]
-\begin{tabular}{lrrrrr}
-\toprule
-Model & Top-50 Gene P & Top-200 Gene P & Gene S & Cell P & F1 \\
-\midrule
-\textbf{Image} & \textbf{0.324} & \textbf{0.202} & \textbf{0.291} &
-\textbf{0.442} & \textbf{0.413} \\
-Coordinate only & 0.046 & 0.031 & 0.041 & 0.288 & 0.283 \\
-Spatial KNN & 0.053 & 0.029 & 0.051 & 0.268 & 0.320 \\
-Training mean & N/A & N/A & N/A & 0.305 & 0.253 \\
-\bottomrule
-\end{tabular}
-\endgroup
-\end{center}
-
-The top-50 image Gene Pearson has a biological-sample bootstrap 95\% CI of
-0.277--0.368. Image prediction exceeded both coordinate and spatial-neighbor
-controls in 28 of 30 samples; the two exceptions, human liver (image \(-0.002\))
-and mouse bone (0.030), are retained rather than excluded. The paired
+Image prediction exceeded both coordinate and spatial-neighbor controls in 28 of
+30 samples; the two exceptions, human liver (image \(-0.002\)) and mouse bone
+(0.030), are retained rather than excluded. The paired
 sample-level image-versus-coordinate and image-versus-KNN comparisons remain
 significant after Holm correction (adjusted \(p\leq1.9\times10^{-8}\)). We do
 not perform a Gene-Pearson test against the constant training-mean predictor.
@@ -198,7 +211,7 @@ train/test units.}
 We agree that the previous manuscript did not clearly separate new primary
 acquisition from public aggregation and processing. Across three submission
 rounds, the resource grew from sMMC-12M to sMMC-20M, then to the submitted
-sMMC-22M manifest, and now to a rebuttal-time sMMC-28M working manifest. Table~1
+sMMC-22M manifest, and now to a rebuttal-time sMMC-28M working manifest. Table~2
 separates mutually exclusive HEST-1K overlap, STimage-1K4M-only overlap, other
 public data, and new in-house primary data.
 
@@ -207,7 +220,7 @@ public data, and new in-house primary data.
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.12}
-\textit{Table 1. sMMC-28M working-manifest scale and provenance audit.}\\[3pt]
+\textit{Table 2. sMMC-28M working-manifest scale and provenance audit.}\\[3pt]
 \begin{tabularx}{\linewidth}{
   >{\raggedright\arraybackslash}p{0.22\linewidth}
   >{\raggedright\arraybackslash}p{0.12\linewidth}
@@ -274,9 +287,9 @@ unrestricted patient-level generalization.
 
 We also agree that the main text emphasized representative organs without a
 compact cross-organ summary. We therefore report the in-domain and cross-patient
-results together below. Table~2 is the same-sample, spatially held-out in-domain
+results together below. Table~3 is the same-sample, spatially held-out in-domain
 comparison of STBoosted BLEEP, GHIST, sCellST, and STBoost-Ref across eight
-organs. Table~3 uses a separate source sample and target sample for each organ
+organs. Table~4 uses a separate source sample and target sample for each organ
 under a matched transfer protocol.
 
 \begin{center}
@@ -284,7 +297,7 @@ under a matched transfer protocol.
 \scriptsize
 \setlength{\tabcolsep}{2.2pt}
 \renewcommand{\arraystretch}{1.08}
-\textit{Table 2. Eight-organ in-domain cell-level comparison. BL denotes
+\textit{Table 3. Eight-organ in-domain cell-level comparison. BL denotes
 STBoosted BLEEP (the published BLEEP architecture retrained under the same
 cell-aligned protocol); GH and SC denote GHIST and sCellST, respectively.
 Bold marks the best result within each organ and metric.}\\[3pt]
@@ -340,7 +353,7 @@ Mouse embryo
 \footnotesize
 \setlength{\tabcolsep}{3.6pt}
 \renewcommand{\arraystretch}{1.08}
-\textit{Table 3. Eight-organ cross-patient Visium HD benchmark, implemented as
+\textit{Table 4. Eight-organ cross-patient Visium HD benchmark, implemented as
 source-sample-to-target-sample transfer. TM is the training-mean baseline; its
 gene-wise Pearson is undefined because its prediction is constant across test
 cells.}\\[3pt]
@@ -393,7 +406,7 @@ future work to develop stronger patient- and platform-robust methods.
 
 The scale table reports 99 unique source samples, but ``sample'' is not
 interchangeable with ``donor.'' The eight-organ experiment uses eight distinct
-source--target sample pairs (16 source samples). Table~3 uses ``cross-patient''
+source--target sample pairs (16 source samples). Table~4 uses ``cross-patient''
 to match the manuscript's task terminology, but
 operationally the current audit verifies a sample-held-out split; we will call it
 patient-held-out only where donor identity is verified. The revised manifest will
@@ -597,7 +610,7 @@ interface. BLEEP is the published spot-level image--expression contrastive
 retrieval baseline. STBoosted BLEEP is BLEEP retrained through this interface,
 whereas STBoost-Ref is our native image-only, retrieval-based reference predictor.
 To remove the ambiguity noted by the reviewer, we eliminate the bare ``Ours''
-label and use STBoost-Ref explicitly in Table~2, figures, and prose. At inference,
+label and use STBoost-Ref explicitly in Table~3, figures, and prose. At inference,
 STBoost-Ref receives local and wider-context histology crops, never query
 expression, and returns a cell-aligned expression vector.
 
