@@ -1,4 +1,4 @@
-We thank the reviewer for identifying the central issues: target provenance, experimental breadth, and what cell alignment adds beyond spot prediction. We now separate native Xenium from derived Visium HD targets and report both positive and negative results.
+We thank the reviewer for identifying the central issues: target provenance, experimental breadth, and what cell alignment adds beyond spot prediction. Table 1 first summarizes the release-wide breadth benchmark; we then separate native Xenium from derived Visium HD targets and report both positive and negative results.
 
 **Table 1. Per-organ cell-aligned breadth benchmark.** Rows follow the 25-category release taxonomy. Results use top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer; the final row is the 30-sample native-Xenium macro.
 
@@ -63,7 +63,7 @@ Table 1 is the strongest new validation: 30 native-Xenium samples (360,000 cells
 
 Most scale comes from public harmonization; 53,989 QC-passed cells are new primary data, while the continuing in-house pool is approximately 200,000 paired cells. Table 1 reports all 25 categories with species labels. A same-organ leave-one-sample-out native-Xenium test on 18 targets achieved Gene Pearson 0.170, Cell Pearson 0.275 versus 0.205 for training mean (better in 14/18), and F1 0.125 versus 0.031 (better in 17/18).
 
-**Table 4. Eight-organ cross-patient Visium HD benchmark (source→target sample).** TM is training mean; its Gene Pearson is undefined.
+**Table 3. Eight-organ cross-patient Visium HD benchmark (source→target sample).** TM is training mean; its Gene Pearson is undefined.
 
 | Organ | Pair | UNI2-h Gene P | UNI2-h Cell P | UNI2-h F1 | TM Cell P | TM F1 |
 |---|---|---:|---:|---:|---:|---:|
