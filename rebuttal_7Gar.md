@@ -17,12 +17,12 @@ We thank the reviewer for identifying where our framing ran ahead of the evidenc
 - **New in-house data:** our collaborators provided the DBiC-seq data. Each released record is a native, individually resolved cell paired one-to-one with its transcriptomic profile, making this a high-quality source of cell-aligned supervision.
 - **Limited overlap:** only 32 examples overlap HEST-1K, all from its newly added Visium HD cohort; approximately 70% of our collection is not contained in HEST-1K.
 
-**Q2.** *Clear purpose and biological meaning of the per-axis experiments. For each experiment, please lay out the benchmark objective, design, results, and significance cleanly. In particular: What task and metric does Fig. 2 use? In the resolution study, what exactly are STBoost, STBoost-Ref, and “Ours”; what is BLEEP; and what is “STBoosted BLEEP”? For the age-effect analysis, what is the precise claim, and why is it informative beyond the expected degradation under an age shift?*
+**Q2.** *Clear purpose and biological meaning of the per-axis experiments.*
 
-**A1 — Scale.** We agree that the three axes lacked clear objectives and conclusions.
+**A1 — Scale.** We agree that the three axes lacked clear objectives and conclusions and will reorganize them as follows. This experiment is not intended as a benchmark; it tests the central scale claim of the resource: whether increasing the amount of training data improves model performance.
 
-- **Objective:** test whether more training cells improve fixed image-to-expression predictors.
-- **Design/metric:** Fig. 2 varies the training fraction while fixing targets, preprocessing, and spatial test regions; the metric is gene-macro Pearson across held-out cells. On native-Xenium HHDX011, we tested seven frozen encoders, training-selected top-50 HVGs, four buffered edge holdouts (2,400 test cells each), and 5%/10%/25%/100% training fractions (445--447/890--895/2,226--2,237/8,912--8,948 cells).
+- **Objective:** determine whether a larger training set from our dataset benefits image-to-expression models.
+- **Design/metric:** the original Fig. 2 varies the training fraction while fixing the targets, preprocessing, model head, and spatial test regions, and evaluates gene-macro Pearson across held-out cells. We further tested seven frozen encoders with training-selected top-50 HVGs, four buffered spatial holdouts, and 5%/10%/25%/100% training fractions.
 
 | Encoder | 5% | 10% | 25% | 100% |
 |---|---:|---:|---:|---:|
@@ -34,40 +34,52 @@ We thank the reviewer for identifying where our framing ran ahead of the evidenc
 | UNI2 | 0.197 | 0.225 | 0.257 | 0.295 |
 | H-Optimus-0 | 0.205 | 0.233 | 0.269 | 0.307 |
 
-- **Result/significance:** all encoders improve monotonically; their mean rises 0.177→0.205→0.241→0.278. This supports data utility in this controlled range, not a universal scaling law. For breadth, we tested CONCH--Ridge on 30 native-Xenium samples (17 organ/tissue labels, 25 reported conditions, two species; up to 12,000 spatially sampled cells each):
+- **Result:** every encoder improves as the training scale increases; their mean Gene Pearson rises from 0.177 to 0.205, 0.241, and 0.278.
 
-| Model | Gene Pearson | Gene Spearman | Cell Pearson | Gene F1 |
-|---|---:|---:|---:|---:|
-| Image | 0.324 | 0.291 | 0.442 | 0.413 |
-| Coordinate-only | 0.046 | 0.041 | 0.288 | 0.283 |
-| Spatial KNN | 0.053 | 0.051 | 0.268 | 0.320 |
-| Training mean | 0.000 | -- | 0.305 | 0.253 |
+**A2 — Resolution (our central benchmark).**
 
-- **Claim boundary:** image gene Pearson is 0.324 (sample bootstrap 95% CI 0.277--0.368) and exceeds all controls (paired Holm $p\leq1.9\times10^{-8}$). These are sample-specific top-50-HVG, not full-panel or donor-held-out, results.
+- **Task and purpose:** this benchmark asks whether single-cell gene expression can be predicted directly from histology. The input is the histology image alone, and the output is the RNA-expression vector of the aligned cell. Such predictions can support cell-type or cell-state assignment and other cell-resolved downstream analyses.
+- **Evaluation protocols:** we designed in-sample prediction, cross-sample/cross-patient prediction, and cross-platform prediction to separate increasingly difficult forms of generalization.
+- **Definitions:** we first implemented cell-level baseline experiments and then proposed STBoost, a model-agnostic framework that adapts spot-level methods to cell-level prediction. To avoid ambiguity, every BLEEP result in our experiments uses BLEEP after this STBoost adaptation. STBoost-Ref is our further optimized reference method, which incorporates a diffusion loss and related components detailed in the Appendix. It produces comparatively strong results, but it also has limitations; we present it as a reference and hope future work will develop stronger methods using this dataset.
 
-**A2 — Resolution.**
+**Result — per-organ cell-aligned breadth benchmark.** Rows follow the 25-category release taxonomy. Results use top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer; the final row is the 30-sample native-Xenium macro.
 
-- **Objective:** test cell-aligned prediction and what aggregation hides.
-- **Definitions:** STBoost is our model-agnostic cell-aligned interface; BLEEP is the published spot baseline; STBoosted BLEEP retrains BLEEP through this interface; STBoost-Ref is our retrieval predictor and will replace “Ours” in the figure. It uses only histology at inference.
-- **Result:** on 5,000 cells and 18,085 genes, STBoost-Ref improves most $A\!\to\!A$ metrics and all $A\!\to\!B$ metrics; cross-patient F1 rises 0.0857→0.1061 and cell Pearson 0.0896→0.2820. We also constructed matched pseudo-spots from six native-Xenium samples under identical splits/modeling:
+| Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
+|---|---:|---:|---:|---:|---:|---:|
+| **Bone (mouse)** | 0.030 | **0.124** | 0.055 | 0.037 | 0.180 | 0.240 |
+| Brain (human + mouse) | **0.399** | 0.010 | 0.036 | 0.371 | 0.570 | 0.752 |
+| Breast (human) | **0.400** | 0.053 | 0.035 | 0.375 | 0.433 | 0.487 |
+| Cervical (human) | **0.178** | 0.017 | 0.014 | 0.157 | 0.247 | 0.026 |
+| **Colon (mouse)** | **0.615** | −0.137 | 0.072 | 0.588 | 0.739 | 0.744 |
+| Colorectal (human) | **0.431** | 0.056 | 0.083 | 0.419 | 0.532 | 0.623 |
+| **Embryo (mouse)** | **0.278** | 0.037 | 0.045 | 0.251 | 0.517 | 0.342 |
+| Head (zebrafish) | **0.216** | 0.022 | 0.031 | 0.193 | 0.429 | 0.287 |
+| Heart (human) | **0.292** | 0.010 | 0.021 | 0.266 | 0.688 | 0.304 |
+| Kidney (human) | **0.402** | 0.019 | 0.017 | 0.361 | 0.471 | 0.460 |
+| Liver (human) | −0.002 | 0.003 | **0.010** | −0.002 | 0.561 | 0.400 |
+| Lung (human) | **0.359** | 0.065 | 0.053 | 0.317 | 0.402 | 0.457 |
+| Lymph Node (human) | **0.141** | 0.043 | 0.013 | 0.131 | 0.164 | 0.023 |
+| Ovarian (human) | **0.250** | 0.122 | 0.104 | 0.239 | 0.312 | 0.234 |
+| Ovarian glands (human) | **0.402** | 0.059 | 0.043 | 0.391 | 0.559 | 0.756 |
+| Pancreas (human) | **0.324** | 0.090 | 0.068 | 0.272 | 0.505 | 0.275 |
+| Pancreatic (human) | **0.366** | 0.080 | 0.051 | 0.341 | 0.540 | 0.694 |
+| Pancreatic duct gland (human) | **0.331** | 0.091 | 0.100 | 0.282 | 0.408 | 0.386 |
+| Plant (*A. thaliana*) | −0.011 | 0.004 | **0.012** | −0.009 | 0.385 | 0.052 |
+| Prostate (human) | **0.263** | −0.015 | 0.025 | 0.244 | 0.263 | 0.083 |
+| Seed (soybean) | −0.020 | −0.003 | **0.008** | −0.018 | 0.314 | 0.037 |
+| Skin (human) | **0.359** | 0.048 | 0.086 | 0.299 | 0.437 | 0.368 |
+| **Small Intestine (mouse)** | **0.572** | −0.104 | 0.067 | 0.548 | 0.701 | 0.715 |
+| Tonsil (human) | **0.294** | 0.028 | 0.018 | 0.249 | 0.462 | 0.399 |
+| Xenograft (human + mouse) | **0.387** | 0.041 | 0.049 | 0.362 | 0.526 | 0.589 |
+| **30-sample macro** | **0.324** | 0.046 | 0.053 | **0.291** | **0.442** | **0.413** |
 
-| Evaluation unit | Cell | 8 $\mu$m | 16 $\mu$m | 55 $\mu$m |
-|---|---:|---:|---:|---:|
-| Gene Pearson | 0.365 | 0.365 | 0.363 | 0.330 |
-
-- **Significance:** cell and 8/16-$\mu$m scores are similar, but 55-$\mu$m aggregation drops performance and mixes predicted types in dense lung (55.5%--66.4% of spots; 73.8%--81.0% of cells), versus sparse heart (3.5%--4.1%; 7.0%--8.3%). Thus, the evidence is density-dependent heterogeneity concealment, not universally easier cell prediction. Biological calibration gives:
-
-| Biological calibration | Image | Coordinate | Spatial KNN | Mean |
-|---|---:|---:|---:|---:|
-| Marker/HVG gene Pearson $\uparrow$ | 0.201 | 0.031 | 0.028 | 0.000 |
-| Cell-type-stratified pseudobulk RMSE $\downarrow$ | 0.120 | 0.224 | 0.187 | 0.188 |
-
-- **Claim boundary:** markers overlap training-selected HVGs; pseudobulk uses molecularly predicted cell-type annotations. We therefore claim recoverable aggregate structure, not exact cell-wise recovery or independent ground truth.
+*Among category rows, bold names are mouse-only. Bold Gene-Pearson values mark the best of image, coordinate, and spatial KNN. Native-Xenium top-200 image Gene Pearson is 0.202; the top-50 95% CI is 0.277–0.368.*
 
 **A3 — Rich context.**
 
-- **Objective:** expose subgroup collapse hidden by pooled scores.
-- **Result:** in ovarian cancer, AK (60+)→AD (60+) versus AK (60+)→AL (40-) changes F1 0.289→0.072, gene Spearman 0.036→0.006, cell Spearman 0.206→0.095, and nonzero rate 0.166→0.027. Across 18 same-organ native-Xenium target samples, top-50-HVG Pearson averages 0.170 (range 0.016--0.372); incomplete donor IDs make this sample-, not patient-held-out. Average/Worst/Gap audits on other context-rich cohorts show the same issue:
+- **Purpose:** our rich-context metadata—including age, sex/gender where reported, disease, and underlying clinical conditions—enable us to test whether a model performs consistently across biologically and clinically meaningful subgroups. Average performance alone can hide severe subgroup failures, so such context-aware evaluation is an important dimension for assessing foundation models and other predictive methods.
+- **Main-text example:** the ovarian experiment is one illustrative case. AK (60+)→AD (60+) versus AK (60+)→AL (<40) changes F1 from 0.289 to 0.072, gene Spearman from 0.036 to 0.006, cell Spearman from 0.206 to 0.095, and nonzero rate from 0.166 to 0.027, revealing a large age-associated performance disparity.
+- **Broader evidence:** we conducted analogous audits for other foundation models and contexts. The table below shows substantial assay-, dataset-, and site-associated gaps for Geneformer, scGPT, CONCH, UNI, and H-Optimus-0:
 
 | Domain | Task / encoder | Context; split | Avg. BA | Worst BA | Gap |
 |---|---|---|---:|---:|---:|
@@ -79,7 +91,7 @@ We thank the reviewer for identifying where our framing ran ahead of the evidenc
 | Pathology | LGG IDH / UNI | site; leave-one-site | 0.682 | 0.464 | 0.471 |
 | Pathology | LGG IDH / H-optimus0 | site; leave-one-site | 0.747 | 0.476 | 0.524 |
 
-- **Significance and boundary:** BA is balanced accuracy; Gap is best-to-worst. High averages coexist with Worst BA 0.004 and site gaps 0.471--0.542. Rich context enables such audits, not bias removal. Ovarian age is nested within sample/patient and panels differ; we therefore claim an age-associated, sample-confounded shift, not causality.
+- **Significance and boundary:** BA is balanced accuracy, and Gap is best-to-worst performance. The purpose of this axis is to make context-dependent performance bias measurable, not to claim that the resource itself removes bias. Because ovarian age is nested within sample/patient and the panels differ, this example supports an age-associated, sample-confounded shift rather than a causal age effect.
 
 **Q3.** *How are bin2cell targets constructed and validated?*
 
