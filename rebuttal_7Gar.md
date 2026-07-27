@@ -40,9 +40,9 @@ We thank the reviewer for identifying places where the manuscript did not suffic
 - **Protocols:** in-sample, cross-sample/patient, and cross-platform prediction test increasingly difficult shifts.
 - **Definitions:** STBoost adapts spot-level methods to cells; every reported BLEEP result uses this adaptation. STBoost-Ref further adds diffusion loss and Appendix components. Its strong but imperfect results provide a reference for future methods on this dataset.
 
-**Result — per-organ cell-aligned breadth.** Rows use the 25-category taxonomy, top-50 training-selected HVGs, four spatial holdouts, and a 5% buffer; the final row is the 30-sample native-Xenium macro.
+**Per-organ benchmark results.** Results use the top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer.
 
-| Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
+| Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Gene Spearman | Cell Pearson | F1 |
 |---|---:|---:|---:|---:|---:|---:|
 | **Bone (mouse)** | 0.030 | **0.124** | 0.055 | 0.037 | 0.180 | 0.240 |
 | Brain (human + mouse) | **0.399** | 0.010 | 0.036 | 0.371 | 0.570 | 0.752 |
@@ -70,8 +70,6 @@ We thank the reviewer for identifying places where the manuscript did not suffic
 | Tonsil (human) | **0.294** | 0.028 | 0.018 | 0.249 | 0.462 | 0.399 |
 | Xenograft (human + mouse) | **0.387** | 0.041 | 0.049 | 0.362 | 0.526 | 0.589 |
 | **30-sample macro** | **0.324** | 0.046 | 0.053 | **0.291** | **0.442** | **0.413** |
-
-*Bold names are mouse-only; bold Gene P is best among image, coordinate, and KNN. Native-Xenium image Gene P is 0.202 (top-200); top-50 95% CI is 0.277–0.368.*
 
 **A3 — Rich context.**
 

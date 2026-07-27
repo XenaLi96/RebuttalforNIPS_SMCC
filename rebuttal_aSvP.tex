@@ -96,11 +96,6 @@ claim a universal scaling law.
 \end{itemize}
 
 \textbf{A2 (Breadth and biological calibration).}
-\begin{itemize}
-\item \textbf{Objective/design:} we now report all 25 release categories under
-the matched top-50-HVG, four-spatial-holdout protocol. The final row retains the
-primary 30-sample native-Xenium macro.
-\end{itemize}
 
 \newpage
 \begin{center}
@@ -108,16 +103,13 @@ primary 30-sample native-Xenium macro.
 \footnotesize
 \setlength{\tabcolsep}{4.2pt}
 \renewcommand{\arraystretch}{1.04}
-\textit{\textbf{Table 1. Per-organ cell-aligned breadth benchmark.}
-Rows follow the 25-category release taxonomy. Results use top-50
-training-selected HVGs, four contiguous spatial holdouts, and a 5\%
-train--test buffer; the final row retains the 30-sample native-Xenium macro
-from the primary campaign.}\\[5pt]
+\textit{\textbf{Table 1. Per-organ benchmark results.}
+Results use the top-50 training-selected HVGs, four contiguous spatial
+holdouts, and a 5\% train--test buffer.}\\[5pt]
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
 \toprule
-& \multicolumn{3}{c}{Gene Pearson}
-& \multicolumn{3}{c}{Image prediction} \\
-\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+& \multicolumn{3}{c}{Gene Pearson} & & & \\
+\cmidrule(lr){2-4}
 \shortstack[l]{Release category\\(evaluated species)} &
 Image &
 \shortstack{Coordinate\\only} &
@@ -157,13 +149,6 @@ Xenograft (human + mouse) & \textbf{0.387} & 0.041 & 0.049 & 0.362 & 0.526 & 0.5
 \bottomrule
 \end{tabular*}
 
-\parbox{0.98\linewidth}{\scriptsize\textit{Bold category labels denote
-mouse-only evaluations; mixed-species and non-mouse categories are labeled
-explicitly. Bold numeric entries in the three Gene-Pearson columns mark the best
-of image, coordinate-only, and spatial KNN. The final macro row summarizes the
-30-sample native-Xenium campaign: its top-200 image Gene Pearson is 0.202, and
-the top-50 value has a biological-sample bootstrap 95\% CI of 0.277--0.368.
-Training-mean Gene Pearson is undefined and is not shown.}}
 \endgroup
 \end{center}
 

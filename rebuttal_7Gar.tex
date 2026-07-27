@@ -153,15 +153,13 @@ reference for future methods on this dataset.
 \footnotesize
 \setlength{\tabcolsep}{4.2pt}
 \renewcommand{\arraystretch}{1.04}
-\textit{\textbf{Result. Per-organ cell-aligned breadth.}
-Rows use the 25-category taxonomy, top-50 training-selected HVGs, four spatial
-holdouts, and a 5\% buffer; the final row is the 30-sample native-Xenium
-macro.}\\[5pt]
+\textit{\textbf{Per-organ benchmark results.}
+Results use the top-50 training-selected HVGs, four contiguous spatial
+holdouts, and a 5\% train--test buffer.}\\[5pt]
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
 \toprule
-\multicolumn{1}{c}{} & \multicolumn{3}{c}{Gene Pearson}
-& \multicolumn{3}{c}{Image prediction} \\
-\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+\multicolumn{1}{c}{} & \multicolumn{3}{c}{Gene Pearson} & & & \\
+\cmidrule(lr){2-4}
 \shortstack[l]{Release category\\(evaluated species)} &
 Image &
 \shortstack{Coordinate\\only} &
@@ -201,9 +199,6 @@ Xenograft (human + mouse) & \textbf{0.387} & 0.041 & 0.049 & 0.362 & 0.526 & 0.5
 \bottomrule
 \end{tabular*}
 
-\parbox{0.98\linewidth}{\scriptsize\textit{Bold names are mouse-only; bold Gene
-P is best among image, coordinate, and KNN. Native-Xenium image Gene P is 0.202
-(top-200); top-50 95\% CI is 0.277--0.368.}}
 \endgroup
 \end{center}
 \par\smallskip

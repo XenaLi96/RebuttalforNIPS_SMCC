@@ -5,14 +5,14 @@ to construct Figure 1.
 
 - `figure1_individual_layers.jpg` exposes individual vector objects, including
   cell circles stored as separate `Oval` layers.
-- `figure1_versions_and_selection.jpg` shows multiple preserved Figure 1
-  versions and all 84 editable layers selected at once.
+- `figure1_versions_and_selection.jpg` shows the two preserved Figure 1
+  versions and the editable layers of the revised version selected at once.
 
-The selection badge `84` in the second screenshot records the complete editable
-layer count. Figure 1 underwent three revision rounds, with more than one week of
-cumulative manual design and editing. Every circle, line, arrow, and layout
-element was placed manually in Sketch; the figure was not produced by a
-one-prompt generative workflow.
+The two preserved versions contain 162 editable layers in total; the selection
+badge `84` in the second screenshot records the selected layers in the revised
+version. The figure required more than one week of cumulative manual design and
+editing. Every circle, line, arrow, and layout element was placed manually in
+Sketch; the figure was not AI-generated.
 
 ## SHA-256
 

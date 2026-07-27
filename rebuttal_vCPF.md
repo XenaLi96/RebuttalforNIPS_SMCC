@@ -26,9 +26,11 @@ Our 21-sample in-house DBiC-seq collection adds 54,304 measured/53,989 post-QC c
 
 **Q2.** *The main experiments cover only a few representative cases. Can the authors summarize more organs or platforms?*
 
-**A1 — Release-wide breadth.** Yes. We now report all 25 release categories under the matched top-50-HVG, four-spatial-holdout protocol:
+**A1 — Release-wide breadth.** Yes. Table 1 reports results for all 25 release categories.
 
-| Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
+**Table 1. Per-organ benchmark results.** Results use the top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer.
+
+| Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Gene Spearman | Cell Pearson | F1 |
 |---|---:|---:|---:|---:|---:|---:|
 | **Bone (mouse)** | 0.030 | **0.124** | 0.055 | 0.037 | 0.180 | 0.240 |
 | Brain (human + mouse) | **0.399** | 0.010 | 0.036 | 0.371 | 0.570 | 0.752 |
@@ -56,8 +58,6 @@ Our 21-sample in-house DBiC-seq collection adds 54,304 measured/53,989 post-QC c
 | Tonsil (human) | **0.294** | 0.028 | 0.018 | 0.249 | 0.462 | 0.399 |
 | Xenograft (human + mouse) | **0.387** | 0.041 | 0.049 | 0.362 | 0.526 | 0.589 |
 | **30-sample macro** | **0.324** | 0.046 | 0.053 | **0.291** | **0.442** | **0.413** |
-
-*Bold category labels denote mouse-only evaluations; mixed-species and non-mouse categories are explicit. Bold values in the three Gene-Pearson columns mark the best baseline. The 30-sample macro uses 360,000 spatially stratified cells; its top-200 image Gene Pearson is 0.202 and top-50 bootstrap 95% CI is 0.277--0.368.*
 
 **A2 — Independent-sample evidence.**
 

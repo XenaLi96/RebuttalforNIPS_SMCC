@@ -21,7 +21,7 @@ We thank the reviewer for identifying the central issues: molecular-target prove
 
 **Table 1. Per-organ benchmark results.** Results use the top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer.
 
-| Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
+| Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Gene Spearman | Cell Pearson | F1 |
 |---|---:|---:|---:|---:|---:|---:|
 | **Bone (mouse)** | 0.030 | **0.124** | 0.055 | 0.037 | 0.180 | 0.240 |
 | Brain (human + mouse) | **0.399** | 0.010 | 0.036 | 0.371 | 0.570 | 0.752 |
@@ -70,23 +70,23 @@ We thank the reviewer for identifying the central issues: molecular-target prove
 - The low Pearson is not evidence that the dataset is invalid: the in-domain benchmark and separate construction audit establish usable targets. Instead, this negative result exposes the still-unsolved difficulty of single-cell generalization under patient, platform, composition, acquisition, and morphology shifts.
 - The dataset makes this failure measurable and provides a basis for future solutions. We will use “cross-patient” only for verified donors and otherwise say “sample-held-out.”
 
-**Q3 (P4, Q3, L3).** *What does cell-level evaluation add beyond spot-level prediction?*
+**Q3 (Q4).** *What techniques were used to interpolate or match spot-level gene expression to individual cells?*
 
 **A.**
 
-- Spot averaging makes prediction easier, so cell-level correlation need not be higher.
-- In six native-Xenium samples, Gene Pearson was 0.365 at native-cell and 8-µm supervision, 0.363 at 16 µm, and 0.330 at 55 µm; all declined at 55 µm.
-- In dense lung HLCX022, 55-µm grids mixed labels in 55.5–66.4% of test spots, versus 3.5–4.1% in sparse HHDX011.
-- Thus cell alignment exposes density-dependent heterogeneity; we do not claim universal cell-over-spot accuracy.
+- This premise does not apply to our main benchmark: its input is histology alone and its target is a cell-resolved RNA profile. No spot-level gene-expression measurement is supplied to the model. Training directly pairs each cell's RNA profile with two cell-centered histology crops: a local crop around the cell and a larger crop capturing tissue context.
+- STBoost is therefore not a spot-to-cell expression-interpolation method. It adapts existing image-to-spot predictors to cell-level prediction by replacing the spot-centered image input with these two hierarchical cell-centered crops, fusing their representations, and retaining the corresponding spot-level method's downstream prediction modules.
+- Because this is primarily a dataset paper, we placed the full architecture and training details in the Appendix. We agree that the distinction was not sufficiently clear and will add a concise description of the task input, target, training, and inference procedure to the main body.
 
-**Q4 (P6, Q4).** *How reliable are HD localization and expression assignment?*
+**Q4 (P5, P6, minor remarks).** *Was Figure 1 AI-generated, and how will the writing and figure-presentation issues be addressed?*
 
-**A.**
+**A1 — Figure 1 provenance.** Figure 1 was not AI-generated. I began collecting this resource in the first year of my PhD and have continued developing it for several years. I manually drew and revised two versions of Figure 1 in Sketch; together they contain 162 editable layers and required more than one week of work. Screenshots documenting the editable layers are available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure1_design_evidence/`.
 
-- Xenium uses platform boundaries/transcripts. HD uses the official transform, CellViT footprints, and native 2-µm bins; conflicts go to the nearest centroid.
-- Across two lungs and one ovary, strict boundary exclusion retained 56.1–80.7% of cells but 11.0–20.5% of bins; erosion retained 37.9–72.0% of cells, while dilation retained 181.9–196.2% of default bins.
-- A 3,000-polygon audit found no filtered-bin intersection for 50.6% lung, 2.5% brain, and 50.0% pancreas polygons.
-- We will expose coverage/settings and keep native Xenium separate from derived HD evidence.
+**A2 — Presentation revisions.** We thank the reviewer for identifying these issues and will address them individually:
+
+- correct the capitalization, missing letter/space, and blank elements in Figure 1, and expand its caption;
+- define “study split,” “cell unit,” and the Figure 2b training ratio at first use;
+- remove the Figure 3 border, render its labels as vector text, make the requested line-level cuts, and state precisely which parts of the resource are publicly released.
 
 **Q5 (P4, P9).** *What can the context analysis support, and how complete is the demographic metadata?*
 
