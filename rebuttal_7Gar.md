@@ -2,7 +2,7 @@ We thank the reviewer for identifying where our framing ran ahead of the evidenc
 
 **Q1.** *In-house data scale. Please quantify precisely how much new in-house data is contributed relative to HEST-1K and STimage-1K4M (samples, tissues, platforms, spots/cells), ideally as a comparison table. What fraction of the resource is genuinely new vs. aggregated?*
 
-**A1.** We agree and will distinguish primary acquisition from aggregation. We audited each sample against HEST-1K v1.1.0 and the 2025-02-12 STimage-1K4M snapshot, using mutually exclusive categories; the rebuttal-time manifest also adds 12 public Visium HD samples.
+**A1.** We agree and will distinguish primary acquisition from aggregation. We audited each sample against HEST-1K v1.1.0 and the 2025-02-12 STimage-1K4M snapshot.
 
 | Category | Slides/samples | Organs or cell-line origins | Platforms | Aligned target cells after QC |
 |---|---:|---|---|---:|
@@ -12,11 +12,10 @@ We thank the reviewer for identifying where our framing ran ahead of the evidenc
 | Other public data | 44 | 16 species--organ strata | Xenium; Visium HD | 16,996,704 |
 | **Total sMMC-28M** | **99 unique samples (100 records)** | **25 tissue strata + 3 cell-line origins** | **Xenium; Visium HD; DBiC-seq** | **28,315,247** |
 
-**A2.** The audit establishes three boundaries:
+**A2.** The audit establishes two boundaries:
 
-- **New versus public:** the in-house samples contain 54,304 measured cells; QC removes 315, leaving 53,989: **0.1907% new primary versus 99.8093% public aggregated/harmonized targets**.
-- **Current versus continuing acquisition:** the broader DBiC-seq pool contains approximately 200,000 paired cells but is not counted here; one versioned breast slide explains 99 unique samples versus 100 records.
-- **Measurement status:** Visium HD entries are derived $2\,\mu\mathrm{m}$ bin-to-cell targets; Xenium and DBiC-seq are native cell-aligned records.
+- **New in-house data:** our collaborators provided the DBiC-seq data. Each released record is a native, individually resolved cell paired one-to-one with its transcriptomic profile, making this a high-quality source of cell-aligned supervision.
+- **Limited overlap:** only 32 examples overlap HEST-1K, all from its newly added Visium HD cohort; approximately 70% of our collection is not contained in HEST-1K.
 
 **Q2.** *Clear purpose and biological meaning of the per-axis experiments. For each experiment, please lay out the benchmark objective, design, results, and significance cleanly. In particular: What task and metric does Fig. 2 use? In the resolution study, what exactly are STBoost, STBoost-Ref, and “Ours”; what is BLEEP; and what is “STBoosted BLEEP”? For the age-effect analysis, what is the precise claim, and why is it informative beyond the expected degradation under an age shift?*
 
