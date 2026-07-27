@@ -1,4 +1,23 @@
-We thank the reviewer for identifying the central issues: target provenance, experimental breadth, and what cell alignment adds beyond spot prediction. Table 1 first summarizes the release-wide breadth benchmark; we then separate native Xenium from derived Visium HD targets and report both positive and negative results.
+We thank the reviewer for identifying the central issues: molecular-target provenance, experimental breadth, and what cell alignment adds beyond spot prediction. We now distinguish native cell-resolved measurements from derived Visium HD targets, report all 25 release categories, and retain weak transfer results alongside positive findings.
+
+**Q1 (P2, Q2, Q4, L1–L2).** *Are the molecular targets truly single-cell?*
+
+**A1 — Molecular-target provenance.** The resource contains three evidence types:
+
+| Component | Evidence unit | Count | Status |
+|---|---|---:|---|
+| Public Xenium | Platform-segmented cells and transcripts | 16,314,129 cells | Native cell-resolved |
+| Public Visium HD | Native 2-µm bins aggregated to cell masks | 7,629,697 source records → 3,932,040 profiles | Derived cell-aligned |
+| New in-house DBiC-seq | Paired cell morphology and RNA | 53,989 post-QC cells from 21 samples | Native cell-resolved |
+
+- All non-HD data are native cell-resolved measurements: Xenium and DBiC-seq assign an expression profile to each segmented cell. Only the Visium HD component uses bin-to-cell aggregation.
+- We will therefore not describe the entire collection as directly measured single-cell data. We will consistently use “native cell-resolved” for Xenium/DBiC-seq and “derived cell-aligned” for Visium HD, and retitle the work *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
+
+**A2 — Native-cell validation.** Our strongest new validation uses 30 native-Xenium samples (360,000 cells), four contiguous spatial holdouts, a 5% train–test buffer, and training-only gene selection. Images beat both coordinate-only and spatial-KNN controls in 28/30 samples and 15/17 analysis labels; all failures are retained in Table 1. Thus the native-cell evidence does not depend on HD bin assignment, while HD remains separately labeled derived evidence.
+
+**Q2 (P3, Q1).** *Are all 25 release categories evaluated?*
+
+**A1 — 25-category breadth.** Yes. Table 1 reports every release category under one fixed protocol, including negative results.
 
 **Table 1. Per-organ cell-aligned breadth benchmark.** Rows follow the 25-category release taxonomy. Results use top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer; the final row is the 30-sample native-Xenium macro.
 
@@ -33,47 +52,9 @@ We thank the reviewer for identifying the central issues: target provenance, exp
 
 *Among category rows, bold names are mouse-only. Bold Gene-Pearson values mark the best of image, coordinate, and spatial KNN. Native-Xenium top-200 image Gene Pearson is 0.202; the top-50 95% CI is 0.277–0.368.*
 
-**Q1 (P2, Q2, Q4, L1–L2).** *Are the molecular targets truly single-cell, and was Figure 1 AI-generated?*
+**A2 — Cross-sample transfer.** We additionally evaluated sample-to-sample transfer across eight organs.
 
-**A1 — Figure 1 provenance.** Figure 1 was not AI-generated. I designed it in Sketch: the source has 84 editable layers, every element was placed manually, and three revisions required over one week. The proof images and checksums are in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure1_design_evidence/`; we will correct all labels and typography.
-
-**A2 — Resource motivation.** I began this resource in my first PhD year because fragmented datasets required separate Scanpy, Xenium Ranger, and platform-specific workflows. Across previous submissions it grew from 12M to 20M to 22M records, and now 28M, expanding from Xenium to Visium HD and in-house DBiC-seq. It has supported several projects by my co-authors and me. As I approach graduation, I hope to make it accessible to students facing the same barriers.
-
-**A3 — Molecular-target provenance.** The targets have two evidentiary levels:
-
-- The submitted public inventory has 23,943,826 upstream records: 16,314,129 native Xenium cells defined by platform cell boundaries/transcripts and 7,629,697 Visium HD source records.
-- After HD bin-to-cell aggregation, the matrices contain 20,246,169 rows: 16,314,129 native cells and 3,932,040 derived cell-aligned profiles.
-- We will never describe both as directly measured single cells.
-
-**A4 — Native-cell validation and revised claim.**
-
-- Table 1 is the strongest new validation: 30 native-Xenium samples (360,000 cells), spatial holdouts, a 5% buffer, and training-only gene selection.
-- Images beat both spatial controls in 28/30 samples and 15/17 labels; failures are retained.
-- We will say “native cell-resolved” for Xenium, “derived cell-aligned” for HD, and retitle the work *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
-
-**Q2 (P3, Q1, P8, L4).** *How much is newly acquired, are all 25 categories evaluated, and what are the independent units?*
-
-**A1 — Scale and provenance.** Table 2 separates primary acquisition from public aggregation.
-
-**Table 2. sMMC-28M working-manifest scale and provenance audit.**
-
-| Category | Slides/samples | Organs/origins | Platforms | Aligned targets |
-|---|---:|---|---|---:|
-| **New in-house primary** | **21** | **mouse embryo; cervical; lung** | **DBiC-seq** | **53,989** |
-| Public, overlapping HEST-1K | 32 unique (33 records) | 22 species–organ strata | Xenium; HD | 11,051,149 |
-| Public, STimage-1K4M-only | 2 | 2 strata | HD | 213,405 |
-| Other public | 44 | 16 strata | Xenium; HD | 16,996,704 |
-| **Total sMMC-28M** | **99 unique (100 records)** | **25 tissue strata + 3 cell-line origins** | **Xenium; HD; DBiC-seq** | **28,315,247** |
-
-**A2 — Breadth and independent-sample evidence.**
-
-- Most scale comes from public harmonization; 53,989 QC-passed cells are new primary data, while the continuing in-house pool is approximately 200,000 paired cells.
-- Table 1 reports all 25 categories with species labels.
-- A same-organ leave-one-sample-out native-Xenium test on 18 targets achieved Gene Pearson 0.170, Cell Pearson 0.275 versus 0.205 for training mean (better in 14/18), and F1 0.125 versus 0.031 (better in 17/18).
-
-**A3 — Cross-sample transfer.**
-
-**Table 3. Eight-organ cross-patient Visium HD benchmark (source→target sample).** TM is training mean; its Gene Pearson is undefined.
+**Table 2. Eight-organ cross-sample Visium HD benchmark (source→target sample).** TM is training mean; its Gene Pearson is undefined.
 
 | Organ | Pair | UNI2-h Gene P | UNI2-h Cell P | UNI2-h F1 | TM Cell P | TM F1 |
 |---|---|---:|---:|---:|---:|---:|
@@ -87,10 +68,9 @@ We thank the reviewer for identifying the central issues: target provenance, exp
 | Mouse kidney | a→aj | 0.0049 | 0.2678 | 0.0513 | 0.4696 | 0.0159 |
 | **Organ macro** | — | **0.0151** | **0.2036** | **0.0815** | **0.2422** | **0.0375** |
 
-- UNI2-h improves macro F1 but not Cell Pearson over TM; we report this weak result because it is important.
-- Cross-patient/platform generalization remains extremely difficult, and we still lack a satisfactory solution.
-- The same coordinates, targets, and QC yield clear spatially separated and same-organ signal; this failure therefore does not show invalid dataset construction. It exposes real morphology, composition, acquisition, patient, and platform shifts.
-- The resource makes this unsolved problem measurable. We will say “cross-patient” only for verified donors; otherwise, “sample-held-out.”
+- The cross-sample Gene Pearson is indeed low (organ macro 0.0151), and UNI2-h improves F1 but not Cell Pearson over the training mean. We do not claim to have solved this setting.
+- The low Pearson is not evidence that the dataset is invalid: the in-domain benchmark and separate construction audit establish usable targets. Instead, this negative result exposes the still-unsolved difficulty of single-cell generalization under patient, platform, composition, acquisition, and morphology shifts.
+- The dataset makes this failure measurable and provides a basis for future solutions. We will use “cross-patient” only for verified donors and otherwise say “sample-held-out.”
 
 **Q3 (P4, Q3, L3).** *What does cell-level evaluation add beyond spot-level prediction?*
 
