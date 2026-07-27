@@ -1,4 +1,4 @@
-We thank the reviewer for identifying where our framing exceeded the evidence. We will clarify each experiment's question, unit, input, target, metric, and conclusion, and narrow claims for derived targets. This resource has grown with me since my first PhD year; nearing graduation, I hope its unified release helps students entering spatial transcriptomics, as I once did.
+We thank the reviewer for identifying places where the manuscript did not sufficiently distinguish primary measurements, derived cell-aligned targets, and generated auxiliary fields, or explain the objective of each experiment. We provide the requested quantitative audit, expanded results, and validation below, and will revise the claims accordingly.
 
 **Q1.** *Precisely quantify new in-house data versus HEST-1K and STimage-1K4M by samples, tissues, platforms, cells, and new-versus-aggregated fraction.*
 
