@@ -288,15 +288,18 @@ rather than a causal age effect.
 \textbf{A1 (Construction).}
 \begin{itemize}
 \item Appendix S2 shows the official Visium HD registration of native
-2-\(\mu\)m bins to H\&E.
-\item Intersecting same-frame cell polygons aggregate counts; unsupported cells
-are removed and conflicts resolved deterministically.
-\item We will move this pipeline and an example to the main text and label
-outputs \emph{derived cell-aligned targets}, not measured single-cell RNA.
+2-\(\mu\)m bins to H\&E; intersecting same-frame cell polygons aggregate counts,
+unsupported cells are removed, and conflicts are resolved deterministically.
+\item We have moved this pipeline and an example to the main text and now label
+the outputs \emph{derived cell-aligned targets}, not measured single-cell RNA.
 \end{itemize}
 
 \textbf{A2 (Validation).}\enspace We audited 3,000 raw CellViT polygons per
-dataset (9,000 total) under 1-\(\mu\)m registration shifts and erosion/dilation:
+dataset (9,000 total) under 1-\(\mu\)m registration shifts. Canonical-bin
+coverage is reported across all raw polygons; among supported polygons,
+expression direction remains stable (cosine 0.936--0.994), with Jaccard
+0.706--0.816 and median \( |\Delta\mathrm{UMI}| \) 6.0\%--13.7\%, indicating
+reasonable but not perfect robustness:
 
 \begin{center}
 \begingroup
@@ -315,16 +318,6 @@ Human pancreas & 50.0\% & 0.706--0.714 & 0.994 & 13.0\%--13.7\% \\
 \end{tabularx}
 \endgroup
 \end{center}
-
-\begin{itemize}
-\item Canonical-bin percentages use all raw polygons; unsupported polygons are
-excluded before release.
-\item Shifts preserve expression direction but alter membership/UMIs;
-erosion/dilation yields Jaccard 0.462--0.720, cosine 0.871--0.993, and
-\(|\Delta\mathrm{UMI}|\) 32.8\%--66.6\%.
-\item We will release parameters and per-sample QC, avoid calling aggregation
-ground truth, and report native-Xenium evidence separately.
-\end{itemize}
 
 \questionsep
 \textbf{Q4.}\quad

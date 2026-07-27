@@ -95,21 +95,16 @@ We thank the reviewer for identifying where our framing ran ahead of the evidenc
 
 **A1 — Construction.**
 
-- Appendix S2 shows the official Visium HD registration of native $2\,\mu$m bins to H&E.
-- Intersecting same-frame cell polygons aggregate counts; unsupported cells are removed and conflicts resolved deterministically.
-- We will move this pipeline and an example to the main text and label outputs *derived cell-aligned targets*, not measured single-cell RNA.
+- Appendix S2 shows the official Visium HD registration of native $2\,\mu$m bins to H&E; intersecting same-frame cell polygons aggregate counts, unsupported cells are removed, and conflicts are resolved deterministically.
+- We have moved this pipeline and an example to the main text and now label the outputs *derived cell-aligned targets*, not measured single-cell RNA.
 
-**A2 — Validation.** We audited 3,000 raw CellViT polygons per dataset (9,000 total) under 1-$\mu$m registration shifts and erosion/dilation:
+**A2 — Validation.** We audited 3,000 raw CellViT polygons per dataset (9,000 total) under 1-$\mu$m registration shifts. Canonical-bin coverage is reported across all raw polygons; among supported polygons, expression direction remains stable (cosine 0.936--0.994), with Jaccard 0.706--0.816 and median $|\Delta\mathrm{UMI}|$ 6.0%--13.7%, indicating reasonable but not perfect robustness:
 
 | Visium HD example | Raw polygons with canonical bins | Shift bin Jaccard | Shift expression cosine | Shift median $|\Delta\mathrm{UMI}|$ |
 |---|---:|---:|---:|---:|
 | Human lung cancer | 49.4% | 0.727--0.733 | 0.954--0.957 | 11.1%--11.3% |
 | Mouse brain | 97.5% | 0.806--0.816 | 0.936--0.939 | 6.0%--6.1% |
 | Human pancreas | 50.0% | 0.706--0.714 | 0.994 | 13.0%--13.7% |
-
-- Canonical-bin percentages use all raw polygons; unsupported polygons are excluded before release.
-- Shifts preserve expression direction but alter membership/UMIs; erosion/dilation yields Jaccard 0.462--0.720, cosine 0.871--0.993, and $|\Delta\mathrm{UMI}|$ 32.8%--66.6%.
-- We will release parameters and per-sample QC, avoid calling aggregation ground truth, and report native-Xenium evidence separately.
 
 **Q4.** *How are LMM-generated texts produced and validated?*
 
