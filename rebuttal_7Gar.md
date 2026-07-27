@@ -12,7 +12,7 @@ We thank the reviewer for identifying where our framing ran ahead of the evidenc
 | Other public data | 44 | 16 species--organ strata | Xenium; Visium HD | 16,996,704 |
 | **Total sMMC-28M** | **99 unique samples (100 records)** | **25 tissue strata + 3 cell-line origins** | **Xenium; Visium HD; DBiC-seq** | **28,315,247** |
 
-- **New in-house data:** our collaborators provided the DBiC-seq data. Each released record is a native, individually resolved cell paired one-to-one with its transcriptomic profile. The data can be downloaded and previewed through our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75).
+- **New in-house data:** our collaborators provided the DBiC-seq data. Each released record is a native, individually resolved cell paired one-to-one with its transcriptomic profile. The data can be downloaded and previewed through our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md).
 - **Limited overlap:** only 32 examples overlap HEST-1K, all from its newly added Visium HD cohort; approximately 70% of our collection is not contained in HEST-1K.
 
 **Q2.** *Clear purpose and biological meaning of the per-axis experiments.*
