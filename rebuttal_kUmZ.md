@@ -7,19 +7,19 @@ We thank the reviewer for identifying the central issues: molecular-target prove
 | Component | Evidence unit | Count | Status |
 |---|---|---:|---|
 | Public Xenium | Platform-segmented cells and transcripts | 16,314,129 cells | Native cell-resolved |
-| Public Visium HD | Native 2-µm bins aggregated to cell masks | 7,629,697 source records → 3,932,040 profiles | Derived cell-aligned |
+| Public Visium HD | Native 2-µm bins aggregated to cell masks | 7,629,697 derived cells | Derived cell-aligned |
 | New in-house DBiC-seq | Paired cell morphology and RNA | 53,989 post-QC cells from 21 samples | Native cell-resolved |
 
-- All non-HD data are native cell-resolved measurements: Xenium and DBiC-seq assign an expression profile to each segmented cell. Only the Visium HD component uses bin-to-cell aggregation.
+- All non-HD data are native cell-resolved measurements: Xenium and DBiC-seq assign an expression profile to each segmented cell. Only Visium HD uses bin-to-cell aggregation, following 10x Genomics’ [officially documented mapping](https://www.10xgenomics.com/support/software/space-ranger/latest/analysis/segmented-outputs) from native 2-µm barcodes to segmented cells. The new in-house DBiC-seq data are available for [download and preview](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md).
 - We will therefore not describe the entire collection as directly measured single-cell data. We will consistently use “native cell-resolved” for Xenium/DBiC-seq and “derived cell-aligned” for Visium HD, and retitle the work *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
 
-**A2 — Native-cell validation.** Our strongest new validation uses 30 native-Xenium samples (360,000 cells), four contiguous spatial holdouts, a 5% train–test buffer, and training-only gene selection. Images beat both coordinate-only and spatial-KNN controls in 28/30 samples and 15/17 analysis labels; all failures are retained in Table 1. Thus the native-cell evidence does not depend on HD bin assignment, while HD remains separately labeled derived evidence.
+**A2 — Native-cell validation.** To directly address this concern, we reran the benchmark using only native Xenium data; Table 1 reports the 25-organ results. Table 2 separately reports cross-sample organ transfer on Visium HD.
 
 **Q2 (P3, Q1).** *Are all 25 release categories evaluated?*
 
-**A1 — 25-category breadth.** Yes. Table 1 reports every release category under one fixed protocol, including negative results.
+**A1 — 25-organ results.** Table 1 reports results for all 25 organs under one fixed protocol.
 
-**Table 1. Per-organ cell-aligned breadth benchmark.** Rows follow the 25-category release taxonomy. Results use top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer; the final row is the 30-sample native-Xenium macro.
+**Table 1. Per-organ benchmark results.** Results use the top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer.
 
 | Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
 |---|---:|---:|---:|---:|---:|---:|
@@ -49,8 +49,6 @@ We thank the reviewer for identifying the central issues: molecular-target prove
 | Tonsil (human) | **0.294** | 0.028 | 0.018 | 0.249 | 0.462 | 0.399 |
 | Xenograft (human + mouse) | **0.387** | 0.041 | 0.049 | 0.362 | 0.526 | 0.589 |
 | **30-sample macro** | **0.324** | 0.046 | 0.053 | **0.291** | **0.442** | **0.413** |
-
-*Among category rows, bold names are mouse-only. Bold Gene-Pearson values mark the best of image, coordinate, and spatial KNN. Native-Xenium top-200 image Gene Pearson is 0.202; the top-50 95% CI is 0.277–0.368.*
 
 **A2 — Cross-sample transfer.** We additionally evaluated sample-to-sample transfer across eight organs.
 

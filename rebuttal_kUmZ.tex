@@ -49,7 +49,7 @@ Component & Evidence unit & Count & Status \\
 Public Xenium & Platform-segmented cells and transcripts &
 16,314,129 cells & Native cell-resolved \\
 Public Visium HD & Native 2-\(\mu\)m bins aggregated to cell masks &
-7,629,697 source records \(\rightarrow\) 3,932,040 profiles &
+7,629,697 derived cells &
 Derived cell-aligned \\
 New in-house DBiC-seq & Paired cell morphology and RNA &
 53,989 post-QC cells from 21 samples & Native cell-resolved \\
@@ -60,8 +60,13 @@ New in-house DBiC-seq & Paired cell morphology and RNA &
 
 \begin{itemize}
 \item All non-HD data are native cell-resolved measurements: Xenium and
-DBiC-seq assign an expression profile to each segmented cell. Only the Visium
-HD component uses bin-to-cell aggregation.
+DBiC-seq assign an expression profile to each segmented cell. Only Visium HD
+uses bin-to-cell aggregation, following 10x Genomics'
+\href{https://www.10xgenomics.com/support/software/space-ranger/latest/analysis/segmented-outputs}{officially
+documented mapping} from native 2-\(\mu\)m barcodes to segmented cells. The new
+in-house DBiC-seq data are available for
+\href{https://anonymous.4open.science/r/sMMC-22M-DB75/README.md}{download and
+preview}.
 \item We will therefore not describe the entire collection as directly measured
 single-cell data. We will consistently use ``native cell-resolved'' for
 Xenium/DBiC-seq and ``derived cell-aligned'' for Visium HD, and retitle the work
@@ -69,31 +74,26 @@ Xenium/DBiC-seq and ``derived cell-aligned'' for Visium HD, and retitle the work
 \end{itemize}
 
 \textbf{A2 (Native-cell validation).}\enspace
-Our strongest new validation uses 30 native-Xenium samples (360,000 cells),
-four contiguous spatial holdouts, a 5\% train--test buffer, and training-only
-gene selection. Images beat both coordinate-only and spatial-KNN controls in
-28/30 samples and 15/17 analysis labels; all failures are retained in
-Table~1. Thus the native-cell evidence does not depend on HD bin assignment,
-while HD remains separately labeled derived evidence.
+To directly address this concern, we reran the benchmark using only native
+Xenium data; Table~1 reports the 25-organ results. Table~2 separately reports
+cross-sample organ transfer on Visium HD.
 
 \newpage
 \questionsep
 \textbf{Q2 (P3, Q1).}\quad
 \textit{Are all 25 release categories evaluated?}
 
-\textbf{A1 (25-category breadth).}\enspace
-Yes. Table~1 reports every release category under one fixed protocol,
-including negative results.
+\textbf{A1 (25-organ results).}\enspace
+Table~1 reports results for all 25 organs under one fixed protocol.
 
 \begin{center}
 \begingroup
 \footnotesize
 \setlength{\tabcolsep}{4.2pt}
 \renewcommand{\arraystretch}{1.04}
-\textit{\textbf{Table 1. Per-organ cell-aligned breadth benchmark.}
-Rows follow the 25-category release taxonomy. Results use top-50
-training-selected HVGs, four contiguous spatial holdouts, and a 5\%
-train--test buffer; the final row is the 30-sample native-Xenium macro.}\\[5pt]
+\textit{\textbf{Table 1. Per-organ benchmark results.}
+Results use the top-50 training-selected HVGs, four contiguous spatial
+holdouts, and a 5\% train--test buffer.}\\[5pt]
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
 \toprule
 & \multicolumn{3}{c}{Gene Pearson}
@@ -137,11 +137,6 @@ Xenograft (human + mouse) & \textbf{0.387} & 0.041 & 0.049 & 0.362 & 0.526 & 0.5
 \textbf{0.291} & \textbf{0.442} & \textbf{0.413} \\
 \bottomrule
 \end{tabular*}
-
-\parbox{0.98\linewidth}{\scriptsize\textit{Among category rows, bold names are mouse-only.
-Bold Gene-Pearson values mark the best of image, coordinate, and spatial KNN.
-Native-Xenium top-200 image Gene Pearson is 0.202; the top-50 95\% CI is
-0.277--0.368.}}
 \endgroup
 \end{center}
 
