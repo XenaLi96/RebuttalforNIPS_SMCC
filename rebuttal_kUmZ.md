@@ -33,23 +33,27 @@ We thank the reviewer for identifying the central issues: target provenance, exp
 
 *Among category rows, bold names are mouse-only. Bold Gene-Pearson values mark the best of image, coordinate, and spatial KNN. Native-Xenium top-200 image Gene Pearson is 0.202; the top-50 95% CI is 0.277–0.368.*
 
-**1. Figure 1 and molecular-target provenance (P2, Q2, Q4, L1–L2).**
+**Q1 (P2, Q2, Q4, L1–L2).** *Are the molecular targets truly single-cell, and was Figure 1 AI-generated?*
 
-**Reviewer concern.** Was Figure 1 AI-generated, and are the targets truly single-cell?
+**A1 — Figure 1 provenance.** Figure 1 was not AI-generated. I designed it in Sketch: the source has 84 editable layers, every element was placed manually, and three revisions required over one week. The proof images and checksums are in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure1_design_evidence/`; we will correct all labels and typography.
 
-**Response.** Figure 1 was not AI-generated. I designed it in Sketch: the source has 84 editable layers, every element was placed manually, and three revisions required over one week. The proof images and checksums are in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure1_design_evidence/`; we will correct all labels and typography.
+**A2 — Resource motivation.** I began this resource in my first PhD year because fragmented datasets required separate Scanpy, Xenium Ranger, and platform-specific workflows. Across previous submissions it grew from 12M to 20M to 22M records, and now 28M, expanding from Xenium to Visium HD and in-house DBiC-seq. It has supported several projects by my co-authors and me. As I approach graduation, I hope to make it accessible to students facing the same barriers.
 
-I began this resource in my first PhD year because fragmented datasets required separate Scanpy, Xenium Ranger, and platform-specific workflows. Across previous submissions it grew from 12M to 20M to 22M records, and now 28M, expanding from Xenium to Visium HD and in-house DBiC-seq. It has supported several projects by my co-authors and me. As I approach graduation, I hope to make it accessible to students facing the same barriers.
+**A3 — Molecular-target provenance.** The targets have two evidentiary levels:
 
-Crucially, the targets have two evidentiary levels. The submitted public inventory has 23,943,826 upstream records: 16,314,129 native Xenium cells defined by platform cell boundaries/transcripts and 7,629,697 Visium HD source records. After HD bin-to-cell aggregation, the matrices contain 20,246,169 rows: 16,314,129 native cells and 3,932,040 derived cell-aligned profiles. We will never describe both as directly measured single cells.
+- The submitted public inventory has 23,943,826 upstream records: 16,314,129 native Xenium cells defined by platform cell boundaries/transcripts and 7,629,697 Visium HD source records.
+- After HD bin-to-cell aggregation, the matrices contain 20,246,169 rows: 16,314,129 native cells and 3,932,040 derived cell-aligned profiles.
+- We will never describe both as directly measured single cells.
 
-Table 1 is the strongest new validation: 30 native-Xenium samples (360,000 cells), spatial holdouts, a 5% buffer, and training-only gene selection. Images beat both spatial controls in 28/30 samples and 15/17 labels; failures are retained. We will say “native cell-resolved” for Xenium, “derived cell-aligned” for HD, and retitle the work *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
+**A4 — Native-cell validation and revised claim.**
 
-**2. Breadth, provenance, and independent units (P3, Q1, P8, L4).**
+- Table 1 is the strongest new validation: 30 native-Xenium samples (360,000 cells), spatial holdouts, a 5% buffer, and training-only gene selection.
+- Images beat both spatial controls in 28/30 samples and 15/17 labels; failures are retained.
+- We will say “native cell-resolved” for Xenium, “derived cell-aligned” for HD, and retitle the work *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
 
-**Reviewer concern.** How much is newly acquired, are all 25 categories evaluated, and what are the independent units?
+**Q2 (P3, Q1, P8, L4).** *How much is newly acquired, are all 25 categories evaluated, and what are the independent units?*
 
-**Response.** Table 2 separates primary acquisition from public aggregation.
+**A1 — Scale and provenance.** Table 2 separates primary acquisition from public aggregation.
 
 **Table 2. sMMC-28M working-manifest scale and provenance audit.**
 
@@ -61,7 +65,13 @@ Table 1 is the strongest new validation: 30 native-Xenium samples (360,000 cells
 | Other public | 44 | 16 strata | Xenium; HD | 16,996,704 |
 | **Total sMMC-28M** | **99 unique (100 records)** | **25 tissue strata + 3 cell-line origins** | **Xenium; HD; DBiC-seq** | **28,315,247** |
 
-Most scale comes from public harmonization; 53,989 QC-passed cells are new primary data, while the continuing in-house pool is approximately 200,000 paired cells. Table 1 reports all 25 categories with species labels. A same-organ leave-one-sample-out native-Xenium test on 18 targets achieved Gene Pearson 0.170, Cell Pearson 0.275 versus 0.205 for training mean (better in 14/18), and F1 0.125 versus 0.031 (better in 17/18).
+**A2 — Breadth and independent-sample evidence.**
+
+- Most scale comes from public harmonization; 53,989 QC-passed cells are new primary data, while the continuing in-house pool is approximately 200,000 paired cells.
+- Table 1 reports all 25 categories with species labels.
+- A same-organ leave-one-sample-out native-Xenium test on 18 targets achieved Gene Pearson 0.170, Cell Pearson 0.275 versus 0.205 for training mean (better in 14/18), and F1 0.125 versus 0.031 (better in 17/18).
+
+**A3 — Cross-sample transfer.**
 
 **Table 3. Eight-organ cross-patient Visium HD benchmark (source→target sample).** TM is training mean; its Gene Pearson is undefined.
 
@@ -77,20 +87,51 @@ Most scale comes from public harmonization; 53,989 QC-passed cells are new prima
 | Mouse kidney | a→aj | 0.0049 | 0.2678 | 0.0513 | 0.4696 | 0.0159 |
 | **Organ macro** | — | **0.0151** | **0.2036** | **0.0815** | **0.2422** | **0.0375** |
 
-We report this weak result because it is important: UNI2-h improves macro F1 but not Cell Pearson over TM. Cross-patient/platform generalization remains extremely difficult, and we still lack a satisfactory solution. Yet the same coordinates, targets, and QC yield clear spatially separated and same-organ signal; this failure therefore does not show invalid dataset construction. It exposes real morphology, composition, acquisition, patient, and platform shifts. The resource makes this unsolved problem measurable. We will say “cross-patient” only for verified donors; otherwise, “sample-held-out.”
+- UNI2-h improves macro F1 but not Cell Pearson over TM; we report this weak result because it is important.
+- Cross-patient/platform generalization remains extremely difficult, and we still lack a satisfactory solution.
+- The same coordinates, targets, and QC yield clear spatially separated and same-organ signal; this failure therefore does not show invalid dataset construction. It exposes real morphology, composition, acquisition, patient, and platform shifts.
+- The resource makes this unsolved problem measurable. We will say “cross-patient” only for verified donors; otherwise, “sample-held-out.”
 
-**3. What cell-level evaluation adds (P4, Q3, L3).**
+**Q3 (P4, Q3, L3).** *What does cell-level evaluation add beyond spot-level prediction?*
 
-**Response.** Spot averaging makes prediction easier, so cell-level correlation need not be higher. In six native-Xenium samples, Gene Pearson was 0.365 at native-cell and 8-µm supervision, 0.363 at 16 µm, and 0.330 at 55 µm; all declined at 55 µm. In dense lung HLCX022, 55-µm grids mixed labels in 55.5–66.4% of test spots, versus 3.5–4.1% in sparse HHDX011. Thus cell alignment exposes density-dependent heterogeneity; we do not claim universal cell-over-spot accuracy.
+**A.**
 
-**4. HD localization and assignment robustness (P6, Q4).**
+- Spot averaging makes prediction easier, so cell-level correlation need not be higher.
+- In six native-Xenium samples, Gene Pearson was 0.365 at native-cell and 8-µm supervision, 0.363 at 16 µm, and 0.330 at 55 µm; all declined at 55 µm.
+- In dense lung HLCX022, 55-µm grids mixed labels in 55.5–66.4% of test spots, versus 3.5–4.1% in sparse HHDX011.
+- Thus cell alignment exposes density-dependent heterogeneity; we do not claim universal cell-over-spot accuracy.
 
-**Response.** Xenium uses platform boundaries/transcripts. HD uses the official transform, CellViT footprints, and native 2-µm bins; conflicts go to the nearest centroid. Across two lungs and one ovary, strict boundary exclusion retained 56.1–80.7% of cells but 11.0–20.5% of bins; erosion retained 37.9–72.0% of cells, while dilation retained 181.9–196.2% of default bins. A 3,000-polygon audit found no filtered-bin intersection for 50.6% lung, 2.5% brain, and 50.0% pancreas polygons. We will expose coverage/settings and keep native Xenium separate from derived HD evidence.
+**Q4 (P6, Q4).** *How reliable are HD localization and expression assignment?*
 
-**5. Context claims and metadata (P4, P9).**
+**A.**
 
-**Response.** We agree the ovarian AK/AD/AL comparison cannot establish an age effect because age is nested within sample/patient and panels differ. We will rename it “sample/age-confounded context shift.” Its role is to motivate Average/Worst/Gap/Support auditing, not causal attribution. Donor, age, sex, and disease are incompletely reported across sources, and ethnicity is undocumented; we will report missingness, never infer sensitive attributes, and analyze subgroups only with adequate independent-donor support.
+- Xenium uses platform boundaries/transcripts. HD uses the official transform, CellViT footprints, and native 2-µm bins; conflicts go to the nearest centroid.
+- Across two lungs and one ovary, strict boundary exclusion retained 56.1–80.7% of cells but 11.0–20.5% of bins; erosion retained 37.9–72.0% of cells, while dilation retained 181.9–196.2% of default bins.
+- A 3,000-polygon audit found no filtered-bin intersection for 50.6% lung, 2.5% brain, and 50.0% pancreas polygons.
+- We will expose coverage/settings and keep native Xenium separate from derived HD evidence.
 
-**6. Terminology and presentation (P5, P7, minor comments).**
+**Q5 (P4, P9).** *What can the context analysis support, and how complete is the demographic metadata?*
 
-**Response.** STBoost is the model-agnostic cell-aligned interface; STBoosted BLEEP is published BLEEP retrained through it; STBoost-Ref is our image-only retrieval reference predictor. At inference it receives local/context histology, never query expression. We will use these names consistently, define every split/unit, correct Figure 1 and Figure 3, and state the limits of spatial autocorrelation, sample/platform shift, HD boundary assignment, metadata missingness, and prediction as a substitute for measurement.
+**A1 — Context claim.**
+
+- The ovarian AK/AD/AL comparison cannot establish an age effect because age is nested within sample/patient and panels differ.
+- We will rename it “sample/age-confounded context shift.”
+- Its role is to motivate Average/Worst/Gap/Support auditing, not causal attribution.
+
+**A2 — Metadata boundary.**
+
+- Donor, age, sex, and disease are incompletely reported across sources, and ethnicity is undocumented.
+- We will report missingness, never infer sensitive attributes, and analyze subgroups only with adequate independent-donor support.
+
+**Q6 (P5, P7, minor comments).** *Please clarify terminology and correct the remaining presentation issues.*
+
+**A1 — Terminology.**
+
+- STBoost is the model-agnostic cell-aligned interface.
+- STBoosted BLEEP is published BLEEP retrained through it.
+- STBoost-Ref is our image-only retrieval reference predictor; at inference it receives local/context histology, never query expression.
+
+**A2 — Presentation and limitations.**
+
+- We will use these names consistently, define every split/unit, and correct Figure 1 and Figure 3.
+- We will state the limits of spatial autocorrelation, sample/platform shift, HD boundary assignment, metadata missingness, and prediction as a substitute for measurement.

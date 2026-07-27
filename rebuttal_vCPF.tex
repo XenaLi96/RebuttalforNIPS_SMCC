@@ -11,9 +11,7 @@
 \setlength{\parskip}{0.26em}
 \setlength{\emergencystretch}{2em}
 
-\newcommand{\revcomment}[1]{\textcolor{black}{\textbf{Reviewer comment. #1}}}
 \newcommand{\questionsep}{\par\vspace{0.75em}}
-\newcommand{\response}{\textbf{Response.}\enspace}
 
 \begin{document}
 
@@ -34,20 +32,25 @@ unique samples (100 records) and 28,315,247 targets; a broader continuing
 DBiC-seq pool of approximately 200,000 paired cells is not counted here.
 
 \questionsep
-\textbf{vCPF-1.}\quad
-\revcomment{For the Visium HD data, how reliable is the bin-to-cell aggregation?
+\textbf{Q1.}\quad
+\textit{For the Visium HD data, how reliable is the bin-to-cell aggregation?
 How are boundary bins assigned, and do segmentation errors noticeably affect
 expression profiles?}
 
-\response
-We will distinguish native Xenium cells from \emph{derived cell-aligned} Visium
-HD targets. Official transforms register native 2-\(\mu\)m bins to H\&E. A
+\textbf{A1 (Construction).}
+\begin{itemize}
+\item We will distinguish native Xenium cells from \emph{derived cell-aligned}
+Visium HD targets.
+\item Official transforms register native 2-\(\mu\)m bins to H\&E. A
 closed bin square is assigned when it intersects a same-frame CellViT polygon;
 if several polygons claim it, the nearest full-resolution centroid wins, with
-raw-cell index breaking exact ties. Unsupported cells are removed. We will move
-this rule and a complete record example from Appendix S2 into the main text.
+raw-cell index breaking exact ties.
+\item Unsupported cells are removed. We will move this rule and a complete
+record example from Appendix S2 into the main text.
+\end{itemize}
 
-We audited 3,000 raw polygons per dataset (9,000 total) under 1-\(\mu\)m
+\textbf{A2 (Sensitivity audit).}\enspace We audited 3,000 raw polygons per
+dataset (9,000 total) under 1-\(\mu\)m
 registration shifts and mask erosion/dilation:
 
 \begin{center}
@@ -67,18 +70,22 @@ Human pancreas & 50.0\% & 0.706--0.714 & 0.994 & 13.0\%--13.7\% \\
 \endgroup
 \end{center}
 
-Percentages use all detected polygons; unsupported polygons are excluded. Shifts
-preserve expression direction but alter membership/UMIs; erosion/dilation gives
-Jaccard 0.462--0.720, cosine 0.871--0.993, and
-\(|\Delta\mathrm{UMI}|\) 32.8\%--66.6\%. Thus, uncertainty is material. We will
-release settings/QC, avoid ground-truth language, and report Xenium separately.
+\textbf{A3 (Interpretation).}
+\begin{itemize}
+\item Percentages use all detected polygons; unsupported polygons are excluded.
+\item Shifts preserve expression direction but alter membership/UMIs;
+erosion/dilation gives Jaccard 0.462--0.720, cosine 0.871--0.993, and
+\(|\Delta\mathrm{UMI}|\) 32.8\%--66.6\%.
+\item Uncertainty is material. We will release settings/QC, avoid ground-truth
+language, and report Xenium separately.
+\end{itemize}
 
 \questionsep
-\textbf{vCPF-2.}\quad
-\revcomment{The main experiments cover only a few representative cases. Can the
+\textbf{Q2.}\quad
+\textit{The main experiments cover only a few representative cases. Can the
 authors summarize more organs or platforms?}
 
-\response
+\textbf{A1 (Release-wide breadth).}\enspace
 Yes. We now report all 25 release categories under the matched top-50-HVG,
 four-spatial-holdout protocol:
 
@@ -147,16 +154,22 @@ Training-mean Gene Pearson is undefined and is not shown.}}
 \endgroup
 \end{center}
 
-Image is strongest in 21/25 category rows; the four failures remain visible rather
-than being removed. Across 18 complete same-organ held-out targets, image
+\textbf{A2 (Independent-sample evidence).}
+\begin{itemize}
+\item Image is strongest in 21/25 category rows; the four failures remain
+visible rather than being removed.
+\item Across 18 complete same-organ held-out targets, image
 top-50-HVG Gene Pearson averages 0.170 (0.016--0.372), Cell Pearson is 0.275
 versus 0.205 for training mean, and F1 is 0.125 versus 0.031. These are sample-,
-not donor-held-out, results. The updated benchmark code, fixed splits,
+not donor-held-out, results.
+\item The updated benchmark code, fixed splits,
 configurations, and evaluation scripts are now available in our
 \href{https://anonymous.4open.science/r/sMMC-22M-DB75}{anonymous GitHub
 repository}.
+\end{itemize}
 
-For Visium HD breadth, eight source-sample-to-target-sample organ pairs give:
+\textbf{A3 (Visium HD transfer).}\enspace Eight
+source-sample-to-target-sample organ pairs give:
 
 \begin{center}
 \begingroup
@@ -172,23 +185,31 @@ Training mean & N/A & 0.2422 & 0.0375 \\
 \endgroup
 \end{center}
 
-The transfer result is intentionally not hidden: UNI2-h improves F1 but not Cell
-Pearson over the mean baseline. We will report organ-macro and per-organ values,
-separate Xenium from Visium HD, and avoid cell-weighted pooled claims.
+\begin{itemize}
+\item UNI2-h improves F1 but not Cell Pearson over the mean baseline; this
+transfer failure is intentionally not hidden.
+\item We will report organ-macro and per-organ values, separate Xenium from
+Visium HD, and avoid cell-weighted pooled claims.
+\end{itemize}
 
 \questionsep
-\textbf{vCPF-3.}\quad
-\revcomment{Some gene-wise correlations are low, especially under transfer. How
+\textbf{Q3.}\quad
+\textit{Some gene-wise correlations are low, especially under transfer. How
 should they be interpreted biologically, and could marker/cell-type genes or
 spatial-only/metadata-only baselines calibrate them?}
 
-\response
-Low full-panel correlations show that histology is not a replacement for
-molecular measurement. They combine sparse/weakly morphology-linked genes with
-sample, composition, and acquisition shifts. A restricted training-selected HVG
-endpoint is easier and must not be conflated with all-gene transfer.
+\textbf{A1 (Interpretation).}
+\begin{itemize}
+\item Low full-panel correlations show that histology is not a replacement for
+molecular measurement.
+\item They combine sparse or weakly morphology-linked genes with sample,
+composition, and acquisition shifts.
+\item A restricted training-selected HVG endpoint is easier and must not be
+conflated with all-gene transfer.
+\end{itemize}
 
-Biological calibration of the 30-sample spatially held-out predictions gives:
+\textbf{A2 (Biological calibration).}\enspace The 30-sample spatially held-out
+predictions give:
 
 \begin{center}
 \begingroup
@@ -206,43 +227,52 @@ Cell-type-stratified pseudobulk RMSE \(\downarrow\) &
 \endgroup
 \end{center}
 
-The marker inventory overlaps training-selected HVGs, and cell-type strata are
-expression-derived; these results show recoverable aggregate structure, not
-independent cell-type validation. Under the harder bidirectional all-gene
-lung/ovary transfer, image Gene Pearson averages are \(-0.0003/0.0020\), whereas
+\textbf{A3 (Hard-transfer boundary).}
+\begin{itemize}
+\item The marker inventory overlaps training-selected HVGs, and cell-type strata
+are expression-derived; these results show recoverable aggregate structure, not
+independent cell-type validation.
+\item Under the harder bidirectional all-gene lung/ovary transfer, image Gene
+Pearson averages are \(-0.0003/0.0020\), whereas
 metadata-only baselines reach 0.104/0.142; coarse-state balanced accuracy is
-0.139/0.159 for image prediction versus 0.220/0.252 for metadata. This negative
-result demonstrates context dependence and motivates stronger
+0.139/0.159 for image prediction versus 0.220/0.252 for metadata.
+\item This negative result demonstrates context dependence and motivates stronger
 patient/platform-robust methods rather than supporting unrestricted cell-wise
 recovery.
+\end{itemize}
 
 \questionsep
-\textbf{vCPF-4.}\quad
-\revcomment{In-domain results may reflect local interpolation and spatial
+\textbf{Q4.}\quad
+\textit{In-domain results may reflect local interpolation and spatial
 autocorrelation rather than robust generalization.}
 
-\response
-We agree. We will call same-sample results \emph{spatial interpolation
-diagnostics}. The 30-sample experiment uses contiguous holdouts and a 5\%
+\textbf{A.}
+\begin{itemize}
+\item We will call same-sample results \emph{spatial interpolation diagnostics}.
+\item The 30-sample experiment uses contiguous holdouts and a 5\%
 train--test buffer, while the 18-target and eight-organ experiments hold out
 complete samples. Their lower and heterogeneous performance quantifies the
-generalization gap. ``Patient-held-out'' will be used only when donor identity is
-verified.
+generalization gap.
+\item ``Patient-held-out'' will be used only when donor identity is verified.
+\end{itemize}
 
 \questionsep
-\textbf{vCPF-5.}\quad
-\revcomment{The ovarian context analysis is narrow and does not establish
+\textbf{Q5.}\quad
+\textit{The ovarian context analysis is narrow and does not establish
 systematic evaluation of all variables.}
 
-\response
-Agreed. Ovarian AK (60+) \(\to\) AD (60+) versus AK \(\to\) AL (40-) changes F1
+\textbf{A1 (Scope of the ovarian result).}
+\begin{itemize}
+\item Ovarian AK (60+) \(\to\) AD (60+) versus AK \(\to\) AL (40-) changes F1
 0.289 \(\to\) 0.072, gene Spearman 0.036 \(\to\) 0.006, cell Spearman
-0.206 \(\to\) 0.095, and nonzero rate 0.166 \(\to\) 0.027. Because age is nested
+0.206 \(\to\) 0.095, and nonzero rate 0.166 \(\to\) 0.027.
+\item Because age is nested
 within sample/patient and panels differ, we will call this an \emph{age-associated,
 sample-confounded shift}, not a causal age effect.
+\end{itemize}
 
-To show the broader purpose of rich context, we applied Average/Worst/Gap audits
-to complementary cohorts:
+\textbf{A2 (Broader context audit).}\enspace To show the broader purpose of rich
+context, we applied Average/Worst/Gap audits to complementary cohorts:
 
 \begin{center}
 \begingroup
@@ -262,15 +292,15 @@ LGG IDH / H-Optimus-0 & site; leave-one-site & 0.747 & 0.476 & 0.524 \\
 \endgroup
 \end{center}
 
-Rich metadata enable subgroup-support and worst-context audits; they do not
-themselves remove bias.
+\textbf{A3 (Significance).}\enspace Rich metadata enable subgroup-support and
+worst-context audits; they do not themselves remove bias.
 
 \questionsep
-\textbf{vCPF-6.}\quad
-\revcomment{Users need clear guidance on which fields are direct measurements and
+\textbf{Q6.}\quad
+\textit{Users need clear guidance on which fields are direct measurements and
 which are generated or post-processed.}
 
-\response
+\textbf{A1 (Provenance classes).}
 \begin{center}
 \begingroup
 \small
@@ -289,9 +319,13 @@ molecular ground truth. \\
 \endgroup
 \end{center}
 
-GPT-4o only verbalizes supplied fields. PLIP/CONCH audits give AUC 0.993/0.988 and
-100\% Top-3 retrieval. We will restore prompts, field checks, examples, and
-matrices in the Appendix. Captions remain optional context, not molecular ground
-truth.
+\textbf{A2 (Generated-text validation and scope).}
+\begin{itemize}
+\item GPT-4o only verbalizes supplied fields.
+\item PLIP/CONCH audits give AUC 0.993/0.988 and 100\% Top-3 retrieval.
+\item We will restore prompts, field checks, examples, and matrices in the
+Appendix.
+\item Captions remain optional context, not molecular ground truth.
+\end{itemize}
 
 \end{document}

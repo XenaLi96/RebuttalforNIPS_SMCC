@@ -7,19 +7,22 @@ We also clarify the new primary component. The current working manifest contains
 | **New in-house primary data** | **21** | **DBiC-seq** | **53,989** |
 | **Total sMMC-28M working manifest** | **99 unique (100 records)** | **Xenium; Visium HD; DBiC-seq** | **28,315,247** |
 
-**1. The extent to which this new data can truly promote relevant research progress has not been fully explained.**
+**Q1.** *The extent to which this new data can truly promote relevant research progress has not been fully explained.*
 
-We agree. The resource is valuable not because one predictor has solved histology-to-expression inference, but because it makes three previously difficult evaluations measurable: scaling under a fixed task, leakage-controlled breadth across organs, and failures caused by aggregation or context shift.
+**A1 — Scale.** We agree. The resource is valuable not because one predictor has solved histology-to-expression inference, but because it makes previously difficult evaluations measurable.
 
-**Scale.** On native-Xenium sample HHDX011, we fixed the spatial test regions, training-selected top-50 HVGs, and regression protocol while varying training cells for seven frozen encoders:
+- **Objective:** test the value of additional training cells under a fixed task.
+- **Design:** on native-Xenium sample HHDX011, we fixed the spatial test regions, training-selected top-50 HVGs, and regression protocol while varying training cells for seven frozen encoders:
 
 | Training fraction | 5% | 10% | 25% | 100% |
 |---|---:|---:|---:|---:|
 | Seven-encoder mean Gene Pearson | 0.177 | 0.205 | 0.241 | 0.278 |
 
-Every encoder improved monotonically. This shows that additional cells are useful within this controlled range; we do not claim a universal scaling law.
+- **Result/significance:** every encoder improved monotonically. This shows that additional cells are useful within this controlled range; we do not claim a universal scaling law.
 
-**Breadth and biological calibration.** We now report all 25 release categories under the matched top-50-HVG, four-spatial-holdout protocol. The final row retains the primary 30-sample native-Xenium macro.
+**A2 — Breadth and biological calibration.**
+
+- **Objective/design:** we now report all 25 release categories under the matched top-50-HVG, four-spatial-holdout protocol. The final row retains the primary 30-sample native-Xenium macro.
 
 | Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
 |---|---:|---:|---:|---:|---:|---:|
@@ -52,17 +55,25 @@ Every encoder improved monotonically. This shows that additional cells are usefu
 
 *Bold category labels denote mouse-only evaluations; mixed-species and non-mouse categories are explicit. Bold values in the three Gene-Pearson columns mark the best baseline. The 30-sample macro uses 360,000 spatially stratified cells, a 5% train--test buffer, and training-selected genes; its top-200 image Gene Pearson is 0.202 and top-50 bootstrap 95% CI is 0.277--0.368.*
 
-The updated benchmark code, fixed splits, configurations, and evaluation scripts for this table are now available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75).
+- **Reproducibility:** the updated benchmark code, fixed splits, configurations, and evaluation scripts for this table are now available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75).
 
-Image prediction exceeds coordinate and KNN controls in 28/30 samples. On marker/HVG overlap, image Gene Pearson is 0.201 versus 0.031 for coordinates and 0.028 for KNN. Cell-type-stratified pseudobulk RMSE is 0.120 for image prediction versus 0.224/0.187/0.188 for coordinates/KNN/training mean. Because cell-type labels are expression derived, this is aggregate biological calibration, not independent ground truth.
+- **Result:** image prediction exceeds coordinate and KNN controls in 28/30 samples. On marker/HVG overlap, image Gene Pearson is 0.201 versus 0.031 for coordinates and 0.028 for KNN. Cell-type-stratified pseudobulk RMSE is 0.120 for image prediction versus 0.224/0.187/0.188 for coordinates/KNN/training mean.
+- **Claim boundary:** because cell-type labels are expression derived, this is aggregate biological calibration, not independent ground truth.
 
-**Resolution.** On six native-Xenium samples, matched cell/8/16/55-$\mu$m supervision gives Gene Pearson 0.365/0.365/0.363/0.330. In dense lung, 55.5%--66.4% of 55-$\mu$m pseudo-spots mix predicted cell types and contain 73.8%--81.0% of evaluated cells, whereas sparse heart shows only 3.5%--4.1% mixed spots and 7.0%--8.3% affected cells. Thus, cell-level evaluation exposes density-dependent mixing hidden by coarse averaging; it is not claimed to be universally easier.
+**A3 — Resolution.**
 
-Together, these experiments turn scale, resolution, and context from descriptive properties into testable variables: users can study data scaling, organ/platform transfer, aggregation-induced oversmoothing, spatial leakage, and context-specific failure.
+- **Design/result:** on six native-Xenium samples, matched cell/8/16/55-$\mu$m supervision gives Gene Pearson 0.365/0.365/0.363/0.330. In dense lung, 55.5%--66.4% of 55-$\mu$m pseudo-spots mix predicted cell types and contain 73.8%--81.0% of evaluated cells, whereas sparse heart shows only 3.5%--4.1% mixed spots and 7.0%--8.3% affected cells.
+- **Significance:** cell-level evaluation exposes density-dependent mixing hidden by coarse averaging; it is not claimed to be universally easier.
 
-**2. The increase of data scale, resolution, and contexts typically associates with increased heterogeneity, which may pose critical challenges for data analysis. Please clarify the heterogeneity and how it may influence downstream analysis.**
+**A4 — Overall scientific value.** Together, these experiments turn scale, resolution, and context from descriptive properties into testable variables:
 
-We agree and will make heterogeneity an explicit benchmark variable rather than a hidden nuisance.
+- data scaling and leakage-controlled breadth across organs;
+- organ/platform transfer and context-specific failure;
+- aggregation-induced oversmoothing and spatial leakage.
+
+**Q2.** *The increase of data scale, resolution, and contexts typically associates with increased heterogeneity, which may pose critical challenges for data analysis. Please clarify the heterogeneity and how it may influence downstream analysis.*
+
+**A1 — Observed heterogeneity.** We agree and will make heterogeneity an explicit benchmark variable rather than a hidden nuisance.
 
 | Dimension | Observed heterogeneity | Downstream consequence |
 |---|---|---|
@@ -73,8 +84,12 @@ We agree and will make heterogeneity an explicit benchmark variable rather than 
 | Sample transfer | Across 18 same-organ held-out targets, top-50-HVG Gene Pearson averages 0.170 but ranges 0.016--0.372 | Mean performance can conceal severe target-sample failures. |
 | Context | Ovarian AK (60+)→AD (60+) versus AK→AL (40-) changes F1 0.289→0.072 | Pooled scores can hide subgroup collapse. |
 
-The ovarian comparison is age associated but sample/patient confounded, not causal. Incomplete donor identity also means the 18-target result is sample-held-out, not patient-held-out. These limitations illustrate why context and provenance are necessary.
+**A2 — Interpretation and protocol changes.**
 
-We will therefore: (i) report organ-macro and platform-separated results rather than only cell-weighted averages; (ii) distinguish spatial in-domain, sample-held-out, and verified patient-held-out protocols; (iii) report Average/Worst/Gap together with sample support; (iv) disclose gene-panel overlap and metadata missingness; and (v) label every field as directly measured, processed, generated, or model output. We will not infer missing sensitive attributes.
+- The ovarian comparison is age associated but sample/patient confounded, not causal. Incomplete donor identity also means the 18-target result is sample-held-out, not patient-held-out.
+- We will report organ-macro and platform-separated results rather than only cell-weighted averages.
+- We will distinguish spatial in-domain, sample-held-out, and verified patient-held-out protocols.
+- We will report Average/Worst/Gap with sample support and disclose gene-panel overlap and metadata missingness.
+- We will label every field as directly measured, processed, generated, or model output, and will not infer missing sensitive attributes.
 
-These revisions also clarify the scientific value: sMMC does not remove heterogeneity, but makes its downstream effects visible, measurable, and reproducible across organs, platforms, spatial resolutions, and biological contexts.
+**A3 — Significance.** These revisions clarify the scientific value: sMMC does not remove heterogeneity, but makes its downstream effects visible, measurable, and reproducible across organs, platforms, spatial resolutions, and biological contexts.

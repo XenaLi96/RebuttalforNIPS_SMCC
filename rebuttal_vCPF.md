@@ -2,11 +2,15 @@ We sincerely thank the reviewer. The three requests sharpen the revision: audit 
 
 Our 21-sample in-house DBiC-seq collection adds 54,304 measured/53,989 post-QC cells with paired morphology, RNA, and context. The working manifest contains 99 unique samples (100 records) and 28,315,247 targets; a broader continuing DBiC-seq pool of approximately 200,000 paired cells is not counted here.
 
-**1. For the Visium HD data, how reliable is the bin-to-cell aggregation? How are boundary bins assigned, and do segmentation errors noticeably affect expression profiles?**
+**Q1.** *For the Visium HD data, how reliable is the bin-to-cell aggregation? How are boundary bins assigned, and do segmentation errors noticeably affect expression profiles?*
 
-We will distinguish native Xenium cells from *derived cell-aligned* Visium HD targets. Official transforms register native $2\,\mu$m bins to H&E. A closed bin square is assigned when it intersects a same-frame CellViT polygon; if several polygons claim it, the nearest full-resolution centroid wins, with raw-cell index breaking exact ties. Unsupported cells are removed. We will move this rule and a complete record example from Appendix S2 into the main text.
+**A1 — Construction.**
 
-We audited 3,000 raw polygons per dataset (9,000 total) under 1-$\mu$m registration shifts and mask erosion/dilation:
+- We will distinguish native Xenium cells from *derived cell-aligned* Visium HD targets.
+- Official transforms register native $2\,\mu$m bins to H&E. A closed bin square is assigned when it intersects a same-frame CellViT polygon; if several polygons claim it, the nearest full-resolution centroid wins, with raw-cell index breaking exact ties.
+- Unsupported cells are removed. We will move this rule and a complete record example from Appendix S2 into the main text.
+
+**A2 — Sensitivity audit.** We audited 3,000 raw polygons per dataset (9,000 total) under 1-$\mu$m registration shifts and mask erosion/dilation:
 
 | Visium HD sample | Raw polygons with canonical bins | Shift-bin Jaccard | Shift-expression cosine | Shift median $|\Delta\mathrm{UMI}|$ |
 |---|---:|---:|---:|---:|
@@ -14,11 +18,15 @@ We audited 3,000 raw polygons per dataset (9,000 total) under 1-$\mu$m registrat
 | Mouse brain | 97.5% | 0.806--0.816 | 0.936--0.939 | 6.0%--6.1% |
 | Human pancreas | 50.0% | 0.706--0.714 | 0.994 | 13.0%--13.7% |
 
-Percentages use all detected polygons; unsupported polygons are excluded. Shifts preserve expression direction but alter membership/UMIs; erosion/dilation gives Jaccard 0.462--0.720, cosine 0.871--0.993, and $|\Delta\mathrm{UMI}|$ 32.8%--66.6%. Thus, uncertainty is material. We will release settings/QC, avoid ground-truth language, and report Xenium separately.
+**A3 — Interpretation.**
 
-**2. The main experiments cover only a few representative cases. Can the authors summarize more organs or platforms?**
+- Percentages use all detected polygons; unsupported polygons are excluded.
+- Shifts preserve expression direction but alter membership/UMIs; erosion/dilation gives Jaccard 0.462--0.720, cosine 0.871--0.993, and $|\Delta\mathrm{UMI}|$ 32.8%--66.6%.
+- Uncertainty is material. We will release settings/QC, avoid ground-truth language, and report Xenium separately.
 
-Yes. We now report all 25 release categories under the matched top-50-HVG, four-spatial-holdout protocol:
+**Q2.** *The main experiments cover only a few representative cases. Can the authors summarize more organs or platforms?*
+
+**A1 — Release-wide breadth.** Yes. We now report all 25 release categories under the matched top-50-HVG, four-spatial-holdout protocol:
 
 | Release category (evaluated species) | Image Gene P | Coordinate Gene P | Spatial KNN Gene P | Image Gene S | Image Cell P | Image F1 |
 |---|---:|---:|---:|---:|---:|---:|
@@ -51,39 +59,59 @@ Yes. We now report all 25 release categories under the matched top-50-HVG, four-
 
 *Bold category labels denote mouse-only evaluations; mixed-species and non-mouse categories are explicit. Bold values in the three Gene-Pearson columns mark the best baseline. The 30-sample macro uses 360,000 spatially stratified cells; its top-200 image Gene Pearson is 0.202 and top-50 bootstrap 95% CI is 0.277--0.368.*
 
-Image is strongest in 21/25 category rows; the four failures remain visible rather than being removed. Across 18 complete same-organ held-out targets, image top-50-HVG Gene Pearson averages 0.170 (0.016--0.372), Cell Pearson is 0.275 versus 0.205 for training mean, and F1 is 0.125 versus 0.031. These are sample-, not donor-held-out, results. The updated benchmark code, fixed splits, configurations, and evaluation scripts are now available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75).
+**A2 — Independent-sample evidence.**
 
-For Visium HD breadth, eight source-sample→target-sample organ pairs give:
+- Image is strongest in 21/25 category rows; the four failures remain visible rather than being removed.
+- Across 18 complete same-organ held-out targets, image top-50-HVG Gene Pearson averages 0.170 (0.016--0.372), Cell Pearson is 0.275 versus 0.205 for training mean, and F1 is 0.125 versus 0.031. These are sample-, not donor-held-out, results.
+- The updated benchmark code, fixed splits, configurations, and evaluation scripts are now available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75).
+
+**A3 — Visium HD transfer.** Eight source-sample→target-sample organ pairs give:
 
 | Eight-organ macro result | Gene P | Cell P | F1 |
 |---|---:|---:|---:|
 | UNI2-h | 0.0151 | 0.2036 | 0.0815 |
 | Training mean | N/A | 0.2422 | 0.0375 |
 
-The transfer result is intentionally not hidden: UNI2-h improves F1 but not Cell Pearson over the mean baseline. We will report organ-macro and per-organ values, separate Xenium from Visium HD, and avoid cell-weighted pooled claims.
+- UNI2-h improves F1 but not Cell Pearson over the mean baseline; this transfer failure is intentionally not hidden.
+- We will report organ-macro and per-organ values, separate Xenium from Visium HD, and avoid cell-weighted pooled claims.
 
-**3. Some gene-wise correlations are low, especially under transfer. How should they be interpreted biologically, and could marker/cell-type genes or spatial-only/metadata-only baselines calibrate them?**
+**Q3.** *Some gene-wise correlations are low, especially under transfer. How should they be interpreted biologically, and could marker/cell-type genes or spatial-only/metadata-only baselines calibrate them?*
 
-Low full-panel correlations show that histology is not a replacement for molecular measurement. They combine sparse/weakly morphology-linked genes with sample, composition, and acquisition shifts. A restricted training-selected HVG endpoint is easier and must not be conflated with all-gene transfer.
+**A1 — Interpretation.**
 
-Biological calibration of the 30-sample spatially held-out predictions gives:
+- Low full-panel correlations show that histology is not a replacement for molecular measurement.
+- They combine sparse or weakly morphology-linked genes with sample, composition, and acquisition shifts.
+- A restricted training-selected HVG endpoint is easier and must not be conflated with all-gene transfer.
+
+**A2 — Biological calibration.** The 30-sample spatially held-out predictions give:
 
 | Metric | Image | Coordinate | Spatial KNN | Mean |
 |---|---:|---:|---:|---:|
 | Marker/HVG Gene Pearson $\uparrow$ | 0.201 | 0.031 | 0.028 | N/A |
 | Cell-type-stratified pseudobulk RMSE $\downarrow$ | 0.120 | 0.224 | 0.187 | 0.188 |
 
-The marker inventory overlaps training-selected HVGs, and cell-type strata are expression-derived; these results show recoverable aggregate structure, not independent cell-type validation. Under the harder bidirectional all-gene lung/ovary transfer, image Gene Pearson averages are $-0.0003/0.0020$, whereas metadata-only baselines reach 0.104/0.142; coarse-state balanced accuracy is 0.139/0.159 for image prediction versus 0.220/0.252 for metadata. This negative result demonstrates context dependence and motivates stronger patient/platform-robust methods rather than supporting unrestricted cell-wise recovery.
+**A3 — Hard-transfer boundary.**
 
-**4. In-domain results may reflect local interpolation and spatial autocorrelation rather than robust generalization.**
+- The marker inventory overlaps training-selected HVGs, and cell-type strata are expression-derived; these results show recoverable aggregate structure, not independent cell-type validation.
+- Under the harder bidirectional all-gene lung/ovary transfer, image Gene Pearson averages are $-0.0003/0.0020$, whereas metadata-only baselines reach 0.104/0.142; coarse-state balanced accuracy is 0.139/0.159 for image prediction versus 0.220/0.252 for metadata.
+- This negative result demonstrates context dependence and motivates stronger patient/platform-robust methods rather than supporting unrestricted cell-wise recovery.
 
-We agree. We will call same-sample results *spatial interpolation diagnostics*. The 30-sample experiment uses contiguous holdouts and a 5% train--test buffer, while the 18-target and eight-organ experiments hold out complete samples. Their lower and heterogeneous performance quantifies the generalization gap. “Patient-held-out” will be used only when donor identity is verified.
+**Q4.** *In-domain results may reflect local interpolation and spatial autocorrelation rather than robust generalization.*
 
-**5. The ovarian context analysis is narrow and does not establish systematic evaluation of all variables.**
+**A.**
 
-Agreed. Ovarian AK (60+)→AD (60+) versus AK→AL (40-) changes F1 0.289→0.072, gene Spearman 0.036→0.006, cell Spearman 0.206→0.095, and nonzero rate 0.166→0.027. Because age is nested within sample/patient and panels differ, we will call this an *age-associated, sample-confounded shift*, not a causal age effect.
+- We will call same-sample results *spatial interpolation diagnostics*.
+- The 30-sample experiment uses contiguous holdouts and a 5% train--test buffer, while the 18-target and eight-organ experiments hold out complete samples; their lower and heterogeneous performance quantifies the generalization gap.
+- “Patient-held-out” will be used only when donor identity is verified.
 
-To show the broader purpose of rich context, we applied Average/Worst/Gap audits to complementary cohorts:
+**Q5.** *The ovarian context analysis is narrow and does not establish systematic evaluation of all variables.*
+
+**A1 — Scope of the ovarian result.**
+
+- Ovarian AK (60+)→AD (60+) versus AK→AL (40-) changes F1 0.289→0.072, gene Spearman 0.036→0.006, cell Spearman 0.206→0.095, and nonzero rate 0.166→0.027.
+- Because age is nested within sample/patient and panels differ, we will call this an *age-associated, sample-confounded shift*, not a causal age effect.
+
+**A2 — Broader context audit.** To show the broader purpose of rich context, we applied Average/Worst/Gap audits to complementary cohorts:
 
 | Task / encoder | Context; split | Average BA | Worst BA | Gap |
 |---|---|---:|---:|---:|
@@ -92,9 +120,11 @@ To show the broader purpose of rich context, we applied Average/Worst/Gap audits
 | LUAD KRAS / CONCH | site; leave-one-site | 0.499 | 0.375 | 0.542 |
 | LGG IDH / H-Optimus-0 | site; leave-one-site | 0.747 | 0.476 | 0.524 |
 
-Rich metadata enable subgroup-support and worst-context audits; they do not themselves remove bias.
+**A3 — Significance.** Rich metadata enable subgroup-support and worst-context audits; they do not themselves remove bias.
 
-**6. Users need clear guidance on which fields are direct measurements and which are generated or post-processed.**
+**Q6.** *Users need clear guidance on which fields are direct measurements and which are generated or post-processed.*
+
+**A1 — Provenance classes.**
 
 | Provenance | Examples |
 |---|---|
@@ -102,4 +132,9 @@ Rich metadata enable subgroup-support and worst-context audits; they do not them
 | Processed | Registration; CellViT footprints; Visium HD bin-to-cell matrices; crops; normalized matrices; splits; molecular-profile summaries. |
 | Generated | Metadata-grounded GPT-4o captions and model predictions; neither is molecular ground truth. |
 
-GPT-4o only verbalizes supplied fields. PLIP/CONCH audits give AUC 0.993/0.988 and 100% Top-3 retrieval. We will restore prompts, field checks, examples, and matrices in the Appendix. Captions remain optional context, not molecular ground truth.
+**A2 — Generated-text validation and scope.**
+
+- GPT-4o only verbalizes supplied fields.
+- PLIP/CONCH audits give AUC 0.993/0.988 and 100% Top-3 retrieval.
+- We will restore prompts, field checks, examples, and matrices in the Appendix.
+- Captions remain optional context, not molecular ground truth.

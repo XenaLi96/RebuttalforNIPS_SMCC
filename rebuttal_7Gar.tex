@@ -11,9 +11,7 @@
 \setlength{\parskip}{0.38em}
 \setlength{\emergencystretch}{2em}
 
-\newcommand{\revcomment}[1]{\textcolor{black}{\textbf{Reviewer comment. #1}}}
 \newcommand{\questionsep}{\par\vspace{1.25em}}
-\newcommand{\response}{\textbf{Response.}\enspace}
 \definecolor{inhouseblue}{RGB}{225,240,255}
 
 \begin{document}
@@ -31,13 +29,13 @@ resource has accompanied me since my first PhD year; near graduation, I hope its
 unified release helps new students enter spatial transcriptomics.
 
 \questionsep
-\textbf{7Gar-1.}\quad
-\revcomment{In-house data scale. Please quantify precisely how much new in-house
+\textbf{Q1.}\quad
+\textit{In-house data scale. Please quantify precisely how much new in-house
 data is contributed relative to HEST-1K and STimage-1K4M (samples, tissues,
 platforms, spots/cells), ideally as a comparison table. What fraction of the
 resource is genuinely new vs.\ aggregated?}
 
-\response
+\textbf{A1.}\enspace
 We agree and will distinguish primary acquisition from aggregation. We audited
 each sample against HEST-1K v1.1.0 and the 2025-02-12 STimage-1K4M snapshot,
 using mutually exclusive categories; the rebuttal-time manifest also adds 12
@@ -89,19 +87,23 @@ Xenium; Visium HD &
 \endgroup
 \end{center}
 
-The in-house samples contain 54,304 measured cells; QC removes 315, leaving
-53,989: \textbf{0.1907\% new primary versus 99.8093\% public
-aggregated/harmonized targets}. The broader, continuing DBiC-seq pool contains
-approximately 200,000 paired cells but is not counted here. One versioned breast
-slide explains 99 unique samples versus 100 records. Visium HD entries are
-derived 2-\(\mu\)m bin-to-cell targets; Xenium and DBiC-seq are native
-cell-aligned records.
+\textbf{A2.}\enspace The audit establishes three boundaries:
+\begin{itemize}
+\item \textbf{New versus public:} the in-house samples contain 54,304 measured
+cells; QC removes 315, leaving 53,989: \textbf{0.1907\% new primary versus
+99.8093\% public aggregated/harmonized targets}.
+\item \textbf{Current versus continuing acquisition:} the broader DBiC-seq pool
+contains approximately 200,000 paired cells but is not counted here; one
+versioned breast slide explains 99 unique samples versus 100 records.
+\item \textbf{Measurement status:} Visium HD entries are derived 2-\(\mu\)m
+bin-to-cell targets; Xenium and DBiC-seq are native cell-aligned records.
+\end{itemize}
 
 
 
 \questionsep
-\textbf{7Gar-2.}\quad
-\revcomment{Clear purpose and biological meaning of the per-axis experiments. For
+\textbf{Q2.}\quad
+\textit{Clear purpose and biological meaning of the per-axis experiments. For
 each experiment, please lay out the benchmark objective, design, results, and
 significance cleanly. In particular: What task and metric does Fig.\ 2 use? In the
 resolution study, what exactly are STBoost, STBoost-Ref, and ``Ours''; what is
@@ -109,19 +111,20 @@ BLEEP; and what is ``STBoosted BLEEP''? For the age-effect analysis, what is the
 precise claim, and why is it informative beyond the expected degradation under an
 age shift?}
 
-\response
+\textbf{A1 (Scale).}\enspace
 We agree that the three axes lacked clear objectives and conclusions and will
 reorganize them as follows.
-
-\textbf{Scale.}
-\textbf{Objective:} test whether more training cells improve fixed
-image-to-expression predictors. \textbf{Design/metric:} Fig.\ 2 varies the
+\begin{itemize}
+\item \textbf{Objective:} test whether more training cells improve fixed
+image-to-expression predictors.
+\item \textbf{Design/metric:} Fig.\ 2 varies the
 training fraction while fixing targets, preprocessing, and spatial test regions;
 the metric is gene-macro Pearson across held-out cells. On native-Xenium HHDX011,
 we tested seven frozen encoders, training-selected top-50 HVGs, four buffered
 edge holdouts (2,400 test cells each), and 5\%/10\%/25\%/100\% training fractions
 using
 445--447/890--895/2,226--2,237/8,912--8,948 training cells.
+\end{itemize}
 
 \begin{center}
 \begingroup
@@ -144,11 +147,13 @@ H-Optimus-0 & 0.205 & 0.233 & 0.269 & 0.307 \\
 \endgroup
 \end{center}
 
-All encoders improve monotonically; their mean rises
+\begin{itemize}
+\item \textbf{Result/significance:} all encoders improve monotonically; their mean rises
 0.177\(\to\)0.205\(\to\)0.241\(\to\)0.278. This supports data utility in this
 controlled range, not a universal scaling law. For breadth, we tested
 CONCH--Ridge on 30 native-Xenium samples (17 organ/tissue labels, 25 reported
 conditions, two species; up to 12,000 spatially sampled cells each):
+\end{itemize}
 
 \begin{center}
 \begingroup
@@ -168,19 +173,24 @@ Training mean & 0.000 & -- & 0.305 & 0.253 \\
 \endgroup
 \end{center}
 
-Image gene Pearson is 0.324 (sample bootstrap 95\% CI 0.277--0.368) and exceeds
+\begin{itemize}
+\item \textbf{Claim boundary:} image gene Pearson is 0.324 (sample bootstrap 95\% CI 0.277--0.368) and exceeds
 all controls (paired Holm \(p\leq1.9\times10^{-8}\)). These are sample-specific
 top-50-HVG, not full-panel or donor-held-out, results.
+\end{itemize}
 
-\textbf{Resolution.}
-\textbf{Objective:} test cell-aligned prediction and what aggregation hides.
-STBoost is our model-agnostic cell-aligned interface; BLEEP is the published spot
+\textbf{A2 (Resolution).}
+\begin{itemize}
+\item \textbf{Objective:} test cell-aligned prediction and what aggregation hides.
+\item \textbf{Definitions:} STBoost is our model-agnostic cell-aligned interface; BLEEP is the published spot
 baseline; STBoosted BLEEP retrains BLEEP through this interface; STBoost-Ref is
 our retrieval predictor and will replace ``Ours'' in the figure. It uses only
-histology at inference. On 5,000 cells and 18,085 genes, STBoost-Ref improves most
+histology at inference.
+\item \textbf{Result:} on 5,000 cells and 18,085 genes, STBoost-Ref improves most
 \(A\!\to\!A\) metrics and all \(A\!\to\!B\) metrics; cross-patient F1 rises
 0.0857\(\to\)0.1061 and cell Pearson 0.0896\(\to\)0.2820. We also constructed
 matched pseudo-spots from six native-Xenium samples under identical splits/modeling:
+\end{itemize}
 
 \begin{center}
 \begingroup
@@ -197,11 +207,13 @@ Gene Pearson & 0.365 & 0.365 & 0.363 & 0.330 \\
 \endgroup
 \end{center}
 
-Cell and 8/16-\(\mu\)m scores are similar, but 55-\(\mu\)m aggregation drops
+\begin{itemize}
+\item \textbf{Significance:} cell and 8/16-\(\mu\)m scores are similar, but 55-\(\mu\)m aggregation drops
 performance and mixes predicted types in dense lung (55.5\%--66.4\% of spots;
 73.8\%--81.0\% of cells), versus sparse heart (3.5\%--4.1\%; 7.0\%--8.3\%).
 Thus, the evidence is density-dependent heterogeneity concealment, not universally
 easier cell prediction. Biological calibration gives:
+\end{itemize}
 
 \begin{center}
 \begingroup
@@ -219,18 +231,23 @@ Cell-type-stratified pseudobulk RMSE \(\downarrow\) & 0.120 & 0.224 & 0.187 & 0.
 \endgroup
 \end{center}
 
-Markers overlap training-selected HVGs; pseudobulk uses molecularly predicted
+\begin{itemize}
+\item \textbf{Claim boundary:} markers overlap training-selected HVGs; pseudobulk uses molecularly predicted
 cell-type annotations. We therefore claim recoverable aggregate structure, not
 exact cell-wise recovery or independent ground truth.
+\end{itemize}
 
-\textbf{Rich context.}
-\textbf{Objective:} expose subgroup collapse hidden by pooled scores. In ovarian
+\textbf{A3 (Rich context).}
+\begin{itemize}
+\item \textbf{Objective:} expose subgroup collapse hidden by pooled scores.
+\item \textbf{Result:} in ovarian
 cancer, AK (60+) \(\to\) AD (60+) versus AK (60+) \(\to\) AL (40-) changes F1
 0.289\(\to\)0.072, gene Spearman 0.036\(\to\)0.006, cell Spearman
 0.206\(\to\)0.095, and nonzero rate 0.166\(\to\)0.027. Across 18 same-organ
 native-Xenium target samples, top-50-HVG Pearson averages 0.170 (range
 0.016--0.372); incomplete donor IDs make this sample-, not patient-held-out.
 Average/Worst/Gap audits on other context-rich cohorts show the same issue:
+\end{itemize}
 
 \begin{center}
 \begingroup
@@ -260,23 +277,29 @@ Pathology & LGG IDH / H-optimus0 & site; leave-one-site
 \endgroup
 \end{center}
 
-BA is balanced accuracy; Gap is best-to-worst. High averages coexist with Worst
+\begin{itemize}
+\item \textbf{Significance and boundary:} BA is balanced accuracy; Gap is best-to-worst. High averages coexist with Worst
 BA 0.004 and site gaps 0.471--0.542. Rich context enables such audits, not bias
 removal. Ovarian age is nested within sample/patient and panels differ; we
 therefore claim an age-associated, sample-confounded shift, not causality.
+\end{itemize}
 
 \questionsep
-\textbf{7Gar-3.}\quad
-\revcomment{How are bin2cell targets constructed and validated?}
+\textbf{Q3.}\quad
+\textit{How are bin2cell targets constructed and validated?}
 
-\response
-Appendix S2 shows the official Visium HD registration of native 2-\(\mu\)m bins
-to H\&E. Intersecting same-frame cell polygons aggregate counts; unsupported
-cells are removed and conflicts resolved deterministically. We will move this
-pipeline and an example to the main text and label outputs \emph{derived
-cell-aligned targets}, not measured single-cell RNA. We audited 3,000 raw CellViT
-polygons per dataset (9,000 total) under 1-\(\mu\)m registration shifts and
-erosion/dilation:
+\textbf{A1 (Construction).}
+\begin{itemize}
+\item Appendix S2 shows the official Visium HD registration of native
+2-\(\mu\)m bins to H\&E.
+\item Intersecting same-frame cell polygons aggregate counts; unsupported cells
+are removed and conflicts resolved deterministically.
+\item We will move this pipeline and an example to the main text and label
+outputs \emph{derived cell-aligned targets}, not measured single-cell RNA.
+\end{itemize}
+
+\textbf{A2 (Validation).}\enspace We audited 3,000 raw CellViT polygons per
+dataset (9,000 total) under 1-\(\mu\)m registration shifts and erosion/dilation:
 
 \begin{center}
 \begingroup
@@ -296,19 +319,21 @@ Human pancreas & 50.0\% & 0.706--0.714 & 0.994 & 13.0\%--13.7\% \\
 \endgroup
 \end{center}
 
-Canonical-bin percentages use all raw polygons; unsupported polygons are
-excluded before release. Shifts preserve expression direction but alter
-membership/UMIs; erosion/dilation yields Jaccard 0.462--0.720, cosine
-0.871--0.993, and \(|\Delta\mathrm{UMI}|\) 32.8\%--66.6\%. We will release
-parameters and per-sample QC, avoid calling aggregation ground truth, and report
-native-Xenium evidence separately.
+\begin{itemize}
+\item Canonical-bin percentages use all raw polygons; unsupported polygons are
+excluded before release.
+\item Shifts preserve expression direction but alter membership/UMIs;
+erosion/dilation yields Jaccard 0.462--0.720, cosine 0.871--0.993, and
+\(|\Delta\mathrm{UMI}|\) 32.8\%--66.6\%.
+\item We will release parameters and per-sample QC, avoid calling aggregation
+ground truth, and report native-Xenium evidence separately.
+\end{itemize}
 
 \questionsep
-\textbf{7Gar-4.}\quad
-\revcomment{How are LMM-generated texts produced and validated?}
+\textbf{Q4.}\quad
+\textit{How are LMM-generated texts produced and validated?}
 
-\response
-GPT-4o verbalizes supplied fields without adding attributes. We regret omitting
+\textbf{A1 (Generation).}\enspace GPT-4o verbalizes supplied fields without adding attributes. We regret omitting
 the completed audit while shortening this section and will restore prompts,
 field checks, examples, and matrices:
 
@@ -329,8 +354,12 @@ CONCH & 29 & 0.040 & 0.0021 & \(19.1{\times}\) & 0.988 & 90.9\% / 100\% \\
 \endgroup
 \end{center}
 
-Both VLMs reach AUC \(\geq 0.988\) and 100\% Top-3 retrieval. These assess image
-relevance, while source-field checks assess factuality. Text remains optional
-context, not ground truth.
+\textbf{A2 (Validation and scope).}
+\begin{itemize}
+\item Both VLMs reach AUC \(\geq 0.988\) and 100\% Top-3 retrieval.
+\item These metrics assess image relevance, while source-field checks assess
+factuality.
+\item Text remains optional context, not ground truth.
+\end{itemize}
 
 \end{document}
