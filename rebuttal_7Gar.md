@@ -1,4 +1,4 @@
-We thank the reviewer for identifying where our framing ran ahead of the evidence. We will reorganize each experiment around its question, unit, input, target, metric, and conclusion, and narrow claims for derived targets. This resource has accompanied me since my first PhD year; near graduation, I hope its unified release helps new students enter spatial transcriptomics.
+We thank the reviewer for identifying where our framing ran ahead of the evidence. We will reorganize each experiment around its question, unit, input, target, metric, and conclusion, and narrow claims for derived targets. This resource has accompanied me since my first PhD year; near graduation, I hope its unified release helps new students who, like me then, are just entering spatial transcriptomics.
 
 **Q1.** *In-house data scale. Please quantify precisely how much new in-house data is contributed relative to HEST-1K and STimage-1K4M (samples, tissues, platforms, spots/cells), ideally as a comparison table. What fraction of the resource is genuinely new vs. aggregated?*
 
@@ -12,9 +12,7 @@ We thank the reviewer for identifying where our framing ran ahead of the evidenc
 | Other public data | 44 | 16 species--organ strata | Xenium; Visium HD | 16,996,704 |
 | **Total sMMC-28M** | **99 unique samples (100 records)** | **25 tissue strata + 3 cell-line origins** | **Xenium; Visium HD; DBiC-seq** | **28,315,247** |
 
-**A2.** The audit establishes two boundaries:
-
-- **New in-house data:** our collaborators provided the DBiC-seq data. Each released record is a native, individually resolved cell paired one-to-one with its transcriptomic profile, making this a high-quality source of cell-aligned supervision.
+- **New in-house data:** our collaborators provided the DBiC-seq data. Each released record is a native, individually resolved cell paired one-to-one with its transcriptomic profile. The data can be downloaded and previewed through our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75).
 - **Limited overlap:** only 32 examples overlap HEST-1K, all from its newly added Visium HD cohort; approximately 70% of our collection is not contained in HEST-1K.
 
 **Q2.** *Clear purpose and biological meaning of the per-axis experiments.*
