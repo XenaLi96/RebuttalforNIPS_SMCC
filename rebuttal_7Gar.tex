@@ -22,23 +22,20 @@ Submission 13175
 \end{center}
 
 \textbf{Opening response.}
-We thank the reviewer for identifying where our framing ran ahead of the
-evidence. We will reorganize each experiment around its question, unit, input,
-target, metric, and conclusion, and narrow claims for derived targets. This
-resource has accompanied me since my first PhD year; near graduation, I hope its
-unified release helps new students who, like me then, are just entering spatial
-transcriptomics.
+We thank the reviewer for identifying where our framing exceeded the evidence.
+We will clarify each experiment's question, unit, input, target, metric, and
+conclusion, and narrow claims for derived targets. This resource has grown with
+me since my first PhD year; nearing graduation, I hope its unified release helps
+students entering spatial transcriptomics, as I once did.
 
 \questionsep
 \textbf{Q1.}\quad
-\textit{In-house data scale. Please quantify precisely how much new in-house
-data is contributed relative to HEST-1K and STimage-1K4M (samples, tissues,
-platforms, spots/cells), ideally as a comparison table. What fraction of the
-resource is genuinely new vs.\ aggregated?}
+\textit{Precisely quantify new in-house data versus HEST-1K and STimage-1K4M by
+samples, tissues, platforms, cells, and new-versus-aggregated fraction.}
 
 \textbf{A1.}\enspace
-We agree and will distinguish primary acquisition from aggregation. We audited
-each sample against HEST-1K v1.1.0 and the 2025-02-12 STimage-1K4M snapshot.
+We agree. We audited every sample against HEST-1K v1.1.0 and the 2025-02-12
+STimage-1K4M snapshot.
 
 \begin{center}
 \begingroup
@@ -87,15 +84,12 @@ Xenium; Visium HD &
 \end{center}
 
 \begin{itemize}
-\item \textbf{New in-house data:} our collaborators provided the DBiC-seq data.
-Each released record is a native, individually resolved cell paired one-to-one
-with its transcriptomic profile. The data can be downloaded and previewed
-through our
-\href{https://anonymous.4open.science/r/sMMC-22M-DB75/README.md}{anonymous GitHub
-repository}.
-\item \textbf{Limited overlap:} only 32 examples overlap HEST-1K, all from its
-newly added Visium HD cohort; approximately 70\% of our collection is not
-contained in HEST-1K.
+\item \textbf{New in-house:} collaborators provided DBiC-seq native cells paired
+one-to-one with transcriptomic profiles, available for
+\href{https://anonymous.4open.science/r/sMMC-22M-DB75/README.md}{download and
+preview}.
+\item \textbf{Limited overlap:} only 32 samples overlap HEST-1K, all from its
+new Visium HD cohort; about 70\% are absent from HEST-1K.
 \end{itemize}
 
 
@@ -105,18 +99,15 @@ contained in HEST-1K.
 \textit{Clear purpose and biological meaning of the per-axis experiments.}
 
 \textbf{A1 (Scale).}\enspace
-We agree that the three axes lacked clear objectives and conclusions and will
-reorganize them as follows. This experiment is not intended as a benchmark; it
-tests the central scale claim of the resource: whether increasing the amount of
-training data improves model performance.
+We agree and will reorganize the three axes.
 \begin{itemize}
-\item \textbf{Objective:} determine whether a larger training set from our
-dataset benefits image-to-expression models.
-\item \textbf{Design/metric:} the original Fig.\ 2 varies the training fraction
-while fixing the targets, preprocessing, model head, and spatial test regions,
-and evaluates gene-macro Pearson across held-out cells. We further tested seven
-frozen encoders with training-selected top-50 HVGs, four buffered spatial
-holdouts, and 5\%/10\%/25\%/100\% training fractions.
+\item \textbf{Objective:} not a benchmark, but a test of whether more training
+data improve image-to-expression models.
+\item \textbf{Design/metric:} Fig.\ 2 varies training fraction while fixing
+targets, preprocessing, head, and spatial tests; the metric is held-out
+gene-macro Pearson. We further tested seven frozen encoders on
+training-selected top-50 HVGs, four buffered holdouts, and
+5\%/10\%/25\%/100\% fractions.
 \end{itemize}
 
 \begin{center}
@@ -141,28 +132,20 @@ H-Optimus-0 & 0.205 & 0.233 & 0.269 & 0.307 \\
 \end{center}
 
 \begin{itemize}
-\item \textbf{Result:} every encoder improves as the training scale increases;
-their mean Gene Pearson rises from 0.177 to 0.205, 0.241, and 0.278.
+\item \textbf{Result:} every encoder improves with scale; mean Gene Pearson
+rises 0.177\(\to\)0.205\(\to\)0.241\(\to\)0.278.
 \end{itemize}
 
 \textbf{A2 (Resolution---our central benchmark).}
 \begin{itemize}
-\item \textbf{Task and purpose:} this benchmark asks whether single-cell gene
-expression can be predicted directly from histology. The input is the histology
-image alone, and the output is the RNA-expression vector of the aligned cell.
-Such predictions can support cell-type or cell-state assignment and other
-cell-resolved downstream analyses.
-\item \textbf{Evaluation protocols:} we designed in-sample prediction,
-cross-sample/cross-patient prediction, and cross-platform prediction to separate
-increasingly difficult forms of generalization.
-\item \textbf{Definitions:} we first implemented cell-level baseline
-experiments and then proposed STBoost, a model-agnostic framework that adapts
-spot-level methods to cell-level prediction. To avoid ambiguity, every BLEEP
-result in our experiments uses BLEEP after this STBoost adaptation. STBoost-Ref
-is our further optimized reference method, which incorporates a diffusion loss
-and related components detailed in the Appendix. It produces comparatively
-strong results, but it also has limitations; we present it as a reference and
-hope future work will develop stronger methods using this dataset.
+\item \textbf{Task:} predict aligned-cell RNA expression from histology alone,
+supporting cell-type/state and other cell-resolved analyses.
+\item \textbf{Protocols:} in-sample, cross-sample/patient, and cross-platform
+prediction test increasingly difficult shifts.
+\item \textbf{Definitions:} STBoost adapts spot-level methods to cells; every
+reported BLEEP result uses this adaptation. STBoost-Ref further adds diffusion
+loss and Appendix components. Its strong but imperfect results provide a
+reference for future methods on this dataset.
 \end{itemize}
 
 \begin{center}
@@ -170,10 +153,10 @@ hope future work will develop stronger methods using this dataset.
 \footnotesize
 \setlength{\tabcolsep}{4.2pt}
 \renewcommand{\arraystretch}{1.04}
-\textit{\textbf{Result. Per-organ cell-aligned breadth benchmark.}
-Rows follow the 25-category release taxonomy. Results use top-50
-training-selected HVGs, four contiguous spatial holdouts, and a 5\%
-train--test buffer; the final row is the 30-sample native-Xenium macro.}\\[5pt]
+\textit{\textbf{Result. Per-organ cell-aligned breadth.}
+Rows use the 25-category taxonomy, top-50 training-selected HVGs, four spatial
+holdouts, and a 5\% buffer; the final row is the 30-sample native-Xenium
+macro.}\\[5pt]
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
 \toprule
 \multicolumn{1}{c}{} & \multicolumn{3}{c}{Gene Pearson}
@@ -218,12 +201,12 @@ Xenograft (human + mouse) & \textbf{0.387} & 0.041 & 0.049 & 0.362 & 0.526 & 0.5
 \bottomrule
 \end{tabular*}
 
-\parbox{0.98\linewidth}{\scriptsize\textit{Among category rows, bold names are
-mouse-only. Bold Gene-Pearson values mark the best of image, coordinate, and
-spatial KNN. Native-Xenium top-200 image Gene Pearson is 0.202; the top-50 95\%
-CI is 0.277--0.368.}}
+\parbox{0.98\linewidth}{\scriptsize\textit{Bold names are mouse-only; bold Gene
+P is best among image, coordinate, and KNN. Native-Xenium image Gene P is 0.202
+(top-200); top-50 95\% CI is 0.277--0.368.}}
 \endgroup
 \end{center}
+\par\smallskip
 
 \textbf{A3 (Rich context).}
 \begin{itemize}
