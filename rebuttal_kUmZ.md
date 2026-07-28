@@ -92,9 +92,8 @@ Expression direction is stable among supported polygons, while bin membership/UM
 
 **A.** We thank the reviewer for this suggestion.
 
-- Across six native-Xenium samples, fixed-pipeline cell/8/16/55-µm targets gave Gene Pearson values of 0.365, 0.365, 0.363, and 0.330; averaging can retain a similar global score.
-- In two representative samples, 55-µm pseudo-spots mixed cell types in 55.5–66.4% of regions and affected 73.8–81.0% of cells in dense tissue, versus 3.5–4.1% and 7.0–8.3% in sparse tissue.
-- Cell alignment reveals hidden heterogeneity and supports cell–cell communication, virtual-cell perturbation prediction, and tracing perturbation effects across spatial tissue.
+- Across six native-Xenium samples, fixed-pipeline cell/8/16/55-µm targets gave Gene Pearson values of 0.365, 0.365, 0.363, and 0.330. Yet, in two representative samples, 55-µm pseudo-spots mixed cell types in 55.5–66.4% of regions and affected 73.8–81.0% of cells in dense tissue, versus 3.5–4.1% and 7.0–8.3% in sparse tissue.
+- Thus, even when global correlation changes little, cell alignment preserves cell identity and local heterogeneity needed for cell–cell communication; links morphology, RNA, and perturbation response at the cell unit for virtual-cell models; and permits tracing perturbation effects through interacting cells across spatial tissue. These analyses are ill-posed when heterogeneous cells are collapsed into one spot.
 
 **Q5 (P4, P8, P9, L4).** *What do the context analysis and available metadata support?*
 
@@ -104,13 +103,9 @@ Expression direction is stable among supported polygons, while bin membership/UM
 
 | Domain | Task / encoder | Context; split | Avg. BA | Worst BA | Gap |
 |---|---|---|---:|---:|---:|
-| Single-cell | Bone marrow / Geneformer | assay; patient-CV | 0.938 | 0.669 | 0.327 |
-| Single-cell | Bone marrow / scGPT | assay; patient-CV | 0.962 | 0.740 | 0.258 |
-| Single-cell | Bone marrow / scVI-style | assay; patient-CV | 0.932 | 0.616 | 0.373 |
+| Single-cell | Bone marrow / 3 encoders | assay; patient-CV | 0.932–0.962 | 0.616–0.740 | 0.258–0.373 |
 | Single-cell | Ten tissues / scGPT | dataset; patient-CV | 0.667–0.962 | 0.004–0.892 | max 0.975 |
-| Pathology | LUAD KRAS / CONCH | site; leave-one-site | 0.499 | 0.375 | 0.542 |
-| Pathology | LGG IDH / UNI | site; leave-one-site | 0.682 | 0.464 | 0.471 |
-| Pathology | LGG IDH / H-Optimus-0 | site; leave-one-site | 0.747 | 0.476 | 0.524 |
+| Pathology | LUAD/LGG / 3 encoders | site; leave-one-site | 0.499–0.747 | 0.375–0.476 | 0.471–0.542 |
 
 Context materially changes performance; structured metadata make this measurable.
 
