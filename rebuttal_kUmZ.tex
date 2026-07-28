@@ -70,18 +70,44 @@ Xenium/DBiC-seq ``native cell-resolved,'' HD ``derived cell-aligned,'' and retit
 \emph{sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics}.
 \end{itemize}
 
-\textbf{A2 (Native-cell validation).}\enspace
-We reran the benchmark on native Xenium only (Table~1); Table~2 separately
-reports Visium HD transfer so that native and derived evidence are not
-conflated.
+\textbf{A2 (Derived HD construction and audit).}
+\begin{itemize}
+\item For HD, official transforms register native 2-\(\mu\)m bins to
+H\&E-aligned CellViT contours; intersecting bins are aggregated, conflicts go
+to the nearest centroid, and unsupported polygons are excluded. These are
+\emph{derived cell-aligned targets}, not native single-cell measurements.
+\item We audited 3,000 raw polygons per dataset (9,000 total) under
+\(\pm1\)-\(\mu\)m registration shifts:
+\end{itemize}
+
+\begin{center}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabularx}{\linewidth}{@{}Xrrrr@{}}
+\toprule
+Visium HD example & Raw polygons with canonical bins & Shift-bin Jaccard &
+Shift-expression cosine & Shift median \(|\Delta\mathrm{UMI}|\) \\
+\midrule
+Human lung cancer & 49.4\% & 0.727--0.733 & 0.954--0.957 & 11.1\%--11.3\% \\
+Mouse brain & 97.5\% & 0.806--0.816 & 0.936--0.939 & 6.0\%--6.1\% \\
+Human pancreas & 50.0\% & 0.706--0.714 & 0.994 & 13.0\%--13.7\% \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{center}
+
+Among supported polygons, expression direction is stable, while bin membership
+and UMI counts remain boundary sensitive. We will move the construction rule,
+audit, and QC into the main body.
 
 \newpage
 \questionsep
 \textbf{Q2 (P3, Q1).}\quad
 \textit{Are all 25 release categories evaluated?}
 
-\textbf{A1 (25-organ results).}\enspace
-Table~1 uses one fixed protocol across all categories.
+\textbf{A1 (25-category results).}\enspace
+Yes. Table~1 reports all 25 release categories under one fixed protocol.
 
 \begin{center}
 \begingroup
@@ -206,45 +232,10 @@ main body.
 \end{itemize}
 
 \questionsep
-\textbf{Q4 (Q4, Q3, L3).}\quad
-\textit{How are cells aligned, and what does cell alignment add beyond
-spot-centered prediction?}
+\textbf{Q4 (Q3, L3).}\quad
+\textit{What does cell alignment add beyond spot-centered prediction?}
 
-\textbf{A1 (Cell alignment).}
-\begin{itemize}
-\item Xenium uses native cell boundaries and transcript coordinates. For HD,
-official transforms register native 2-\(\mu\)m bins to H\&E-aligned CellViT
-contours; intersecting bins are aggregated, conflicts go to the nearest
-centroid, and unsupported polygons are excluded. We will describe these
-outputs as \emph{derived cell-aligned targets}.
-\end{itemize}
-
-\textbf{A2 (Alignment audit).}\enspace We audited 3,000 raw polygons per
-dataset (9,000 total) under \(\pm1\)-\(\mu\)m registration shifts:
-
-\begin{center}
-\begingroup
-\scriptsize
-\setlength{\tabcolsep}{2pt}
-\begin{tabularx}{\linewidth}{@{}Xrrrr@{}}
-\toprule
-Visium HD example & Raw polygons with canonical bins & Shift-bin Jaccard &
-Shift-expression cosine & Shift median \(|\Delta\mathrm{UMI}|\) \\
-\midrule
-Human lung cancer & 49.4\% & 0.727--0.733 & 0.954--0.957 & 11.1\%--11.3\% \\
-Mouse brain & 97.5\% & 0.806--0.816 & 0.936--0.939 & 6.0\%--6.1\% \\
-Human pancreas & 50.0\% & 0.706--0.714 & 0.994 & 13.0\%--13.7\% \\
-\bottomrule
-\end{tabularx}
-\endgroup
-\end{center}
-
-Among supported polygons, expression direction is stable but bin
-membership/UMIs remain boundary sensitive. We will move the construction rule,
-audit, and QC into the main body.
-
-\textbf{A3 (Beyond spot-centered prediction).}\enspace We thank the reviewer
-for this important suggestion.
+\textbf{A.}\enspace We thank the reviewer for this important suggestion.
 \begin{itemize}
 \item Across six native-Xenium samples, we held the pipeline fixed and changed
 only target scale (cell/8/16/55 \(\mu\)m): Gene Pearson was

@@ -13,11 +13,22 @@ We thank the reviewer for focusing on target provenance, experimental breadth, a
 - Xenium and DBiC-seq are native cell-resolved; only HD aggregates native 2-µm bins to segmented cells using 10x Genomics’ [documented mapping](https://www.10xgenomics.com/support/software/space-ranger/latest/analysis/segmented-outputs). The in-house DBiC-seq data are available for [download](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md).
 - We will not describe the entire resource as directly measured single-cell data or use unqualified “single-cell predictor” claims. We will call Xenium/DBiC-seq “native cell-resolved,” HD “derived cell-aligned,” and retitle the work *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
 
-**A2 — Native-cell validation.** We reran the benchmark on native Xenium only (Table 1); Table 2 separately reports Visium HD transfer so that native and derived evidence are not conflated.
+**A2 — Derived HD construction and audit.**
+
+- For HD, official transforms register native 2-µm bins to H&E-aligned CellViT contours; intersecting bins are aggregated, conflicts go to the nearest centroid, and unsupported polygons are excluded. These are *derived cell-aligned targets*, not native single-cell measurements.
+- We audited 3,000 raw polygons per dataset (9,000 total) under ±1-µm registration shifts:
+
+| Visium HD example | Raw polygons with canonical bins | Shift-bin Jaccard | Shift-expression cosine | Shift median $|\Delta\mathrm{UMI}|$ |
+|---|---:|---:|---:|---:|
+| Human lung cancer | 49.4% | 0.727–0.733 | 0.954–0.957 | 11.1%–11.3% |
+| Mouse brain | 97.5% | 0.806–0.816 | 0.936–0.939 | 6.0%–6.1% |
+| Human pancreas | 50.0% | 0.706–0.714 | 0.994 | 13.0%–13.7% |
+
+Among supported polygons, expression direction is stable, while bin membership and UMI counts remain boundary sensitive. We will move the construction rule, audit, and QC into the main body.
 
 **Q2 (P3, Q1).** *Are all 25 release categories evaluated?*
 
-**A1 — 25-organ results.** Table 1 uses one fixed protocol across all categories.
+**A1 — 25-category results.** Yes. Table 1 reports all 25 release categories under one fixed protocol.
 
 **Table 1. Per-organ benchmark results.** Results use the top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer.
 
@@ -78,23 +89,9 @@ We thank the reviewer for focusing on target provenance, experimental breadth, a
 - **STBoost:** this framework lifts existing spot-level image-to-expression methods to cell-level prediction by replacing their spot interface with hierarchical cell/context images and cell-resolved targets while retaining their prediction modules. Every BLEEP comparison in our tables is therefore STBoosted BLEEP; STBoost-Ref is our image-only reference predictor.
 - Because this is a dataset paper, we originally placed the detailed STBoost formulation, equations, and architecture figure in the Appendix. We will define STBoost and BLEEP at first mention, remove the ambiguous label “Ours,” and move a concise architecture and formulation description into the main body.
 
-**Q4 (Q4, Q3, L3).** *How are cells aligned, and what does cell alignment add beyond spot-centered prediction?*
+**Q4 (Q3, L3).** *What does cell alignment add beyond spot-centered prediction?*
 
-**A1 — Cell alignment.**
-
-- Xenium uses native cell boundaries and transcript coordinates. For HD, official transforms register native 2-µm bins to H&E-aligned CellViT contours; intersecting bins are aggregated, conflicts go to the nearest centroid, and unsupported polygons are excluded. We will describe these outputs as *derived cell-aligned targets*.
-
-**A2 — Alignment audit.** We audited 3,000 raw polygons per dataset (9,000 total) under ±1-µm registration shifts:
-
-| Visium HD example | Raw polygons with canonical bins | Shift-bin Jaccard | Shift-expression cosine | Shift median $|\Delta\mathrm{UMI}|$ |
-|---|---:|---:|---:|---:|
-| Human lung cancer | 49.4% | 0.727–0.733 | 0.954–0.957 | 11.1%–11.3% |
-| Mouse brain | 97.5% | 0.806–0.816 | 0.936–0.939 | 6.0%–6.1% |
-| Human pancreas | 50.0% | 0.706–0.714 | 0.994 | 13.0%–13.7% |
-
-Among supported polygons, expression direction is stable but bin membership/UMIs remain boundary sensitive. We will move the construction rule, audit, and QC into the main body.
-
-**A3 — Beyond spot-centered prediction.** We thank the reviewer for this important suggestion.
+**A.** We thank the reviewer for this important suggestion.
 
 - Across six native-Xenium samples, we held the pipeline fixed and changed only target scale (cell/8/16/55 µm): Gene Pearson was 0.365/0.365/0.363/0.330, showing averaging can retain a similar global score.
 - In two representative samples, 55-µm pseudo-spots mixed cell types in 55.5–66.4% of regions and affected 73.8–81.0% of cells in dense tissue, versus 3.5–4.1% and 7.0–8.3% in sparse tissue.
