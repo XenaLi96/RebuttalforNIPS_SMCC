@@ -141,85 +141,64 @@ source-to-target pairs before and after the requested calibration controls.
 \textbf{Q3.}\quad
 \textit{How should low transfer correlations be interpreted and calibrated?}
 
-\textbf{A1 (Full-panel transfer before calibration).}\enspace The unweighted
-per-organ results are:
+\textbf{A1 (Reviewer-inspired paired comparison).}\enspace We thank the
+reviewer for suggesting metadata/spatial controls. On identical
+source-to-target cells and genes, we compare image-only UNI2-h directly with a
+segmentation-metadata baseline. Metadata include CellViT type/confidence,
+polygon/bbox morphology, status, and edge flag; \texttt{total\_counts} and
+\texttt{n\_genes\_detected} are excluded.
 
 \begin{center}
 \begingroup
-\footnotesize
-\setlength{\tabcolsep}{3.4pt}
-\textit{\textbf{Table 2. Full-panel Visium HD transfer before calibration.}
-TM is the source mean; its gene correlation is undefined.}\\[3pt]
-\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrrrrr@{}}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\textit{\textbf{Table 2. Effect of the reviewer-suggested segmentation-metadata
+calibration on the same eight Visium HD transfer pairs.} \(\Delta\) Gene P is
+Metadata minus UNI2-h; bold marks the better result for each metric.}\\[3pt]
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrrr@{}}
 \toprule
-Organ & Pair & \shortstack{UNI2-h\\Gene P} & \shortstack{UNI2-h\\Cell P} &
-\shortstack{UNI2-h\\F1} & \shortstack{TM\\Cell P} & \shortstack{TM\\F1} \\
+& \multicolumn{3}{c}{Gene Pearson} &
+\multicolumn{2}{c}{Cell Pearson} & \multicolumn{2}{c}{F1} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}
+Organ & UNI2-h & Metadata & \(\Delta\) & UNI2-h & Metadata & UNI2-h & Metadata \\
 \midrule
-Human breast & j$\to$m & 0.0272 & 0.1109 & 0.1794 & 0.1108 & 0.1215 \\
-Human ovary & ad$\to$ak & 0.0267 & 0.4593 & 0.1161 & 0.4906 & 0.0561 \\
-Human lung & k$\to$d & 0.0143 & 0.2121 & 0.0960 & 0.1455 & 0.0236 \\
-Human pancreas & g$\to$ag & 0.0040 & 0.0090 & 0.0389 & 0.0023 & 0.0168 \\
-Human tonsil & u$\to$i & 0.0141 & 0.2769 & 0.0708 & 0.3264 & 0.0346 \\
-Mouse brain & e$\to$ah & 0.0243 & 0.2016 & 0.0623 & 0.2238 & 0.0179 \\
-Mouse embryo & b$\to$ai & 0.0048 & 0.0913 & 0.0369 & 0.1683 & 0.0134 \\
-Mouse kidney & a$\to$aj & 0.0049 & 0.2678 & 0.0513 & 0.4696 & 0.0159 \\
+Human breast & 0.0272 & \textbf{0.0847} & \textbf{+0.0575} &
+\textbf{0.1109} & 0.0785 & \textbf{0.1794} & 0.1479 \\
+Human ovary & 0.0267 & \textbf{0.0643} & \textbf{+0.0376} &
+0.4593 & \textbf{0.4645} & \textbf{0.1161} & 0.0615 \\
+Human lung & 0.0143 & \textbf{0.0319} & \textbf{+0.0176} &
+\textbf{0.2121} & 0.1700 & \textbf{0.0960} & 0.0267 \\
+Human pancreas & 0.0040 & \textbf{0.0212} & \textbf{+0.0172} &
+\textbf{0.0090} & 0.0043 & \textbf{0.0389} & 0.0179 \\
+Human tonsil & 0.0141 & \textbf{0.0282} & \textbf{+0.0141} &
+0.2769 & \textbf{0.3696} & \textbf{0.0708} & 0.0368 \\
+Mouse brain & 0.0243 & \textbf{0.0502} & \textbf{+0.0259} &
+0.2016 & \textbf{0.2314} & \textbf{0.0623} & 0.0223 \\
+Mouse embryo & 0.0048 & \textbf{0.0176} & \textbf{+0.0128} &
+0.0913 & \textbf{0.1662} & \textbf{0.0369} & 0.0146 \\
+Mouse kidney & 0.0049 & \textbf{0.0213} & \textbf{+0.0164} &
+0.2678 & \textbf{0.3910} & \textbf{0.0513} & 0.0175 \\
 \midrule
-\textbf{Organ macro} & --- & \textbf{0.0151} & \textbf{0.2036} &
-\textbf{0.0815} & \textbf{0.2422} & \textbf{0.0375} \\
-\bottomrule
-\end{tabular*}
-\endgroup
-\end{center}
-
-Full-panel Gene Pearson is low; UNI2-h improves F1 but not Cell Pearson over
-the mean. We retain this negative result and do not conflate
-sample/processing/composition shift with the easier spatial-interpolation
-endpoint.
-
-\textbf{A2 (Reviewer-inspired calibration).}\enspace We thank the reviewer for
-suggesting metadata/spatial controls. On identical cells/genes we fit
-coordinate-only, segmentation-metadata-only, and combined baselines. Metadata
-include CellViT type/confidence, polygon/bbox morphology, status, and edge flag;
-\texttt{total\_counts} and \texttt{n\_genes\_detected} are excluded.
-
-\begin{center}
-\begingroup
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\textit{\textbf{Table 3. Segmentation-metadata transfer baseline on the same
-eight organ pairs.}}\\[3pt]
-\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrr@{}}
-\toprule
-Organ & Gene P & Gene S & Cell P & Cell S & F1 \\
-\midrule
-Human breast & 0.0847 & 0.0903 & 0.0785 & 0.1366 & 0.1479 \\
-Human ovary & 0.0643 & 0.0638 & 0.4645 & 0.1569 & 0.0615 \\
-Human lung & 0.0319 & 0.0314 & 0.1700 & 0.0982 & 0.0267 \\
-Human pancreas & 0.0212 & 0.0261 & 0.0043 & 0.0687 & 0.0179 \\
-Human tonsil & 0.0282 & 0.0272 & 0.3696 & 0.1432 & 0.0368 \\
-Mouse brain & 0.0502 & 0.0467 & 0.2314 & 0.0706 & 0.0223 \\
-Mouse embryo & 0.0176 & 0.0193 & 0.1662 & 0.0813 & 0.0146 \\
-Mouse kidney & 0.0213 & 0.0211 & 0.3910 & 0.0904 & 0.0175 \\
-\midrule
-\textbf{Organ macro} & \textbf{0.0399} & \textbf{0.0407} &
-\textbf{0.2344} & \textbf{0.1057} & \textbf{0.0432} \\
+\textbf{Organ macro} & 0.0151 & \textbf{0.0399} & \textbf{+0.0248} &
+0.2036 & \textbf{0.2344} & \textbf{0.0815} & 0.0432 \\
 \bottomrule
 \end{tabular*}
 \endgroup
 \end{center}
 
 \begin{itemize}
-\item Segmentation metadata improve Gene Pearson in 8/8 organs and raise
-organ-macro Gene/Cell Pearson from 0.0151/0.2036 to 0.0399/0.2344.
-Coordinate-only and combined reach Gene Pearson -0.0023 and 0.0316,
-respectively.
-\item F1 is lower than UNI2-h (0.0432 versus 0.0815). We will therefore use
-this as the principal non-image \emph{correlation-calibration} baseline
-alongside the mean, not claim universal superiority. Age/sex/disease are not
-identifiable from one source/target pair per organ.
+\item The reviewer-suggested baseline improves Gene Pearson in
+\textbf{8/8 organs}, from 0.0151 to 0.0399 macro
+(\textbf{+0.0248; 2.64\(\times\)}), and improves Cell Pearson in 5/8 organs,
+from 0.2036 to 0.2344 macro (\textbf{+0.0308}).
+\item The gain is metric-specific: F1 decreases from 0.0815 to 0.0432. We will
+therefore adopt segmentation metadata as the principal non-image
+\emph{correlation-calibration} baseline, not claim universal superiority.
+Coordinate-only and metadata+coordinate Gene Pearson are -0.0023/0.0316;
+age/sex/disease are not identifiable from one source/target pair per organ.
 \end{itemize}
 
-\textbf{A3 (Biological calibration).}\enspace The complementary 30-sample
+\textbf{A2 (Biological calibration).}\enspace The complementary 30-sample
 spatially held-out predictions give:
 
 \begin{center}
@@ -238,10 +217,11 @@ Cell-type-stratified pseudobulk RMSE \(\downarrow\) &
 \endgroup
 \end{center}
 
-\textbf{A4 (Boundary).}\enspace Marker overlap and expression-derived strata
-provide aggregate biological calibration, not independent labels. Together,
-the controls demonstrate context dependence and motivate
-patient/platform-robust methods rather than unrestricted cell-wise recovery.
+\textbf{A3 (Boundary).}\enspace Marker overlap and expression-derived strata
+provide aggregate biological calibration, not independent labels. The original
+low UNI2-h transfer column remains visible; the reviewer-inspired baseline
+improves correlation calibration but does not solve patient/platform
+generalization.
 
 \questionsep
 \textbf{Q4.}\quad

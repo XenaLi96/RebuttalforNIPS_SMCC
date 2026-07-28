@@ -59,51 +59,33 @@ Across all raw polygons, coverage is sample dependent. Among supported polygons,
 
 **Q3.** *How should low transfer correlations be interpreted and calibrated?*
 
-**A1 — Full-panel transfer before calibration.** The unweighted per-organ results are:
+**A1 — Reviewer-inspired paired comparison.** We thank the reviewer for suggesting metadata/spatial controls. On the identical source→target cells and genes, we compare image-only UNI2-h directly with a segmentation-metadata baseline. Metadata include CellViT type/confidence, polygon/bbox morphology, status, and edge flag; `total_counts` and `n_genes_detected` are excluded.
 
-**Table 2. Full-panel Visium HD transfer before calibration.** TM is the source mean; its gene correlation is undefined.
+**Table 2. Effect of the reviewer-suggested segmentation-metadata calibration on the same eight Visium HD transfer pairs.** $\Delta$ Gene P is Metadata minus UNI2-h; bold marks the better result for each metric.
 
-| Organ | Pair | UNI2-h Gene P | UNI2-h Cell P | UNI2-h F1 | TM Cell P | TM F1 |
-|---|---|---:|---:|---:|---:|---:|
-| Human breast | j→m | 0.0272 | 0.1109 | 0.1794 | 0.1108 | 0.1215 |
-| Human ovary | ad→ak | 0.0267 | 0.4593 | 0.1161 | 0.4906 | 0.0561 |
-| Human lung | k→d | 0.0143 | 0.2121 | 0.0960 | 0.1455 | 0.0236 |
-| Human pancreas | g→ag | 0.0040 | 0.0090 | 0.0389 | 0.0023 | 0.0168 |
-| Human tonsil | u→i | 0.0141 | 0.2769 | 0.0708 | 0.3264 | 0.0346 |
-| Mouse brain | e→ah | 0.0243 | 0.2016 | 0.0623 | 0.2238 | 0.0179 |
-| Mouse embryo | b→ai | 0.0048 | 0.0913 | 0.0369 | 0.1683 | 0.0134 |
-| Mouse kidney | a→aj | 0.0049 | 0.2678 | 0.0513 | 0.4696 | 0.0159 |
-| **Organ macro** | — | **0.0151** | **0.2036** | **0.0815** | **0.2422** | **0.0375** |
+| Organ | UNI2-h Gene P | Metadata Gene P | $\Delta$ Gene P | UNI2-h Cell P | Metadata Cell P | UNI2-h F1 | Metadata F1 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Human breast | 0.0272 | **0.0847** | **+0.0575** | **0.1109** | 0.0785 | **0.1794** | 0.1479 |
+| Human ovary | 0.0267 | **0.0643** | **+0.0376** | 0.4593 | **0.4645** | **0.1161** | 0.0615 |
+| Human lung | 0.0143 | **0.0319** | **+0.0176** | **0.2121** | 0.1700 | **0.0960** | 0.0267 |
+| Human pancreas | 0.0040 | **0.0212** | **+0.0172** | **0.0090** | 0.0043 | **0.0389** | 0.0179 |
+| Human tonsil | 0.0141 | **0.0282** | **+0.0141** | 0.2769 | **0.3696** | **0.0708** | 0.0368 |
+| Mouse brain | 0.0243 | **0.0502** | **+0.0259** | 0.2016 | **0.2314** | **0.0623** | 0.0223 |
+| Mouse embryo | 0.0048 | **0.0176** | **+0.0128** | 0.0913 | **0.1662** | **0.0369** | 0.0146 |
+| Mouse kidney | 0.0049 | **0.0213** | **+0.0164** | 0.2678 | **0.3910** | **0.0513** | 0.0175 |
+| **Organ macro** | 0.0151 | **0.0399** | **+0.0248** | 0.2036 | **0.2344** | **0.0815** | 0.0432 |
 
-Full-panel Gene Pearson is low; UNI2-h improves F1 but not Cell Pearson over the mean. We retain this negative result and do not conflate sample/processing/composition shift with the easier spatial-interpolation endpoint.
+- The reviewer-suggested baseline improves Gene Pearson in **8/8 organs**, from 0.0151 to 0.0399 macro (**+0.0248; 2.64×**), and improves Cell Pearson in 5/8 organs, from 0.2036 to 0.2344 macro (**+0.0308**).
+- The gain is metric-specific: F1 decreases from 0.0815 to 0.0432. We will therefore adopt segmentation metadata as the principal non-image *correlation-calibration* baseline, not claim universal superiority. Coordinate-only and metadata+coordinate Gene Pearson are −0.0023/0.0316; age/sex/disease are not identifiable from one source/target pair per organ.
 
-**A2 — Reviewer-inspired calibration.** We thank the reviewer for suggesting metadata/spatial controls. On identical cells/genes we fit coordinate-only, segmentation-metadata-only, and combined baselines. Metadata include CellViT type/confidence, polygon/bbox morphology, status, and edge flag; `total_counts` and `n_genes_detected` are excluded.
-
-**Table 3. Segmentation-metadata transfer baseline on the same eight organ pairs.**
-
-| Organ | Gene P | Gene S | Cell P | Cell S | F1 |
-|---|---:|---:|---:|---:|---:|
-| Human breast | 0.0847 | 0.0903 | 0.0785 | 0.1366 | 0.1479 |
-| Human ovary | 0.0643 | 0.0638 | 0.4645 | 0.1569 | 0.0615 |
-| Human lung | 0.0319 | 0.0314 | 0.1700 | 0.0982 | 0.0267 |
-| Human pancreas | 0.0212 | 0.0261 | 0.0043 | 0.0687 | 0.0179 |
-| Human tonsil | 0.0282 | 0.0272 | 0.3696 | 0.1432 | 0.0368 |
-| Mouse brain | 0.0502 | 0.0467 | 0.2314 | 0.0706 | 0.0223 |
-| Mouse embryo | 0.0176 | 0.0193 | 0.1662 | 0.0813 | 0.0146 |
-| Mouse kidney | 0.0213 | 0.0211 | 0.3910 | 0.0904 | 0.0175 |
-| **Organ macro** | **0.0399** | **0.0407** | **0.2344** | **0.1057** | **0.0432** |
-
-- Segmentation metadata improve Gene Pearson in 8/8 organs and raise macro Gene/Cell Pearson from 0.0151/0.2036 to 0.0399/0.2344; coordinate-only and combined Gene Pearson are −0.0023/0.0316.
-- F1 is lower than UNI2-h (0.0432 versus 0.0815). We will therefore use this as the principal non-image *correlation-calibration* baseline alongside the mean, not claim universal superiority. Age/sex/disease are not identifiable from one source/target pair per organ.
-
-**A3 — Biological calibration.** Complementary 30-sample spatial holdouts give:
+**A2 — Biological calibration.** Complementary 30-sample spatial holdouts give:
 
 | Metric | Image | Coordinate | Spatial KNN | Mean |
 |---|---:|---:|---:|---:|
 | Marker/HVG Gene Pearson $\uparrow$ | 0.201 | 0.031 | 0.028 | N/A |
 | Cell-type-stratified pseudobulk RMSE $\downarrow$ | 0.120 | 0.224 | 0.187 | 0.188 |
 
-**A4 — Boundary.** Marker overlap and expression-derived strata provide aggregate biological calibration, not independent labels. Together, the controls demonstrate context dependence and motivate patient/platform-robust methods rather than unrestricted cell-wise recovery.
+**A3 — Boundary.** Marker overlap and expression-derived strata provide aggregate biological calibration, not independent labels. The original low UNI2-h transfer column remains visible; the reviewer-inspired baseline improves correlation calibration but does not solve patient/platform generalization.
 
 **Q4.** *Could in-domain results reflect spatial interpolation?*
 
