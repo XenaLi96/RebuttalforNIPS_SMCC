@@ -93,7 +93,6 @@ Across all raw polygons, coverage is sample dependent. Among supported polygons,
 
 - The original in-domain split trains on the left two-thirds and tests on the right one-third of a section; a 5% buffer removes boundary cells. Train/test cells are therefore neither interleaved nor directly neighboring. The 30-sample benchmark uses four analogous contiguous holdouts.
 - Under identical splits, image macro Gene Pearson is 0.324 versus 0.046 for coordinate-only regression and 0.053 for spatial KNN, and image is strongest in 28/30 samples. Local interpolation alone therefore cannot explain the performance.
-- Because both partitions remain from the same sample, we will call this *within-sample spatially held-out prediction*, not cross-sample/patient generalization. Complete-sample transfer is reported separately and remains substantially harder.
 
 **Q5.** *Is the ovarian context analysis too narrow?*
 

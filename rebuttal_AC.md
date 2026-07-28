@@ -32,7 +32,7 @@ Following the reviewers’ suggestion, we added leakage-controlled coordinate, s
 
 **5. We will revise the framing and reporting.**
 
-- Within-sample experiments use spatially separated block splits (left two-thirds train, right one-third test, with a 5% boundary buffer) and will be called *within-sample spatially held-out predictions*; “patient-held-out” requires verified donors.
+- Within-sample experiments use spatially separated block splits: left two-thirds for training, right one-third for testing, with a 5% boundary buffer.
 - Ovarian results become an *age-associated, sample-confounded shift*, not a causal age effect. Context audits report Average/Worst/Gap, donor support, and missingness.
 - Direct, processed, and generated fields are separated; captions are optional context, never molecular ground truth.
 - STBoost, splits, cell units, HD construction, and Figure 1 will be clarified. Code, fixed splits, audits, and in-house data are in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md).
