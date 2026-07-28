@@ -1,4 +1,4 @@
-We thank the reviewer for identifying places where the manuscript did not sufficiently distinguish primary measurements, derived cell-aligned targets, and generated auxiliary fields, or explain the objective of each experiment. We provide the requested quantitative audit, expanded results, and validation below, and will revise the claims accordingly.
+We thank the reviewer for identifying places where the manuscript did not sufficiently distinguish primary measurements, derived cell-aligned targets, and generated auxiliary fields, or explain the objective of each experiment. We provide the requested quantitative audit, expanded results, and validation below. We will revise the manuscript point by point following the reviewer’s suggestions, and hope the reviewer will reconsider the paper after seeing these changes.
 
 **Q1.** *Precisely quantify new in-house data versus HEST-1K and STimage-1K4M by samples, tissues, platforms, cells, and new-versus-aggregated fraction.*
 
