@@ -157,29 +157,10 @@ configurations, and evaluation scripts are now available in our
 repository}.
 \end{itemize}
 
-\textbf{A3 (Visium HD transfer).}\enspace Eight
-source-sample-to-target-sample organ pairs give:
-
-\begin{center}
-\begingroup
-\small
-\begin{tabular}{lrrr}
-\toprule
-Eight-organ macro result & Gene P & Cell P & F1 \\
-\midrule
-UNI2-h & 0.0151 & 0.2036 & 0.0815 \\
-Training mean & N/A & 0.2422 & 0.0375 \\
-\bottomrule
-\end{tabular}
-\endgroup
-\end{center}
-
-\begin{itemize}
-\item UNI2-h improves F1 but not Cell Pearson over the mean baseline; this
-transfer failure is intentionally not hidden.
-\item We will report organ-macro and per-organ values, separate Xenium from
-Visium HD, and avoid cell-weighted pooled claims.
-\end{itemize}
+\textbf{A3 (Visium HD transfer).}\enspace We additionally evaluated eight
+complete source-sample-to-target-sample organ pairs. Because these full-panel
+transfer results are central to the reviewer's calibration question, we report
+them in Q3 rather than only giving a favorable aggregate.
 
 \questionsep
 \textbf{Q3.}\quad
@@ -187,18 +168,94 @@ Visium HD, and avoid cell-weighted pooled claims.
 should they be interpreted biologically, and could marker/cell-type genes or
 spatial-only/metadata-only baselines calibrate them?}
 
-\textbf{A1 (Interpretation).}
+\textbf{A1 (Full-panel transfer before calibration).}\enspace The unweighted
+per-organ results are:
+
+\begin{center}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3.4pt}
+\textit{\textbf{Table 2. Eight-organ full-panel Visium HD transfer before
+metadata calibration.} TM denotes the source training mean; its gene-wise
+correlation is undefined.}\\[3pt]
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrrrrr@{}}
+\toprule
+Organ & Pair & \shortstack{UNI2-h\\Gene P} & \shortstack{UNI2-h\\Cell P} &
+\shortstack{UNI2-h\\F1} & \shortstack{TM\\Cell P} & \shortstack{TM\\F1} \\
+\midrule
+Human breast & j$\to$m & 0.0272 & 0.1109 & 0.1794 & 0.1108 & 0.1215 \\
+Human ovary & ad$\to$ak & 0.0267 & 0.4593 & 0.1161 & 0.4906 & 0.0561 \\
+Human lung & k$\to$d & 0.0143 & 0.2121 & 0.0960 & 0.1455 & 0.0236 \\
+Human pancreas & g$\to$ag & 0.0040 & 0.0090 & 0.0389 & 0.0023 & 0.0168 \\
+Human tonsil & u$\to$i & 0.0141 & 0.2769 & 0.0708 & 0.3264 & 0.0346 \\
+Mouse brain & e$\to$ah & 0.0243 & 0.2016 & 0.0623 & 0.2238 & 0.0179 \\
+Mouse embryo & b$\to$ai & 0.0048 & 0.0913 & 0.0369 & 0.1683 & 0.0134 \\
+Mouse kidney & a$\to$aj & 0.0049 & 0.2678 & 0.0513 & 0.4696 & 0.0159 \\
+\midrule
+\textbf{Organ macro} & --- & \textbf{0.0151} & \textbf{0.2036} &
+\textbf{0.0815} & \textbf{0.2422} & \textbf{0.0375} \\
+\bottomrule
+\end{tabular*}
+\endgroup
+\end{center}
+
 \begin{itemize}
-\item Low full-panel correlations show that histology is not a replacement for
-molecular measurement.
-\item They combine sparse or weakly morphology-linked genes with sample,
-composition, and acquisition shifts.
-\item A restricted training-selected HVG endpoint is easier and must not be
-conflated with all-gene transfer.
+\item Full-panel Gene Pearson is low, and UNI2-h improves F1 but not Cell
+Pearson over the mean. We intentionally retain this negative transfer result.
+\item It measures sample, processing, composition, and acquisition shift; it
+must not be conflated with the easier training-selected-HVG spatial
+interpolation result.
 \end{itemize}
 
-\textbf{A2 (Biological calibration).}\enspace The 30-sample spatially held-out
-predictions give:
+\textbf{A2 (Reviewer-inspired transfer calibration).}\enspace We sincerely
+thank the reviewer for suggesting metadata/spatial controls. Following this
+suggestion, we fit three leakage-controlled baselines on the identical source
+cells, target cells, and genes: coordinate-only, segmentation-metadata-only,
+and their combination. Segmentation metadata comprise CellViT type/confidence,
+polygon/bounding-box morphology, status, and edge flag; expression-derived
+\texttt{total\_counts} and \texttt{n\_genes\_detected} are excluded.
+
+\begin{center}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\textit{\textbf{Table 3. Segmentation-metadata transfer baseline on the same
+eight organ pairs.}}\\[3pt]
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrr@{}}
+\toprule
+Organ & Gene P & Gene S & Cell P & Cell S & F1 \\
+\midrule
+Human breast & 0.0847 & 0.0903 & 0.0785 & 0.1366 & 0.1479 \\
+Human ovary & 0.0643 & 0.0638 & 0.4645 & 0.1569 & 0.0615 \\
+Human lung & 0.0319 & 0.0314 & 0.1700 & 0.0982 & 0.0267 \\
+Human pancreas & 0.0212 & 0.0261 & 0.0043 & 0.0687 & 0.0179 \\
+Human tonsil & 0.0282 & 0.0272 & 0.3696 & 0.1432 & 0.0368 \\
+Mouse brain & 0.0502 & 0.0467 & 0.2314 & 0.0706 & 0.0223 \\
+Mouse embryo & 0.0176 & 0.0193 & 0.1662 & 0.0813 & 0.0146 \\
+Mouse kidney & 0.0213 & 0.0211 & 0.3910 & 0.0904 & 0.0175 \\
+\midrule
+\textbf{Organ macro} & \textbf{0.0399} & \textbf{0.0407} &
+\textbf{0.2344} & \textbf{0.1057} & \textbf{0.0432} \\
+\bottomrule
+\end{tabular*}
+\endgroup
+\end{center}
+
+\begin{itemize}
+\item Segmentation metadata improve Gene Pearson in all 8/8 organs and raise
+organ-macro Gene/Cell Pearson from 0.0151/0.2036 to 0.0399/0.2344.
+Coordinate-only and metadata+coordinate reach Gene Pearson -0.0023 and 0.0316,
+respectively.
+\item F1 remains lower than UNI2-h (0.0432 versus 0.0815), so this is a stronger
+\emph{correlation-calibration} baseline, not a universally superior predictor.
+We will adopt it as the principal non-image transfer baseline alongside the
+training mean.
+\item Age/sex/disease are not fitted here: each organ has only one source and
+one target sample, so clinical-context effects are not separately identifiable.
+\end{itemize}
+
+\textbf{A3 (Biological calibration).}\enspace The complementary 30-sample
+spatially held-out predictions give:
 
 \begin{center}
 \begingroup
@@ -216,7 +273,7 @@ Cell-type-stratified pseudobulk RMSE \(\downarrow\) &
 \endgroup
 \end{center}
 
-\textbf{A3 (Hard-transfer boundary).}
+\textbf{A4 (Claim boundary).}
 \begin{itemize}
 \item The marker inventory overlaps training-selected HVGs, and cell-type strata
 are expression-derived; these results show recoverable aggregate structure, not
@@ -225,9 +282,9 @@ independent cell-type validation.
 Pearson averages are \(-0.0003/0.0020\), whereas
 metadata-only baselines reach 0.104/0.142; coarse-state balanced accuracy is
 0.139/0.159 for image prediction versus 0.220/0.252 for metadata.
-\item This negative result demonstrates context dependence and motivates stronger
-patient/platform-robust methods rather than supporting unrestricted cell-wise
-recovery.
+\item Together, the native-Xenium and eight-organ HD controls demonstrate
+context dependence and motivate stronger patient/platform-robust methods
+rather than supporting unrestricted cell-wise recovery.
 \end{itemize}
 
 \questionsep

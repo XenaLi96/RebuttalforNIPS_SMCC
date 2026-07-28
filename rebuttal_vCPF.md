@@ -65,36 +65,61 @@ Our 21-sample in-house DBiC-seq collection adds 54,304 measured/53,989 post-QC c
 - Across 18 complete same-organ held-out targets, image top-50-HVG Gene Pearson averages 0.170 (0.016--0.372), Cell Pearson is 0.275 versus 0.205 for training mean, and F1 is 0.125 versus 0.031. These are sample-, not donor-held-out, results.
 - The updated benchmark code, fixed splits, configurations, and evaluation scripts are now available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75).
 
-**A3 — Visium HD transfer.** Eight source-sample→target-sample organ pairs give:
-
-| Eight-organ macro result | Gene P | Cell P | F1 |
-|---|---:|---:|---:|
-| UNI2-h | 0.0151 | 0.2036 | 0.0815 |
-| Training mean | N/A | 0.2422 | 0.0375 |
-
-- UNI2-h improves F1 but not Cell Pearson over the mean baseline; this transfer failure is intentionally not hidden.
-- We will report organ-macro and per-organ values, separate Xenium from Visium HD, and avoid cell-weighted pooled claims.
+**A3 — Visium HD transfer.** We additionally evaluated eight complete source-sample→target-sample organ pairs. Because these full-panel transfer results are central to the reviewer’s calibration question, we report them in Q3 rather than only giving a favorable aggregate.
 
 **Q3.** *Some gene-wise correlations are low, especially under transfer. How should they be interpreted biologically, and could marker/cell-type genes or spatial-only/metadata-only baselines calibrate them?*
 
-**A1 — Interpretation.**
+**A1 — Full-panel transfer before calibration.** The unweighted per-organ results are:
 
-- Low full-panel correlations show that histology is not a replacement for molecular measurement.
-- They combine sparse or weakly morphology-linked genes with sample, composition, and acquisition shifts.
-- A restricted training-selected HVG endpoint is easier and must not be conflated with all-gene transfer.
+**Table 2. Eight-organ full-panel Visium HD transfer before metadata calibration.** TM denotes the source training mean; its gene-wise correlation is undefined.
 
-**A2 — Biological calibration.** The 30-sample spatially held-out predictions give:
+| Organ | Pair | UNI2-h Gene P | UNI2-h Cell P | UNI2-h F1 | TM Cell P | TM F1 |
+|---|---|---:|---:|---:|---:|---:|
+| Human breast | j→m | 0.0272 | 0.1109 | 0.1794 | 0.1108 | 0.1215 |
+| Human ovary | ad→ak | 0.0267 | 0.4593 | 0.1161 | 0.4906 | 0.0561 |
+| Human lung | k→d | 0.0143 | 0.2121 | 0.0960 | 0.1455 | 0.0236 |
+| Human pancreas | g→ag | 0.0040 | 0.0090 | 0.0389 | 0.0023 | 0.0168 |
+| Human tonsil | u→i | 0.0141 | 0.2769 | 0.0708 | 0.3264 | 0.0346 |
+| Mouse brain | e→ah | 0.0243 | 0.2016 | 0.0623 | 0.2238 | 0.0179 |
+| Mouse embryo | b→ai | 0.0048 | 0.0913 | 0.0369 | 0.1683 | 0.0134 |
+| Mouse kidney | a→aj | 0.0049 | 0.2678 | 0.0513 | 0.4696 | 0.0159 |
+| **Organ macro** | — | **0.0151** | **0.2036** | **0.0815** | **0.2422** | **0.0375** |
+
+- Full-panel Gene Pearson is low, and UNI2-h improves F1 but not Cell Pearson over the mean. We intentionally retain this negative transfer result.
+- It measures sample, processing, composition, and acquisition shift; it must not be conflated with the easier training-selected-HVG spatial interpolation result.
+
+**A2 — Reviewer-inspired transfer calibration.** We sincerely thank the reviewer for suggesting metadata/spatial controls. Following this suggestion, we fit three leakage-controlled baselines on the identical source cells, target cells, and genes: coordinate-only, segmentation-metadata-only, and their combination. Segmentation metadata comprise CellViT type/confidence, polygon/bounding-box morphology, status, and edge flag; expression-derived `total_counts` and `n_genes_detected` are excluded.
+
+**Table 3. Segmentation-metadata transfer baseline on the same eight organ pairs.**
+
+| Organ | Gene P | Gene S | Cell P | Cell S | F1 |
+|---|---:|---:|---:|---:|---:|
+| Human breast | 0.0847 | 0.0903 | 0.0785 | 0.1366 | 0.1479 |
+| Human ovary | 0.0643 | 0.0638 | 0.4645 | 0.1569 | 0.0615 |
+| Human lung | 0.0319 | 0.0314 | 0.1700 | 0.0982 | 0.0267 |
+| Human pancreas | 0.0212 | 0.0261 | 0.0043 | 0.0687 | 0.0179 |
+| Human tonsil | 0.0282 | 0.0272 | 0.3696 | 0.1432 | 0.0368 |
+| Mouse brain | 0.0502 | 0.0467 | 0.2314 | 0.0706 | 0.0223 |
+| Mouse embryo | 0.0176 | 0.0193 | 0.1662 | 0.0813 | 0.0146 |
+| Mouse kidney | 0.0213 | 0.0211 | 0.3910 | 0.0904 | 0.0175 |
+| **Organ macro** | **0.0399** | **0.0407** | **0.2344** | **0.1057** | **0.0432** |
+
+- Segmentation metadata improve Gene Pearson in all 8/8 organs and raise organ-macro Gene/Cell Pearson from 0.0151/0.2036 to 0.0399/0.2344. Coordinate-only and metadata+coordinate reach Gene Pearson −0.0023 and 0.0316, respectively.
+- F1 remains lower than UNI2-h (0.0432 versus 0.0815), so this is a stronger *correlation-calibration* baseline, not a universally superior predictor. We will adopt it as the principal non-image transfer baseline alongside the training mean.
+- Age/sex/disease are not fitted here: each organ has only one source and one target sample, so clinical-context effects are not separately identifiable.
+
+**A3 — Biological calibration.** The complementary 30-sample spatially held-out predictions give:
 
 | Metric | Image | Coordinate | Spatial KNN | Mean |
 |---|---:|---:|---:|---:|
 | Marker/HVG Gene Pearson $\uparrow$ | 0.201 | 0.031 | 0.028 | N/A |
 | Cell-type-stratified pseudobulk RMSE $\downarrow$ | 0.120 | 0.224 | 0.187 | 0.188 |
 
-**A3 — Hard-transfer boundary.**
+**A4 — Claim boundary.**
 
 - The marker inventory overlaps training-selected HVGs, and cell-type strata are expression-derived; these results show recoverable aggregate structure, not independent cell-type validation.
 - Under the harder bidirectional all-gene lung/ovary transfer, image Gene Pearson averages are $-0.0003/0.0020$, whereas metadata-only baselines reach 0.104/0.142; coarse-state balanced accuracy is 0.139/0.159 for image prediction versus 0.220/0.252 for metadata.
-- This negative result demonstrates context dependence and motivates stronger patient/platform-robust methods rather than supporting unrestricted cell-wise recovery.
+- Together, the native-Xenium and eight-organ HD controls demonstrate context dependence and motivate stronger patient/platform-robust methods rather than supporting unrestricted cell-wise recovery.
 
 **Q4.** *In-domain results may reflect local interpolation and spatial autocorrelation rather than robust generalization.*
 
