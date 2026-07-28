@@ -10,7 +10,9 @@ We thank Reviewer kUmZ for focusing on the manuscript’s central issue: whether
 | Public Visium HD | 7,629,697 targets | Derived cell-aligned |
 | In-house DBiC-seq | 53,989 post-QC cells from 21 samples | Native cell-resolved |
 
-Xenium uses platform cell boundaries and transcript coordinates; DBiC-seq pairs cell morphology with RNA. Only HD uses official transforms to register native 2-µm bins to H&E-aligned CellViT contours, aggregate intersecting bins, assign conflicts to the nearest centroid, and exclude unsupported polygons. These are derived cell-aligned targets, not native single-cell measurements. In a **9,000-polygon** audit, ±1-µm shifts gave Jaccard **0.706–0.816**, expression cosine **0.936–0.994**, and median absolute UMI change **6.0–13.7%**. We will move this construction rule and QC into the main body, avoid unqualified “single-cell predictor” claims, and use the count-independent title *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
+We have added new in-house DBiC-seq data from our collaborators: 53,989 post-QC cells from 21 samples with paired cell morphology and RNA, available for [download](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md). We will call Xenium/DBiC-seq “native cell-resolved,” HD “derived cell-aligned,” avoid unqualified “single-cell predictor” claims, and use the count-independent title *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
+
+For HD, following 10x Genomics’ documented mapping, official transforms register native 2-µm bins to H&E-aligned CellViT contours, aggregate intersecting bins, assign conflicts to the nearest centroid, and exclude unsupported polygons. These are derived cell-aligned targets, not native single-cell measurements. In a **9,000-polygon** audit, ±1-µm shifts gave Jaccard **0.706–0.816**, expression cosine **0.936–0.994**, and median absolute UMI change **6.0–13.7%**. We will move this construction rule and QC into the main body.
 
 **2. Benchmark results now cover all 25 release categories.**
 

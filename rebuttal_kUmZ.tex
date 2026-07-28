@@ -61,10 +61,9 @@ New in-house DBiC-seq & Paired cell morphology and RNA &
 \end{center}
 
 \begin{itemize}
-\item Xenium and DBiC-seq are native cell-resolved; only HD aggregates native
-2-\(\mu\)m bins to segmented cells using 10x Genomics'
-\href{https://www.10xgenomics.com/support/software/space-ranger/latest/analysis/segmented-outputs}{documented
-mapping}. The in-house DBiC-seq data are available for
+\item We have added new in-house DBiC-seq data from our collaborators: 53,989
+post-QC cells from 21 samples with paired cell morphology and RNA. These data
+are available for
 \href{https://anonymous.4open.science/r/sMMC-22M-DB75/README.md}{download}.
 \item We will not describe the entire resource as directly measured single-cell
 data or use unqualified ``single-cell predictor'' claims. We will call
@@ -74,10 +73,12 @@ Xenium/DBiC-seq ``native cell-resolved,'' HD ``derived cell-aligned,'' and retit
 
 \textbf{A2 (Derived HD construction and audit).}
 \begin{itemize}
-\item For HD, official transforms register native 2-\(\mu\)m bins to
-H\&E-aligned CellViT contours; intersecting bins are aggregated, conflicts go
-to the nearest centroid, and unsupported polygons are excluded. These are
-\emph{derived cell-aligned targets}, not native single-cell measurements.
+\item For HD, following 10x Genomics'
+\href{https://www.10xgenomics.com/support/software/space-ranger/latest/analysis/segmented-outputs}{documented
+mapping}, official transforms register native 2-\(\mu\)m bins to H\&E-aligned
+CellViT contours; intersecting bins are aggregated, conflicts go to the nearest
+centroid, and unsupported polygons are excluded. These are \emph{derived
+cell-aligned targets}, not native single-cell measurements.
 \item We audited 3,000 raw polygons per dataset (9,000 total) under
 \(\pm1\)-\(\mu\)m registration shifts:
 \end{itemize}

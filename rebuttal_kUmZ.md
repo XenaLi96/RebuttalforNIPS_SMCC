@@ -10,12 +10,12 @@ We thank the reviewer for focusing on target provenance, experimental breadth, a
 | Public Visium HD | Native 2-µm bins aggregated to cell masks | 7,629,697 derived cells | Derived cell-aligned |
 | New in-house DBiC-seq | Paired cell morphology and RNA | 53,989 post-QC cells from 21 samples | Native cell-resolved |
 
-- Xenium and DBiC-seq are native cell-resolved; only HD aggregates native 2-µm bins to segmented cells using 10x Genomics’ [documented mapping](https://www.10xgenomics.com/support/software/space-ranger/latest/analysis/segmented-outputs). The in-house DBiC-seq data are available for [download](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md).
+- We have added new in-house DBiC-seq data from our collaborators: 53,989 post-QC cells from 21 samples with paired cell morphology and RNA. These data are available for [download](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md).
 - We will not describe the entire resource as directly measured single-cell data or use unqualified “single-cell predictor” claims. We will call Xenium/DBiC-seq “native cell-resolved,” HD “derived cell-aligned,” and retitle the work *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
 
 **A2 — Derived HD construction and audit.**
 
-- For HD, official transforms register native 2-µm bins to H&E-aligned CellViT contours; intersecting bins are aggregated, conflicts go to the nearest centroid, and unsupported polygons are excluded. These are *derived cell-aligned targets*, not native single-cell measurements.
+- For HD, following 10x Genomics’ [documented mapping](https://www.10xgenomics.com/support/software/space-ranger/latest/analysis/segmented-outputs), official transforms register native 2-µm bins to H&E-aligned CellViT contours; intersecting bins are aggregated, conflicts go to the nearest centroid, and unsupported polygons are excluded. These are *derived cell-aligned targets*, not native single-cell measurements.
 - We audited 3,000 raw polygons per dataset (9,000 total) under ±1-µm registration shifts:
 
 | Visium HD example | Raw polygons with canonical bins | Shift-bin Jaccard | Shift-expression cosine | Shift median $|\Delta\mathrm{UMI}|$ |
