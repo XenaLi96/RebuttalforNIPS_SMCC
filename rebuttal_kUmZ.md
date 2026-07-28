@@ -52,7 +52,7 @@ We thank the reviewer for focusing on target provenance, experimental breadth, a
 
 **A2 — Cross-sample transfer.** We evaluated eight source→target organ pairs.
 
-**Table 2. Eight-organ cross-sample Visium HD benchmark (source→target sample).** TM is training mean; its Gene Pearson is undefined.
+**Table 2. Eight-organ cross-sample benchmark (source→target sample).** TM is training mean; its Gene Pearson is undefined.
 
 | Organ | Pair | UNI2-h Gene P | UNI2-h Cell P | UNI2-h F1 | TM Cell P | TM F1 |
 |---|---|---:|---:|---:|---:|---:|
@@ -66,37 +66,66 @@ We thank the reviewer for focusing on target provenance, experimental breadth, a
 | Mouse kidney | a→aj | 0.0049 | 0.2678 | 0.0513 | 0.4696 | 0.0159 |
 | **Organ macro** | — | **0.0151** | **0.2036** | **0.0815** | **0.2422** | **0.0375** |
 
-- Gene Pearson is low (0.0151 macro); UNI2-h improves F1 but not Cell Pearson over the mean. We do not claim this setting is solved.
-- The native-Xenium in-domain results and construction audits establish usable targets; the negative transfer result instead exposes patient/platform/composition and acquisition shift. We will say “sample-held-out” unless donor independence is verified.
-- The two tables answer different questions: Table 1 tests signal recovery under leakage-controlled spatial holdouts, whereas Table 2 tests transfer across samples. We will present both together, so positive in-domain breadth cannot obscure the unresolved generalization failure.
+- Cross-sample prediction is substantially more difficult than within-sample spatial holdout, and the results are not yet satisfactory: macro Gene Pearson is 0.0151, while UNI2-h improves F1 but not Cell Pearson over the mean.
+- These results reflect the difficulty of sample/platform/composition and acquisition shifts for current models. We report them transparently beside Table 1: Table 1 evaluates spatially held-out signal recovery, whereas Table 2 evaluates transfer across complete samples.
 
-**Q3 (P6, P7, Q4).** *What are the benchmark inputs, STBoost design, and cell-alignment procedure?*
+**Q3 (P6, P7).** *What are the benchmark inputs, experimental design, and STBoost definitions?*
 
 **A.**
 
-- The benchmark predicts a cell-resolved RNA profile from histology alone; no spot-level expression is supplied at inference. Training pairs each profile directly with a local cell crop and a larger tissue-context crop.
-- STBoost is the cell-aligned interface that replaces a spot crop with hierarchical cell/context inputs while retaining a method’s prediction modules. STBoosted BLEEP is published BLEEP retrained through this interface; STBoost-Ref is our image-only reference predictor. We will define STBoost and BLEEP at first mention and remove the ambiguous label “Ours.”
-- Xenium uses native boundaries and transcript coordinates. For HD, official transforms register 2-µm bins to CellViT contours; intersecting bins are aggregated, conflicts go to the nearest centroid, and unsupported polygons are excluded—rather than matching one spot center to one cell. In our 9,000-polygon audit, canonical-bin coverage was 49.4%, 97.5%, and 50.0% across lung, brain, and pancreas. Among supported polygons, ±1-µm shifts gave bin Jaccard 0.706–0.816 and expression cosine 0.936–0.994; erosion/dilation was more disruptive (Jaccard 0.462–0.720; cosine 0.871–0.993; median absolute UMI change 32.8–66.6%). We will move these details into the main body and keep native Xenium separate from derived HD.
+- **Input/output:** the input is histology alone and the output is the RNA-expression vector of an aligned cell; no spot-level expression is supplied at inference. Each training target is paired with a local cell crop and a larger tissue-context crop.
+- **Protocols/metrics:** within-sample spatial holdout, cross-sample, verified cross-patient, and cross-platform protocols test progressively harder shifts using fixed targets and splits. We report gene-wise and cell-wise Pearson/Spearman together with expression-detection F1.
+- **STBoost:** this framework lifts existing spot-level image-to-expression methods to cell-level prediction by replacing their spot interface with hierarchical cell/context images and cell-resolved targets while retaining their prediction modules. Every BLEEP comparison in our tables is therefore STBoosted BLEEP; STBoost-Ref is our image-only reference predictor.
+- Because this is a dataset paper, we originally placed the detailed STBoost formulation, equations, and architecture figure in the Appendix. We will define STBoost and BLEEP at first mention, remove the ambiguous label “Ours,” and move a concise architecture and formulation description into the main body.
 
-**Q4 (Q3, L3).** *What does cell alignment add beyond spot-centered prediction?*
+**Q4 (Q4, Q3, L3).** *How are cells aligned, and what does cell alignment add beyond spot-centered prediction?*
 
-**A.** We thank the reviewer for this important suggestion.
+**A1 — Cell alignment.**
+
+- Xenium uses native cell boundaries and transcript coordinates. For HD, official transforms register native 2-µm bins to H&E-aligned CellViT contours; intersecting bins are aggregated, conflicts go to the nearest centroid, and unsupported polygons are excluded. We will describe these outputs as *derived cell-aligned targets*.
+
+**A2 — Alignment audit.** We audited 3,000 raw polygons per dataset (9,000 total) under ±1-µm registration shifts:
+
+| Visium HD example | Raw polygons with canonical bins | Shift-bin Jaccard | Shift-expression cosine | Shift median $|\Delta\mathrm{UMI}|$ |
+|---|---:|---:|---:|---:|
+| Human lung cancer | 49.4% | 0.727–0.733 | 0.954–0.957 | 11.1%–11.3% |
+| Mouse brain | 97.5% | 0.806–0.816 | 0.936–0.939 | 6.0%–6.1% |
+| Human pancreas | 50.0% | 0.706–0.714 | 0.994 | 13.0%–13.7% |
+
+Among supported polygons, expression direction is stable but bin membership/UMIs remain boundary sensitive. We will move the construction rule, audit, and QC into the main body.
+
+**A3 — Beyond spot-centered prediction.** We thank the reviewer for this important suggestion.
 
 - Across six native-Xenium samples, we held the pipeline fixed and changed only target scale (cell/8/16/55 µm): Gene Pearson was 0.365/0.365/0.363/0.330, showing averaging can retain a similar global score.
-- We then audited two representative samples. At 55 µm, pseudo-spots mixed cell types in 55.5–66.4% of regions and affected 73.8–81.0% of cells in dense tissue, versus 3.5–4.1% and 7.0–8.3% in sparse tissue.
-- Cell alignment thus reveals heterogeneity hidden by averaging and enables cell-resolved studies such as cell–cell communication, virtual-cell perturbation prediction, and tracing perturbation effects through interactions across spatial tissue.
+- In two representative samples, 55-µm pseudo-spots mixed cell types in 55.5–66.4% of regions and affected 73.8–81.0% of cells in dense tissue, versus 3.5–4.1% and 7.0–8.3% in sparse tissue.
+- Cell alignment reveals heterogeneity hidden by averaging and enables cell-resolved studies such as cell–cell communication, virtual-cell perturbation prediction, and tracing perturbation effects through interactions across spatial tissue.
 
 **Q5 (P4, P8, P9, L4).** *What do the context analysis and available metadata support?*
 
-**A.**
+**A1 — Representativeness.** We agree with P9 that we should not assume existing datasets are representative of ethnicity, sex/gender, or other human traits. Ethnicity is undocumented in the upstream records, and other context fields have variable coverage. We will report support and missingness, never infer absent sensitive attributes, and avoid population-level fairness claims unsupported by the data.
 
-- Context is an orthogonal robustness axis, not evidence of single-cell validity. Because age is nested within sample/patient and panels differ, AK/AD/AL supports only a “sample/age-confounded context shift,” motivating Average/Worst/Gap/Support reporting rather than causal attribution.
+**A2 — Why context-bias evaluation matters.** We nevertheless believe that context-aware audits are important for biomedical and pathology foundation models: a strong average score can hide substantial failure in a specific assay, dataset, acquisition site, age group, or disease context. We tested this with patient-CV or leave-one-site-out evaluation and report Average/Worst/Gap:
+
+| Domain | Task / encoder | Context; split | Avg. BA | Worst BA | Gap |
+|---|---|---|---:|---:|---:|
+| Single-cell | Bone marrow / Geneformer | assay; patient-CV | 0.938 | 0.669 | 0.327 |
+| Single-cell | Bone marrow / scGPT | assay; patient-CV | 0.962 | 0.740 | 0.258 |
+| Single-cell | Bone marrow / scVI-style | assay; patient-CV | 0.932 | 0.616 | 0.373 |
+| Single-cell | Ten tissues / scGPT | dataset; patient-CV | 0.667–0.962 | 0.004–0.892 | max 0.975 |
+| Pathology | LUAD KRAS / CONCH | site; leave-one-site | 0.499 | 0.375 | 0.542 |
+| Pathology | LGG IDH / UNI | site; leave-one-site | 0.682 | 0.464 | 0.471 |
+| Pathology | LGG IDH / H-Optimus-0 | site; leave-one-site | 0.747 | 0.476 | 0.524 |
+
+These examples show that context can materially change model performance and that structured metadata make such bias measurable.
+
+**A3 — Reporting scope.**
+
 - The breadth benchmark uses 30 native-Xenium samples; HD transfer uses 16 source/target samples in eight pairs. Upstream donor/animal IDs are incomplete, so these are sample-held-out unless donor independence is verified.
-- We will report per-organ sample records beside cell counts and mark unavailable patient/animal IDs explicitly. Age, sex, and disease are retained only when reported; ethnicity is undocumented. We will report missingness, never infer sensitive attributes, and require multiple verified donors per subgroup comparison.
+- Because age is nested within sample/patient and gene panels differ, AK/AD/AL supports a *sample/age-confounded context shift*, not a causal age effect. We will require multiple verified donors per subgroup comparison and report per-organ sample records beside cell counts.
 
 **Q6 (P5, second Q4, minor remarks).** *How will naming, Figure 1, and presentation be revised?*
 
-**A1 — Figure 1.** Figure 1 was not AI-generated. I began this resource in my first PhD year and manually developed two Sketch versions with 162 editable vector layers over more than one week. Screenshots of the layer workspace are available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure_evidence_not_AI/`.
+**A1 — Figure 1.** Figure 1 was not AI-generated. I began this resource in my first PhD year. Over the following three years, the figure went through two manually drawn Sketch versions and now contains 162 editable vector layers. Screenshots of the layer workspace are available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure_evidence_not_AI/`.
 
 **A2 — Revisions.**
 
