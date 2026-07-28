@@ -100,7 +100,7 @@ Across all raw polygons, coverage is sample dependent. Among supported polygons,
 
 - AK (60+)→AD (60+) versus AK→AL (40-) changes F1 0.289→0.072 and gene/cell Spearman 0.036/0.206→0.006/0.095. Because age is nested within sample/patient and panels differ, this is an *age-associated, sample-confounded shift*, not causal.
 
-**A2 — Broader audit.** We evaluated foundation models across assay, dataset, and site contexts using patient-CV or leave-one-site-out splits, revealing substantial worst-context performance gaps.
+**A2 — Broader audit.** We evaluated foundation models across assay, dataset, and site contexts using patient-CV or leave-one-site-out splits. For each task, we compared average balanced accuracy with the worst supported context and reported their gap. The results show that strong average performance can coexist with substantial context-specific collapse, demonstrating why the resource’s structured metadata are useful for robustness evaluation.
 
 | Task / encoder | Context; split | Average BA | Worst BA | Gap |
 |---|---|---:|---:|---:|

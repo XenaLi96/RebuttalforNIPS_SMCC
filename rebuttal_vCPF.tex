@@ -254,8 +254,11 @@ this is an \emph{age-associated, sample-confounded shift}, not causal.
 \end{itemize}
 
 \textbf{A2 (Broader audit).}\enspace We evaluated foundation models across
-assay, dataset, and site contexts using patient-CV or leave-one-site-out splits,
-revealing substantial worst-context performance gaps.
+assay, dataset, and site contexts using patient-CV or leave-one-site-out splits.
+For each task, we compared average balanced accuracy with the worst supported
+context and reported their gap. The results show that strong average performance
+can coexist with substantial context-specific collapse, demonstrating why the
+resource's structured metadata are useful for robustness evaluation.
 
 \begin{center}
 \begingroup
