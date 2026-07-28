@@ -21,7 +21,7 @@ Below, we summarize each central question, our response, and the resulting evide
 
 - **Question—Which targets are natively cell resolved? Response—** We separate **16,314,129 native Xenium cells** and **53,989 native DBiC-seq cells** from **7,629,697 derived Visium HD cell-aligned targets**, using *native cell-resolved* and *derived cell-aligned*.
 
-- **Question—Does evaluation support the resource’s breadth? Response—** We completed a 25-category benchmark using training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer. Macro Gene Pearson/Gene Spearman/Cell Pearson/F1 is **0.324/0.291/0.442/0.413**. Image prediction leads coordinate-only and spatial-KNN controls in **21/25 categories and 28/30 samples**; marker/HVG Gene Pearson is **0.201 versus 0.031/0.028**. Release-wide evidence now replaces the original three-case evaluation.
+- **Question—Does evaluation support the resource’s breadth? Response—** We now report complete benchmark results for **all 25 organ categories** under a unified evaluation protocol. We additionally provide **eight cross-sample transfer results** in which the complete test sample is unseen. Together, these experiments replace the original small set of representative cases with release-wide and cross-sample evidence.
 
 - **Question—What does cell alignment add beyond spot evaluation? Response—** Across six native-Xenium samples, cell/8/16/55-µm targets yield Gene Pearson **0.365/0.365/0.363/0.330**. Yet 55-µm pseudo-spots mix cell types in **55.5–66.4%** of dense-tissue regions and affect **73.8–81.0%** of cells. **Cell alignment preserves cellular identity and local heterogeneity obscured by regional averaging.**
 

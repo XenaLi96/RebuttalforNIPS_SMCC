@@ -73,13 +73,11 @@ using \textit{native cell-resolved} and \textit{derived cell-aligned}.
 
 \item \textbf{Question---Does evaluation support the resource's breadth?
 Response---}
-We completed a 25-category benchmark using training-selected HVGs, four
-contiguous spatial holdouts, and a 5\% train--test buffer. Macro Gene
-Pearson/Gene Spearman/Cell Pearson/F1 is
-\textbf{0.324/0.291/0.442/0.413}. Image prediction leads coordinate-only and
-spatial-KNN controls in \textbf{21/25 categories and 28/30 samples};
-marker/HVG Gene Pearson is \textbf{0.201 versus 0.031/0.028}. Release-wide
-evidence now replaces the original three-case evaluation.
+We now report complete benchmark results for \textbf{all 25 organ categories}
+under a unified evaluation protocol. We additionally provide \textbf{eight
+cross-sample transfer results} in which the complete test sample is unseen.
+Together, these experiments replace the original small set of representative
+cases with release-wide and cross-sample evidence.
 
 \item \textbf{Question---What does cell alignment add beyond spot evaluation?
 Response---}
