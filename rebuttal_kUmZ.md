@@ -86,7 +86,7 @@ Expression direction is stable among supported polygons, while bin membership/UM
 - **Input/output:** histology alone predicts aligned-cell RNA; no molecular input is used at inference. Each target has local-cell and tissue-context crops.
 - **Protocols/metrics:** spatial holdout, cross-sample, verified cross-patient, and cross-platform tests use fixed splits; metrics are gene/cell Pearson/Spearman and expression-detection F1.
 - **STBoost:** hierarchical cell/context images and cell-resolved targets replace a method’s spot interface while its predictor is retained. Table BLEEP is STBoosted BLEEP; STBoost-Ref is our image-only reference.
-- We will define these terms at first mention, replace “Ours,” and move a concise formulation/architecture from the Appendix to the main body.
+- Because this ED-track submission is a dataset paper, we initially placed the detailed STBoost method, equations, and architecture in the Appendix. This reflected ED-track framing, not omitted methods. We will now define STBoost and BLEEP at first mention, replace “Ours,” and move a concise formulation/architecture into the main body.
 
 **Q4 (Q3, L3).** *What does cell alignment add beyond spot-centered prediction?*
 
