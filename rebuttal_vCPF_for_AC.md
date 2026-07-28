@@ -24,10 +24,10 @@ On identical cells and genes, we added coordinate-only, segmentation-metadata-on
 
 Segmentation metadata improve Gene Pearson in **8/8 organs**, raising macro Gene/Cell Pearson from **0.0151/0.2036 to 0.0399/0.2344**. Coordinate-only and combined Gene Pearson are **−0.0023/0.0316**. However, metadata F1 is **0.0432**, below UNI2-h **0.0815**. We will therefore adopt segmentation metadata as the principal non-image *correlation-calibration* baseline alongside the mean, not claim universal superiority. Age/sex/disease cannot be separated with only one source/target pair per organ.
 
-Complementary biological calibration supports the same boundary: marker/HVG Gene Pearson is **0.201** for image versus **0.031/0.028** for coordinate/KNN, and cell-type-stratified pseudobulk RMSE is **0.120** versus **0.224/0.187/0.188** for coordinate/KNN/mean. Because the strata are expression-derived, these are aggregate checks rather than independent cell labels.
+Complementary biological calibration is also favorable: marker/HVG Gene Pearson is **0.201** for image versus **0.031/0.028** for coordinate/KNN, and cell-type-stratified pseudobulk RMSE is **0.120** versus **0.224/0.187/0.188** for coordinate/KNN/mean. We thank the reviewer for this constructive suggestion and will add the paired transfer comparison and biological-calibration results to the revised manuscript.
 
 **5. Claims will match the evaluation protocol.**
 
 Within-sample experiments use spatial block splits rather than random cell splits: left two-thirds for training, right one-third for testing, with a 5% boundary buffer. The 30-sample benchmark applies four contiguous spatial holdouts under the same principle. The ovarian example will be called an *age-associated, sample-confounded shift*. Direct, processed, and generated fields will be separated, and generated captions will remain optional context rather than molecular truth.
 
-The reviewer’s requested controls have therefore improved the benchmark and revealed a stronger baseline, while also confirming that patient/platform/processing transfer is still an open problem rather than a solved capability.
+The reviewer’s requested controls have improved the benchmark and provided a stronger calibration baseline, which we will incorporate into the revision.

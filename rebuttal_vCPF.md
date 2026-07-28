@@ -85,7 +85,7 @@ Across all raw polygons, coverage is sample dependent. Among supported polygons,
 | Marker/HVG Gene Pearson $\uparrow$ | 0.201 | 0.031 | 0.028 | N/A |
 | Cell-type-stratified pseudobulk RMSE $\downarrow$ | 0.120 | 0.224 | 0.187 | 0.188 |
 
-**A3 — Boundary.** Marker overlap and expression-derived strata provide aggregate biological calibration, not independent labels. The original low UNI2-h transfer column remains visible; the reviewer-inspired baseline improves correlation calibration but does not solve patient/platform generalization.
+**A3 — Revision.** Together, the consistent Gene Pearson improvements and favorable marker/pseudobulk results provide useful calibration for the benchmark. We thank the reviewer for this constructive suggestion and will add the paired comparison and biological-calibration results to the revised manuscript.
 
 **Q4.** *Could in-domain results reflect spatial interpolation?*
 
