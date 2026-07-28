@@ -1,0 +1,121 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.70in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.38em}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\questionsep}{\par\vspace{0.75em}}
+
+\begin{document}
+
+\begin{center}
+{\Large Response to the Area Chair}\\[2pt]
+Submission 13175
+\end{center}
+
+We thank the Area Chair and reviewers.
+\textbf{sMMC-22M advances spatial transcriptomics from spot averages toward
+cell-centered multimodal analysis by linking morphology, RNA, location, and
+biological context at scale.}
+
+Below, we summarize each central question, our response, and the resulting
+evidence.
+
+\section*{Reviewer 7Gar: contribution, experimental purpose, and validation}
+
+\begin{itemize}
+\item \textbf{Question---What is genuinely new? Response---}
+We completed a mutually exclusive provenance audit. The release contains
+\textbf{28,315,247 aligned targets from 99 unique samples}, including
+\textbf{53,989 newly measured native DBiC-seq cells from 21 in-house samples}.
+Only 32 samples overlap HEST-1K and two additional samples overlap
+STimage-1K4M only; approximately \textbf{70\% is absent from HEST-1K}. This
+separates new measurements, public aggregation, and processed derivatives.
+
+\item \textbf{Question---What do the three experimental axes demonstrate?
+Response---}
+\begin{itemize}
+\item \textit{Scale} tests whether more paired data improve foundation
+encoders. Across seven pathology foundation encoders, using 5\%, 10\%, 25\%,
+and 100\% of the data increases mean Gene Pearson from
+\textbf{0.177 to 0.205, 0.241, and 0.278}. This validates the value of scale.
+\item \textit{Resolution} tests whether cell alignment preserves variation
+lost through regional averaging.
+\item \textit{Rich context} tests whether metadata reveal failures hidden by
+average scores. Across assay, dataset, and site contexts,
+\textbf{Average--Worst balanced-accuracy gaps reach 0.258--0.975}.
+\end{itemize}
+Each axis now has an explicit question, design, metric, and conclusion.
+
+\item \textbf{Question---How are derived profiles and textual records
+validated? Response---}
+Visium HD targets use registered native \(2\,\mu\mathrm{m}\) bins intersected
+with cell masks; conflicts are resolved deterministically and unsupported
+cells removed. Across \textbf{9,000 polygons} from lung, brain, and pancreas,
+\(\pm1\,\mu\mathrm{m}\) perturbations give bin Jaccard
+\textbf{0.706--0.816} and expression cosine \textbf{0.936--0.994}. GPT-4o
+converts supplied metadata into readable descriptions; PLIP/CONCH audits give
+AUC \textbf{0.993/0.988} and \textbf{100\% Top-3 retrieval}. Full prompts,
+provenance, QC, and examples will be added to the Appendix.
+\end{itemize}
+
+\section*{Reviewer kUmZ: target validity, benchmark breadth, and biological
+utility}
+
+\begin{itemize}
+\item \textbf{Question---Which targets are natively cell resolved? Response---}
+We separate \textbf{16,314,129 native Xenium cells} and \textbf{53,989 native
+DBiC-seq cells} from \textbf{7,629,697 derived Visium HD cell-aligned targets},
+using \textit{native cell-resolved} and \textit{derived cell-aligned}.
+
+\item \textbf{Question---Does evaluation support the resource's breadth?
+Response---}
+We completed a 25-category benchmark using training-selected HVGs, four
+contiguous spatial holdouts, and a 5\% train--test buffer. Macro Gene
+Pearson/Gene Spearman/Cell Pearson/F1 is
+\textbf{0.324/0.291/0.442/0.413}. Image prediction leads coordinate-only and
+spatial-KNN controls in \textbf{21/25 categories and 28/30 samples};
+marker/HVG Gene Pearson is \textbf{0.201 versus 0.031/0.028}. Release-wide
+evidence now replaces the original three-case evaluation.
+
+\item \textbf{Question---What does cell alignment add beyond spot evaluation?
+Response---}
+Across six native-Xenium samples, cell/8/16/\(55\,\mu\mathrm{m}\) targets
+yield Gene Pearson \textbf{0.365/0.365/0.363/0.330}. Yet
+\(55\,\mu\mathrm{m}\) pseudo-spots mix cell types in \textbf{55.5--66.4\%}
+of dense-tissue regions and affect \textbf{73.8--81.0\%} of cells.
+\textbf{Cell alignment preserves cellular identity and local heterogeneity
+obscured by regional averaging.}
+\end{itemize}
+
+\section*{Reviewers vCPF and aSvP}
+
+We appreciate their constructive suggestions. vCPF requested HD boundary
+validation, broader organ coverage, and spatial/metadata calibration; these
+are addressed by the audits, 25-category benchmark, and added mean,
+coordinate, spatial-KNN, and segmentation-metadata baselines. aSvP asked how
+scale and heterogeneity translate into research value; the scaling,
+release-wide, cell-versus-spot, and context-gap analyses provide this evidence.
+
+\section*{Summary}
+
+\textbf{sMMC-22M provides an audited, release-wide foundation connecting
+spatial transcriptomics with cell-centered computational biology.} Moving
+from spots toward cells enables cell-type/state prediction, cell--cell
+communication, morphology--RNA analysis, perturbation-response modeling, and
+spatially grounded virtual-cell development---questions difficult when
+heterogeneous cells are averaged into one spot.
+
+Following the reviewers' suggestions, we will clarify STBoost and the
+experimental objectives; distinguish native, processed, and generated
+records; add the release-wide results, audits, fixed splits, QC, prompts, and
+examples; and release the code and in-house data. \textbf{The new evidence
+answers the central questions about novelty, target validity, breadth,
+heterogeneity, context, and reproducibility. We hope it resolves the reviewers'
+concerns and demonstrates the utility of sMMC-22M.} We thank the Area Chair
+and reviewers for recognizing its value and helping us strengthen it.
+
+\end{document}

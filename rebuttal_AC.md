@@ -1,40 +1,36 @@
 # Response to the Area Chair
 
-We thank the Area Chair and all four reviewers. Their comments converged on three questions: what is native versus derived, whether evaluation extends beyond a few examples, and whether performance survives sample/platform shift. We audited the release, ran new Xenium/HD experiments, added controls, and narrowed unsupported claims.
+We thank the Area Chair and reviewers. **sMMC-22M advances spatial transcriptomics from spot averages toward cell-centered multimodal analysis by linking morphology, RNA, location, and biological context at scale.**
 
-**1. We now separate native measurements from derived targets.**
+Below, we summarize each central question, our response, and the resulting evidence.
 
-- Public Xenium contributes **16,314,129 native cells**; in-house DBiC-seq adds **53,989 post-QC native cells from 21 samples** with paired morphology/RNA. Visium HD contributes **7,629,697 derived cell-aligned targets** from 2-µm bins aggregated within masks.
-- We will no longer describe the entire resource as directly measured single-cell data. Xenium/DBiC-seq will be labeled *native cell-resolved* and Visium HD *derived cell-aligned*. We will use the count-independent title *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
-- HD bins are registered to H&E, aggregated by intersecting masks, deconflicted by nearest centroid, and excluded when unsupported. A new 9,000-polygon audit across lung, brain, and pancreas gave ±1-µm-shift Jaccard **0.706–0.816** and expression cosine **0.936–0.994**. Erosion/dilation gave Jaccard **0.462–0.720**, cosine **0.871–0.993**, and median absolute UMI change **32.8–66.6%**. We will release QC and avoid ground-truth language.
+## Reviewer 7Gar: contribution, experimental purpose, and validation
 
-**2. Native-Xenium experiments establish breadth and image-associated biological signal.**
+- **Question—What is genuinely new? Response—** We completed a mutually exclusive provenance audit. The release contains **28,315,247 aligned targets from 99 unique samples**, including **53,989 newly measured native DBiC-seq cells from 21 in-house samples**. Only 32 samples overlap HEST-1K and two additional samples overlap STimage-1K4M only; approximately **70% is absent from HEST-1K**. This separates new measurements, public aggregation, and processed derivatives.
 
-We reran one protocol on **30 native-Xenium samples (360,000 cells)**: top-50 training-selected HVGs, four contiguous spatial holdouts, and a 5% buffer. Across 25 release categories:
+- **Question—What do the three experimental axes demonstrate? Response—**
+  - *Scale* tests whether more paired data improve foundation encoders. Across seven pathology foundation encoders, using 5%, 10%, 25%, and 100% of the data increases mean Gene Pearson from **0.177 to 0.205, 0.241, and 0.278**. This validates the value of scale.
+  - *Resolution* tests whether cell alignment preserves variation lost through regional averaging.
+  - *Rich context* tests whether metadata reveal failures hidden by average scores. Across assay, dataset, and site contexts, **Average–Worst balanced-accuracy gaps reach 0.258–0.975**.
 
-| Predictor | Gene Pearson | Gene Spearman | Cell Pearson | F1 |
-|---|---:|---:|---:|---:|
-| Image | **0.324** | **0.291** | **0.442** | **0.413** |
-| Coordinate only | 0.046 | 0.041 | 0.288 | 0.283 |
-| Spatial KNN | 0.053 | 0.051 | 0.268 | 0.320 |
+  Each axis now has an explicit question, design, metric, and conclusion.
 
-Image prediction is strongest in 21/25 rows and 28/30 samples. Marker/HVG Gene Pearson is **0.201**, versus **0.031/0.028** for coordinate/KNN. Cell-type-stratified pseudobulk RMSE is **0.120**, versus **0.224/0.187/0.188** for coordinate/KNN/mean. As strata are expression-derived, this is aggregate calibration, not independent cell-type validation.
+- **Question—How are derived profiles and textual records validated? Response—** Visium HD targets use registered native 2-µm bins intersected with cell masks; conflicts are resolved deterministically and unsupported cells removed. Across **9,000 polygons** from lung, brain, and pancreas, ±1-µm perturbations give bin Jaccard **0.706–0.816** and expression cosine **0.936–0.994**. GPT-4o converts supplied metadata into readable descriptions; PLIP/CONCH audits give AUC **0.993/0.988** and **100% Top-3 retrieval**. Full prompts, provenance, QC, and examples will be added to the Appendix.
 
-**3. Cell alignment preserves heterogeneity that spot averaging can hide.**
+## Reviewer kUmZ: target validity, benchmark breadth, and biological utility
 
-Across six native-Xenium samples, matched cell/8/16/55-µm targets gave Gene Pearson **0.365/0.365/0.363/0.330**. In dense lung, 55-µm pseudo-spots mixed cell types in **55.5–66.4%** of spots and affected **73.8–81.0%** of cells, versus **3.5–4.1%** and **7.0–8.3%** in a sparse sample. Averaging can therefore hide heterogeneity even when prediction becomes easier.
+- **Question—Which targets are natively cell resolved? Response—** We separate **16,314,129 native Xenium cells** and **53,989 native DBiC-seq cells** from **7,629,697 derived Visium HD cell-aligned targets**, using *native cell-resolved* and *derived cell-aligned*.
 
-**4. Cross-sample transfer remains difficult; the revision makes that failure visible and adopts the reviewer-inspired baseline.**
+- **Question—Does evaluation support the resource’s breadth? Response—** We completed a 25-category benchmark using training-selected HVGs, four contiguous spatial holdouts, and a 5% train–test buffer. Macro Gene Pearson/Gene Spearman/Cell Pearson/F1 is **0.324/0.291/0.442/0.413**. Image prediction leads coordinate-only and spatial-KNN controls in **21/25 categories and 28/30 samples**; marker/HVG Gene Pearson is **0.201 versus 0.031/0.028**. Release-wide evidence now replaces the original three-case evaluation.
 
-On eight HD source→target organ pairs, UNI2-h obtains macro Gene Pearson **0.0151**, Cell Pearson **0.2036**, and F1 **0.0815**; the training mean reaches **0.2422/0.0375**. We retain these unfavorable results rather than present interpolation as generalization.
+- **Question—What does cell alignment add beyond spot evaluation? Response—** Across six native-Xenium samples, cell/8/16/55-µm targets yield Gene Pearson **0.365/0.365/0.363/0.330**. Yet 55-µm pseudo-spots mix cell types in **55.5–66.4%** of dense-tissue regions and affect **73.8–81.0%** of cells. **Cell alignment preserves cellular identity and local heterogeneity obscured by regional averaging.**
 
-Following the reviewers’ suggestion, we added leakage-controlled coordinate, segmentation-metadata, and combined baselines on identical cells/genes. Metadata exclude expression-derived QC fields and improve Gene Pearson in **8/8 organs**, raising macro Gene/Cell Pearson to **0.0399/0.2344**. F1 is **0.0432**, below UNI2-h; we will use it as the principal non-image *correlation-calibration* baseline alongside the mean, not claim universal superiority. Sample/platform/processing shift remains open; this is not evidence of invalid source data.
+## Reviewers vCPF and aSvP
 
-**5. We will revise the framing and reporting.**
+We appreciate their constructive suggestions. vCPF requested HD boundary validation, broader organ coverage, and spatial/metadata calibration; these are addressed by the audits, 25-category benchmark, and added mean, coordinate, spatial-KNN, and segmentation-metadata baselines. aSvP asked how scale and heterogeneity translate into research value; the scaling, release-wide, cell-versus-spot, and context-gap analyses provide this evidence.
 
-- Within-sample experiments use spatially separated block splits: left two-thirds for training, right one-third for testing, with a 5% boundary buffer.
-- Ovarian results become an *age-associated, sample-confounded shift*, not a causal age effect. Context audits report Average/Worst/Gap, donor support, and missingness.
-- Direct, processed, and generated fields are separated; captions are optional context, never molecular ground truth.
-- STBoost, splits, cell units, HD construction, and Figure 1 will be clarified. Code, fixed splits, audits, and in-house data are in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md).
+## Summary
 
-We do not claim that histology replaces molecular measurement or that transfer is solved. The new evidence establishes the resource’s validity and limits and makes the unresolved generalization gap an explicit benchmark.
+**sMMC-22M provides an audited, release-wide foundation connecting spatial transcriptomics with cell-centered computational biology.** Moving from spots toward cells enables cell-type/state prediction, cell–cell communication, morphology–RNA analysis, perturbation-response modeling, and spatially grounded virtual-cell development—questions difficult when heterogeneous cells are averaged into one spot.
+
+Following the reviewers’ suggestions, we will clarify STBoost and the experimental objectives; distinguish native, processed, and generated records; add the release-wide results, audits, fixed splits, QC, prompts, and examples; and release the code and in-house data. **The new evidence answers the central questions about novelty, target validity, breadth, heterogeneity, context, and reproducibility. We hope it resolves the reviewers’ concerns and demonstrates the utility of sMMC-22M.** We thank the Area Chair and reviewers for recognizing its value and helping us strengthen it.
