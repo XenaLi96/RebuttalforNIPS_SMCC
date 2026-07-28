@@ -98,7 +98,7 @@ We thank the reviewer for identifying places where the manuscript did not suffic
 
 **A2 — Validation.** We audited 3,000 raw CellViT polygons per dataset (9,000 total) under 1-$\mu$m registration shifts. Canonical-bin coverage is reported across all raw polygons; among supported polygons, expression direction remains stable (cosine 0.936--0.994), with Jaccard 0.706--0.816 and median $|\Delta\mathrm{UMI}|$ 6.0%--13.7%, indicating reasonable but not perfect robustness:
 
-| Visium HD example | Raw polygons with canonical bins | Shift bin Jaccard | Shift expression cosine | Shift median $|\Delta\mathrm{UMI}|$ |
+| Visium HD example | Raw polygons with canonical bins | Shift bin Jaccard | Shift expression cosine | Median absolute change in UMI count |
 |---|---:|---:|---:|---:|
 | Human lung cancer | 49.4% | 0.727--0.733 | 0.954--0.957 | 11.1%--11.3% |
 | Mouse brain | 97.5% | 0.806--0.816 | 0.936--0.939 | 6.0%--6.1% |
