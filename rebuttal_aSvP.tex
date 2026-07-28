@@ -2,17 +2,14 @@
 \usepackage[margin=0.68in]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[table]{xcolor}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage[hidelinks]{hyperref}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{0.40em}
+\setlength{\parskip}{0.38em}
 \setlength{\emergencystretch}{2em}
-
-\newcommand{\questionsep}{\par\vspace{1.15em}}
-\definecolor{inhouseblue}{RGB}{225,240,255}
+\newcommand{\questionsep}{\par\vspace{1em}}
 
 \begin{document}
 
@@ -22,228 +19,129 @@ Submission 13175
 \end{center}
 
 \textbf{Opening response.}
-We sincerely thank the reviewer for recognizing the potential value of sMMC and
-for identifying the central question we had not answered clearly enough: what
-research becomes possible because the resource is larger, cell aligned, and
-context rich? This resource has accompanied me since my first PhD year, when I
-was new to spatial transcriptomics. As I approach graduation, I hope its unified
-release helps new students enter the field with fewer practical barriers.
-
-We also clarify the new primary component. The current working manifest contains
-99 unique samples (100 processing records) and 28,315,247 aligned targets. Our
-in-house DBiC-seq collection contributes 21 samples and 54,304 measured cells;
-paired-record QC removes 315, leaving 53,989 aligned cells. These records pair
-cell morphology, RNA, and cellular context. A broader continuing DBiC-seq pool
-now contains approximately 200,000 paired cells but is not counted in the table
-below.
-
-\begin{center}
-\begingroup
-\footnotesize
-\setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\linewidth}{@{}
->{\raggedright\arraybackslash}p{0.27\linewidth}
->{\raggedright\arraybackslash}p{0.18\linewidth}
->{\raggedright\arraybackslash}Xr@{}}
-\toprule
-Component & Samples & Platforms & Aligned cells after QC \\
-\midrule
-\rowcolor{inhouseblue}
-\textbf{New in-house primary data} & \textbf{21} & \textbf{DBiC-seq} &
-\textbf{53,989} \\
-\textbf{Total sMMC-28M working manifest} &
-\textbf{99 unique (100 records)} & \textbf{Xenium; Visium HD; DBiC-seq} &
-\textbf{28,315,247} \\
-\bottomrule
-\end{tabularx}
-\endgroup
-\end{center}
+We sincerely thank the reviewer for asking what research becomes possible
+because sMMC is larger, cell aligned, and context rich. This helped us organize
+the revision around scientific utility. We will follow the suggestions point
+by point and hope the reviewer will reconsider. The working release contains
+28.3M aligned targets, including 53,989 new in-house DBiC-seq cells with paired
+morphology and RNA.
 
 \questionsep
 \textbf{Q1.}\quad
-\textit{The extent to which this new data can truly promote relevant research
-progress has not been fully explained.}
+\textit{How can the new data promote research progress?}
 
-\textbf{A1 (Scale).}\enspace
-We agree. The resource is valuable not because one predictor has solved
-histology-to-expression inference, but because it makes previously difficult
-evaluations measurable.
+\textbf{A1 (A unified cell-level benchmark).}
 \begin{itemize}
-\item \textbf{Objective:} test the value of additional training cells under a
-fixed task.
-\item \textbf{Design:} on native-Xenium sample HHDX011, we fixed the spatial
-test regions, training-selected top-50 HVGs, and regression protocol while
-varying training cells for seven frozen encoders:
+\item \textbf{Task:} local-cell and tissue-context histology crops predict
+aligned-cell RNA; no expression is supplied at inference.
+\item \textbf{Protocols:} spatial holdout (5\% buffer), complete-sample
+transfer, verified patient/donor holdout, and panel-matched cross-platform
+transfer.
+\item \textbf{Metrics:} gene/cell correlations, F1, marker/HVG performance, and
+Average/Worst/Gap. STBoost lifts spot predictors through hierarchical
+cell/context inputs.
 \end{itemize}
 
-\begin{center}
-\begingroup
-\small
-\begin{tabular}{lrrrr}
-\toprule
-Training fraction & 5\% & 10\% & 25\% & 100\% \\
-\midrule
-Seven-encoder mean Gene Pearson & 0.177 & 0.205 & 0.241 & 0.278 \\
-\bottomrule
-\end{tabular}
-\endgroup
-\end{center}
+\textbf{A2 (Results across all 25 release categories).}\enspace
+Under one fixed spatial-holdout protocol, the image model gives macro Gene
+Pearson/Cell Pearson/F1 of \textbf{0.324/0.442/0.413}:
 
-\begin{itemize}
-\item \textbf{Result/significance:} every encoder improved monotonically. This
-shows that additional cells are useful within this controlled range; we do not
-claim a universal scaling law.
-\end{itemize}
-
-\textbf{A2 (Breadth and biological calibration).}
-
-\newpage
 \begin{center}
 \begingroup
 \footnotesize
-\setlength{\tabcolsep}{4.2pt}
-\renewcommand{\arraystretch}{1.04}
-\textit{\textbf{Table 1. Per-organ benchmark results.}
-Results use the top-50 training-selected HVGs, four contiguous spatial
-holdouts, and a 5\% train--test buffer.}\\[5pt]
-\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
+\setlength{\tabcolsep}{7pt}
+\renewcommand{\arraystretch}{1.02}
+\begin{tabular*}{0.84\linewidth}{@{\extracolsep{\fill}}lrrr@{}}
 \toprule
-& \multicolumn{3}{c}{Gene Pearson} & & & \\
-\cmidrule(lr){2-4}
-\shortstack[l]{Release category\\(evaluated species)} &
-Image &
-\shortstack{Coordinate\\only} &
-\shortstack{Spatial\\KNN} &
-\shortstack{Gene\\Spearman} &
-\shortstack{Cell\\Pearson} &
-F1 \\
+Release category & Gene P & Cell P & F1 \\
 \midrule
-\textbf{Bone (mouse)} & 0.030 & \textbf{0.124} & 0.055 & 0.037 & 0.180 & 0.240 \\
-Brain (human + mouse) & \textbf{0.399} & 0.010 & 0.036 & 0.371 & 0.570 & 0.752 \\
-Breast (human) & \textbf{0.400} & 0.053 & 0.035 & 0.375 & 0.433 & 0.487 \\
-Cervical (human) & \textbf{0.178} & 0.017 & 0.014 & 0.157 & 0.247 & 0.026 \\
-\textbf{Colon (mouse)} & \textbf{0.615} & -0.137 & 0.072 & 0.588 & 0.739 & 0.744 \\
-Colorectal (human) & \textbf{0.431} & 0.056 & 0.083 & 0.419 & 0.532 & 0.623 \\
-\textbf{Embryo (mouse)} & \textbf{0.278} & 0.037 & 0.045 & 0.251 & 0.517 & 0.342 \\
-Head (zebrafish) & \textbf{0.216} & 0.022 & 0.031 & 0.193 & 0.429 & 0.287 \\
-Heart (human) & \textbf{0.292} & 0.010 & 0.021 & 0.266 & 0.688 & 0.304 \\
-Kidney (human) & \textbf{0.402} & 0.019 & 0.017 & 0.361 & 0.471 & 0.460 \\
-Liver (human) & -0.002 & 0.003 & \textbf{0.010} & -0.002 & 0.561 & 0.400 \\
-Lung (human) & \textbf{0.359} & 0.065 & 0.053 & 0.317 & 0.402 & 0.457 \\
-Lymph Node (human) & \textbf{0.141} & 0.043 & 0.013 & 0.131 & 0.164 & 0.023 \\
-Ovarian (human) & \textbf{0.250} & 0.122 & 0.104 & 0.239 & 0.312 & 0.234 \\
-Ovarian glands (human) & \textbf{0.402} & 0.059 & 0.043 & 0.391 & 0.559 & 0.756 \\
-Pancreas (human) & \textbf{0.324} & 0.090 & 0.068 & 0.272 & 0.505 & 0.275 \\
-Pancreatic (human) & \textbf{0.366} & 0.080 & 0.051 & 0.341 & 0.540 & 0.694 \\
-Pancreatic duct gland (human) & \textbf{0.331} & 0.091 & 0.100 & 0.282 & 0.408 & 0.386 \\
-Plant (\textit{A. thaliana}) & -0.011 & 0.004 & \textbf{0.012} & -0.009 & 0.385 & 0.052 \\
-Prostate (human) & \textbf{0.263} & -0.015 & 0.025 & 0.244 & 0.263 & 0.083 \\
-Seed (soybean) & -0.020 & -0.003 & \textbf{0.008} & -0.018 & 0.314 & 0.037 \\
-Skin (human) & \textbf{0.359} & 0.048 & 0.086 & 0.299 & 0.437 & 0.368 \\
-\textbf{Small Intestine (mouse)} & \textbf{0.572} & -0.104 & 0.067 & 0.548 & 0.701 & 0.715 \\
-Tonsil (human) & \textbf{0.294} & 0.028 & 0.018 & 0.249 & 0.462 & 0.399 \\
-Xenograft (human + mouse) & \textbf{0.387} & 0.041 & 0.049 & 0.362 & 0.526 & 0.589 \\
+Bone (mouse) & 0.030 & 0.180 & 0.240 \\
+Brain (human + mouse) & 0.399 & 0.570 & 0.752 \\
+Breast (human) & 0.400 & 0.433 & 0.487 \\
+Cervical (human) & 0.178 & 0.247 & 0.026 \\
+Colon (mouse) & 0.615 & 0.739 & 0.744 \\
+Colorectal (human) & 0.431 & 0.532 & 0.623 \\
+Embryo (mouse) & 0.278 & 0.517 & 0.342 \\
+Head (zebrafish) & 0.216 & 0.429 & 0.287 \\
+Heart (human) & 0.292 & 0.688 & 0.304 \\
+Kidney (human) & 0.402 & 0.471 & 0.460 \\
+Liver (human) & -0.002 & 0.561 & 0.400 \\
+Lung (human) & 0.359 & 0.402 & 0.457 \\
+Lymph Node (human) & 0.141 & 0.164 & 0.023 \\
+Ovarian (human) & 0.250 & 0.312 & 0.234 \\
+Ovarian glands (human) & 0.402 & 0.559 & 0.756 \\
+Pancreas (human) & 0.324 & 0.505 & 0.275 \\
+Pancreatic (human) & 0.366 & 0.540 & 0.694 \\
+Pancreatic duct gland (human) & 0.331 & 0.408 & 0.386 \\
+Plant (\textit{A. thaliana}) & -0.011 & 0.385 & 0.052 \\
+Prostate (human) & 0.263 & 0.263 & 0.083 \\
+Seed (soybean) & -0.020 & 0.314 & 0.037 \\
+Skin (human) & 0.359 & 0.437 & 0.368 \\
+Small Intestine (mouse) & 0.572 & 0.701 & 0.715 \\
+Tonsil (human) & 0.294 & 0.462 & 0.399 \\
+Xenograft (human + mouse) & 0.387 & 0.526 & 0.589 \\
 \midrule
-\textbf{30-sample macro} & \textbf{0.324} & 0.046 & 0.053 &
-\textbf{0.291} & \textbf{0.442} & \textbf{0.413} \\
+\textbf{30-sample macro} & \textbf{0.324} & \textbf{0.442} & \textbf{0.413} \\
 \bottomrule
 \end{tabular*}
-
 \endgroup
 \end{center}
 
-\begin{itemize}
-\item \textbf{Reproducibility:} the updated benchmark code, fixed splits,
-configurations, and evaluation scripts for this table are now available in our
-\href{https://anonymous.4open.science/r/sMMC-22M-DB75}{anonymous GitHub
-repository}.
-\item \textbf{Result:} image prediction exceeds coordinate and KNN controls in 28/30 samples. On
-marker/HVG overlap, image Gene Pearson is 0.201 versus 0.031 for coordinates and
-0.028 for KNN. Cell-type-stratified pseudobulk RMSE is 0.120 for image prediction
-versus 0.224/0.187/0.188 for coordinates/KNN/training mean.
-\item \textbf{Claim boundary:} because cell-type labels are expression derived,
-this is aggregate biological calibration, not independent ground truth.
-\end{itemize}
+Image Gene Pearson exceeds coordinate/KNN controls in 21/25 rows; on marker/HVG
+overlap it is 0.201 versus 0.031/0.028. We will release fixed splits,
+configurations, and code.
 
-\textbf{A3 (Resolution).}
+\textbf{A3 (Transfer and context).}
 \begin{itemize}
-\item \textbf{Design/result:} on six native-Xenium samples, matched cell, 8-,
-16-, and 55-\(\mu\)m supervision
-gives Gene Pearson 0.365, 0.365, 0.363, and 0.330. In dense lung, 55.5\%--66.4\% of
-55-\(\mu\)m pseudo-spots mix predicted cell types and contain 73.8\%--81.0\% of
-evaluated cells, whereas sparse heart shows only 3.5\%--4.1\% mixed spots and
-7.0\%--8.3\% affected cells.
-\item \textbf{Significance:} cell-level evaluation exposes density-dependent
-mixing hidden by coarse averaging; it is not claimed to be universally easier.
-\end{itemize}
-
-\textbf{A4 (Overall scientific value).}\enspace Together, these experiments turn
-scale, resolution, and context from descriptive properties into testable
-variables:
-\begin{itemize}
-\item data scaling and leakage-controlled breadth across organs;
-\item organ/platform transfer and context-specific failure;
-\item aggregation-induced oversmoothing and spatial leakage.
+\item Across 18 same-organ held-out targets, top-50-HVG Gene Pearson averages
+\textbf{0.170} (range \textbf{0.016--0.372}); these are sample-held-out unless
+donors are verified.
+\item Across eight HD source\(\rightarrow\)target organ pairs, UNI2-h macro
+Gene Pearson, Cell Pearson, and F1 are \textbf{0.0151}, \textbf{0.2036}, and
+\textbf{0.0815}. This difficult result is important: sample, platform, panel,
+and composition shifts remain open problems.
+\item We will reserve \emph{patient-held-out} for verified donors and report
+cross-platform results with matched panels and platform-separated summaries.
+\item Context audits using patient-CV or leave-one-site-out show Average--Worst
+balanced-accuracy gaps of \textbf{0.258--0.975} across single-cell and pathology
+encoders. The ovarian AK/AD/AL shift changes F1 from \textbf{0.289 to 0.072},
+but will be labeled sample/age-confounded rather than causal.
 \end{itemize}
 
 \questionsep
 \textbf{Q2.}\quad
-\textit{The increase of data scale, resolution, and contexts typically
-associates with increased heterogeneity, which may pose critical challenges for
-data analysis. Please clarify the heterogeneity and how it may influence
-downstream analysis.}
+\textit{How does heterogeneity affect downstream analysis, and what does cell
+alignment add?}
 
-\textbf{A1 (Observed heterogeneity).}\enspace
-We agree and will make heterogeneity an explicit benchmark variable rather than
-a hidden nuisance.
+\textbf{A1 (Measured consequence of resolution).}\enspace
+Across six native-Xenium samples, cell/8/16/55-\(\mu\)m targets give Gene
+Pearson \textbf{0.365/0.365/0.363/0.330}. Yet 55-\(\mu\)m pseudo-spots mix cell
+types in \textbf{55.5--66.4\%} of dense-tissue regions, affecting
+\textbf{73.8--81.0\%} of cells, versus
+\textbf{3.5--4.1\%/7.0--8.3\%} in sparse tissue.
 
-\begin{center}
-\begingroup
-\scriptsize
-\renewcommand{\arraystretch}{1.10}
-\begin{tabularx}{\linewidth}{@{}p{0.15\linewidth}p{0.35\linewidth}X@{}}
-\toprule
-Dimension & Observed heterogeneity & Downstream consequence \\
-\midrule
-Organ size & 26,366--3,559,793 aligned cells (135-fold) &
-Cell-weighted pooling can be dominated by large organs. \\
-Gene coverage & 450--72,302 genes &
-Full-panel metrics are not directly comparable across panels. \\
-Platform & Only 10/25 public tissue strata occur on both platforms &
-Platform and biology can be confounded. \\
-Spatial density & 55-\(\mu\)m mixing affects 7.0\%--8.3\% of cells in sparse
-heart but 73.8\%--81.0\% in dense lung &
-Spot averaging hides tissue-dependent heterogeneity. \\
-Sample transfer & Across 18 same-organ targets, top-50-HVG Gene Pearson averages
-0.170 but ranges 0.016--0.372 &
-Mean performance can conceal severe target-sample failures. \\
-Context & Ovarian AK (60+) \(\to\) AD (60+) versus AK \(\to\) AL (40-)
-changes F1 0.289 \(\to\) 0.072 &
-Pooled scores can hide subgroup collapse. \\
-\bottomrule
-\end{tabularx}
-\endgroup
-\end{center}
+Moving spatial transcriptomics from spots toward cells therefore changes what
+can be studied, not merely the benchmark resolution. It preserves cell identity
+and neighborhood heterogeneity for cell-type/state analysis and cell--cell
+communication; links morphology, RNA, and response at the cell unit for
+virtual-cell and perturbation models; and enables tracing how perturbations
+propagate through interacting cells across spatial tissue. These questions are
+poorly posed when heterogeneous cells are collapsed into one spot.
 
-\textbf{A2 (Interpretation and protocol changes).}
+\textbf{A2 (Revisions enabled by the reviewer's suggestions).}\enspace We will:
 \begin{itemize}
-\item The ovarian comparison is age associated but sample/patient confounded,
-not causal. Incomplete donor identity also means the 18-target result is
-sample-held-out, not patient-held-out.
-\item We will report organ-macro and platform-separated results rather than only
-cell-weighted averages.
-\item We will distinguish spatial in-domain, sample-held-out, and verified
-patient-held-out protocols.
-\item We will report Average/Worst/Gap with sample support and disclose
-gene-panel overlap and metadata missingness.
-\item We will label every field as directly measured, processed, generated, or
-model output, and will not infer missing sensitive attributes.
+\item place the benchmark task, STBoost definition, split construction, and
+25-category results in the main text;
+\item separate spatial, sample-held-out, verified patient-held-out, and
+cross-platform claims;
+\item report organ-macro and platform-separated Average/Worst/Gap with support,
+panel overlap, and metadata missingness;
+\item label each field as measured, processed, generated, or model output and
+avoid causal or representativeness claims unsupported by donors.
 \end{itemize}
 
-\textbf{A3 (Significance).}\enspace These revisions clarify the scientific value:
-sMMC does not remove
-heterogeneity, but makes its downstream effects visible, measurable, and
-reproducible across organs, platforms, spatial resolutions, and biological
-contexts.
+We again thank the reviewer: these suggestions make the paper clearer about
+both the opportunities enabled by a unified cell-aligned resource and the
+substantial heterogeneity that future methods must solve.
 
 \end{document}
