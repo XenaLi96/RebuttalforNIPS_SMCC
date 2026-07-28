@@ -227,12 +227,22 @@ generalization.
 \textbf{Q4.}\quad
 \textit{Could in-domain results reflect spatial interpolation?}
 
-\textbf{A.}
+\textbf{A.}\enspace We thank the reviewer for raising this important concern.
+Random cell splits can be inflated by spatial autocorrelation; ours is
+spatially separated.
 \begin{itemize}
-\item We will call same-sample results \emph{spatial interpolation diagnostics}.
-They use contiguous holdouts and a 5\% buffer; 18-target/eight-organ tests hold
-out complete samples and expose the generalization gap.
-\item ``Patient-held-out'' will be used only for verified donors.
+\item The original in-domain split trains on the left two-thirds and tests on
+the right one-third of a section; a 5\% buffer removes boundary cells.
+Train/test cells are therefore neither interleaved nor directly neighboring.
+The 30-sample benchmark uses four analogous contiguous holdouts.
+\item Under identical splits, image macro Gene Pearson is 0.324 versus 0.046
+for coordinate-only regression and 0.053 for spatial KNN, and image is
+strongest in 28/30 samples. Local interpolation alone therefore cannot explain
+the performance.
+\item Because both partitions remain from the same sample, we will call this
+\emph{within-sample spatially held-out prediction}, not cross-sample/patient
+generalization. Complete-sample transfer is reported separately and remains
+substantially harder.
 \end{itemize}
 
 \questionsep

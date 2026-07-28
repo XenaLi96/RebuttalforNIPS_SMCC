@@ -28,6 +28,6 @@ Complementary biological calibration supports the same boundary: marker/HVG Gene
 
 **5. Claims will match the evaluation protocol.**
 
-Same-sample results will be called *spatial interpolation diagnostics*; “patient-held-out” will require verified donors. The ovarian example will be called an *age-associated, sample-confounded shift*. Direct, processed, and generated fields will be separated, and generated captions will remain optional context rather than molecular truth.
+Within-sample experiments use spatial block splits rather than random cell splits: left two-thirds for training, right one-third for testing, with a 5% boundary buffer. The 30-sample benchmark applies four contiguous spatial holdouts under the same principle. We will call these *within-sample spatially held-out predictions* and reserve “patient-held-out” for verified donors. The ovarian example will be called an *age-associated, sample-confounded shift*. Direct, processed, and generated fields will be separated, and generated captions will remain optional context rather than molecular truth.
 
 The reviewer’s requested controls have therefore improved the benchmark and revealed a stronger baseline, while also confirming that patient/platform/processing transfer is still an open problem rather than a solved capability.
