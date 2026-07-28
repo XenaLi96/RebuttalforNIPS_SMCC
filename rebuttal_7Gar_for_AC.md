@@ -1,6 +1,6 @@
 # Response to the Area Chair regarding Reviewer 7Gar
 
-We thank Reviewer 7Gar for asking us to quantify what is new, clarify the purpose of each experimental axis, and validate the derived HD targets and generated text. We have completed the requested audits and will revise the framing accordingly.
+We thank Reviewer 7Gar for asking us to quantify what is new, clarify each experimental axis, and validate derived HD targets and generated text. We have completed the requested audits and will revise the manuscript point by point.
 
 **1. Dataset composition and novelty are now explicit.**
 
@@ -16,7 +16,7 @@ Thus, approximately **70% of our samples are absent from HEST-1K**. The in-house
 **2. The three experimental axes now have distinct, testable objectives.**
 
 - **Scale:** This is not intended as a leaderboard. It asks whether more training cells improve image-to-expression prediction while targets, preprocessing, head, and spatial tests are fixed. Across seven frozen encoders, mean Gene Pearson increases monotonically from **0.177→0.205→0.241→0.278** at 5%/10%/25%/100% training fractions; every encoder improves. We interpret this only within the tested range, not as a universal scaling law.
-- **Resolution:** This is the central benchmark: histology-only prediction of an aligned-cell RNA profile, with no molecular input at inference. STBoost is the interface that adapts spot-level methods to hierarchical cell/context crops; STBoost-Ref is our image-only reference predictor. On 30 native-Xenium samples, the macro results are Gene Pearson **0.324**, Gene Spearman **0.291**, Cell Pearson **0.442**, and F1 **0.413**. Image prediction is strongest in 21/25 release-category rows.
+- **Resolution:** This is the central benchmark: histology-only prediction of aligned-cell RNA, with no molecular input at inference. STBoost adapts spot methods through hierarchical cell/context crops; every BLEEP result uses this adaptation. STBoost-Ref additionally uses the diffusion-loss and Appendix components. On 30 native-Xenium samples, macro Gene Pearson/Gene Spearman/Cell Pearson/F1 are **0.324/0.291/0.442/0.413**; image prediction is strongest in 21/25 release-category rows.
 - **Context:** This axis asks whether average performance hides subgroup collapse. The ovarian example changes F1 from **0.289 to 0.072** and gene/cell Spearman from **0.036/0.206 to 0.006/0.095**. Because age is nested within sample/patient and panels differ, we will call this an *age-associated, sample-confounded shift*, not a causal age effect. Complementary assay/dataset/site audits show large Average–Worst gaps across Geneformer, scGPT, CONCH, UNI, and H-Optimus-0. Context metadata make such failures measurable; they do not remove bias.
 
 **3. Visium HD construction has been quantitatively audited.**

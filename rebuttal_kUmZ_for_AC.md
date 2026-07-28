@@ -10,7 +10,7 @@ We thank Reviewer kUmZ for focusing on the manuscript’s central issue: whether
 | Public Visium HD | 7,629,697 targets | Derived cell-aligned |
 | In-house DBiC-seq | 53,989 post-QC cells from 21 samples | Native cell-resolved |
 
-We have added new in-house DBiC-seq data from our collaborators: 53,989 post-QC cells from 21 samples with paired cell morphology and RNA, available for [download](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md). We will call Xenium/DBiC-seq “native cell-resolved,” HD “derived cell-aligned,” avoid unqualified “single-cell predictor” claims, and use the count-independent title *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
+The new DBiC-seq data pair cell morphology and RNA and are available for [download](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md). We will call Xenium/DBiC-seq “native cell-resolved,” HD “derived cell-aligned,” avoid unqualified “single-cell predictor” claims, and use the count-independent title *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
 
 For HD, following 10x Genomics’ documented mapping, official transforms register native 2-µm bins to H&E-aligned CellViT contours, aggregate intersecting bins, assign conflicts to the nearest centroid, and exclude unsupported polygons. These are derived cell-aligned targets, not native single-cell measurements. In a **9,000-polygon** audit, ±1-µm shifts gave Jaccard **0.706–0.816**, expression cosine **0.936–0.994**, and median absolute UMI change **6.0–13.7%**. We will move this construction rule and QC into the main body.
 
@@ -22,7 +22,7 @@ We separately report eight source→target organ pairs. Cross-sample prediction 
 
 **3. The task and STBoost interface will be defined in the main body.**
 
-The benchmark predicts a cell-aligned RNA profile from histology alone; no molecular input is supplied at inference. Each profile is paired with local-cell and tissue-context crops. STBoost lifts spot-level methods to cell-level prediction through these hierarchical inputs while retaining their prediction modules. “STBoosted BLEEP” is published BLEEP retrained through this interface; “STBoost-Ref” is our image-only reference. We will move a concise formulation/architecture from the Appendix into the main body.
+The benchmark predicts cell-aligned RNA from histology alone; no molecular input is supplied at inference. STBoost replaces the spot interface with hierarchical local-cell/context inputs while retaining prediction modules. Table BLEEP is STBoosted BLEEP; STBoost-Ref is our image-only reference. Because this ED-track submission was framed as a dataset paper, we initially placed detailed methods, equations, and architecture in the Appendix. We will define the terms at first mention and move a concise formulation/architecture into the main body.
 
 **4. A controlled pseudo-spot experiment shows what cell alignment adds.**
 
@@ -32,6 +32,6 @@ Across six native-Xenium samples, fixed-pipeline cell/8/16/55-µm targets give G
 
 We agree that existing datasets cannot be assumed representative of ethnicity, sex/gender, or other human traits. We will report missingness, never infer undocumented sensitive attributes, and avoid unsupported population-level claims. Nevertheless, context-bias evaluation remains important: patient-CV/leave-one-site-out audits of Geneformer, scGPT, CONCH, UNI, and H-Optimus-0 show substantial Average–Worst gaps (**0.258–0.975**). The ovarian result will be called a *sample/age-confounded context shift*, not causal.
 
-Figure 1 was not AI-generated. I began this resource in my first PhD year; over the following three years, the figure went through two manually drawn Sketch versions and now contains 162 editable vector layers. Evidence is in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure_evidence_not_AI/`. We will also correct its text, expand the caption, define split/cell-unit/ratio terminology, and state exactly which components are public.
+Figure 1 was not AI-generated: it has two manually drawn Sketch versions and 162 editable vector layers, documented in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure_evidence_not_AI/`. We will correct its text, expand the caption, define split/cell-unit/ratio terminology, and identify public components.
 
 The revision therefore distinguishes native from derived evidence, makes the benchmark and alignment auditable, and clarifies the scientific value of cell-resolved evaluation.

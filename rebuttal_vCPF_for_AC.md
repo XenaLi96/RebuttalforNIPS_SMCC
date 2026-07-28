@@ -18,11 +18,11 @@ Across 18 complete same-organ held-out targets, top-50-HVG Gene Pearson averages
 
 On eight complete Visium HD source→target organ pairs, UNI2-h gives macro Gene Pearson **0.0151**, Cell Pearson **0.2036**, and F1 **0.0815**. The training mean gives Cell Pearson **0.2422** and F1 **0.0375**. Thus, UNI2-h improves F1 but not Cell Pearson over the mean, and gene-wise transfer remains poor. We retain this negative result and do not conflate it with the easier spatial-interpolation endpoint.
 
-**4. The reviewer-inspired metadata baseline improves calibration but does not solve transfer.**
+**4. The reviewer-inspired metadata baseline improves calibration.**
 
 On identical cells and genes, we added coordinate-only, segmentation-metadata-only, and combined ridge baselines. Segmentation metadata include CellViT type/confidence, polygon/bounding-box morphology, status, and edge flag; expression-derived `total_counts` and `n_genes_detected` are excluded.
 
-Segmentation metadata improve Gene Pearson in **8/8 organs**, raising macro Gene/Cell Pearson from **0.0151/0.2036 to 0.0399/0.2344**. Coordinate-only and combined Gene Pearson are **−0.0023/0.0316**. However, metadata F1 is **0.0432**, below UNI2-h **0.0815**. We will therefore adopt segmentation metadata as the principal non-image *correlation-calibration* baseline alongside the mean, not claim universal superiority. Age/sex/disease cannot be separated with only one source/target pair per organ.
+Segmentation metadata improve Gene Pearson in **8/8 organs**, raising macro Gene/Cell Pearson from **0.0151/0.2036 to 0.0399/0.2344**. Coordinate-only and combined Gene Pearson are **−0.0023/0.0316**. Metadata F1 is **0.0432**, while UNI2-h reaches **0.0815**, showing complementary calibration strengths. We will adopt segmentation metadata as the principal non-image *correlation-calibration* baseline alongside the mean. Age/sex/disease cannot be separated with only one source/target pair per organ.
 
 Complementary biological calibration is also favorable: marker/HVG Gene Pearson is **0.201** for image versus **0.031/0.028** for coordinate/KNN, and cell-type-stratified pseudobulk RMSE is **0.120** versus **0.224/0.187/0.188** for coordinate/KNN/mean. We thank the reviewer for this constructive suggestion and will add the paired transfer comparison and biological-calibration results to the revised manuscript.
 

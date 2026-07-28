@@ -1,33 +1,44 @@
 # Response to the Area Chair regarding Reviewer aSvP
 
-We thank Reviewer aSvP for asking what research progress is enabled by a resource that is larger, cell aligned, and context rich, and how its heterogeneity affects downstream analysis. We now answer both questions with controlled experiments and explicit protocol changes.
+We thank Reviewer aSvP for identifying two questions that the manuscript had not explained clearly enough: how the data promote research progress, and how increased heterogeneity affects downstream analysis. The revised response and manuscript are organized directly around these concerns.
 
-**1. The contribution is an evaluation resource, not a claim that prediction is solved.**
+**1. The resource promotes research by lowering practical barriers and enabling reproducible evaluation.**
 
-The working manifest contains **99 unique samples (100 records), 28,315,247 aligned targets, and 25 tissue strata plus three cell-line origins**. The new primary component comprises **21 in-house DBiC-seq samples and 53,989 post-QC native cells** paired with morphology, RNA, and cellular context.
+Spatial-transcriptomics data are fragmented across platforms, panels, formats, segmentation conventions, and metadata schemas. sMMC supplies one cell-aligned interface for morphology, tissue context, molecular targets, coordinates, and available donor metadata. The 25-organ release can therefore be accessed through one pipeline while preserving provenance: native Xenium/DBiC-seq cells remain distinct from Visium HD targets derived within cell masks.
 
-The value of this scale is tested under a fixed task. Holding the spatial test regions, training-selected top-50 HVGs, and regression protocol constant, the seven-encoder mean Gene Pearson rises from **0.177→0.205→0.241→0.278** at 5%/10%/25%/100% training fractions; every encoder improves. This supports a benefit of additional cells within the tested range, not a universal scaling law.
+The accompanying benchmark uses image-only local-cell and tissue-context crops to predict RNA aligned to a cell. STBoost lets existing spot predictors use this hierarchical interface while retaining their prediction modules. Fixed targets and splits support:
 
-**2. Breadth and biological calibration now extend beyond the original examples.**
+- spatially separated within-sample prediction;
+- complete-sample transfer;
+- verified patient/donor holdout;
+- panel-matched cross-platform transfer;
+- 25-organ breadth and context-aware evaluation.
 
-We ran one leakage-controlled protocol across all 25 release categories using 30 native-Xenium samples, four contiguous spatial holdouts, and a 5% train–test buffer. The image macro results are Gene Pearson **0.324**, Gene Spearman **0.291**, Cell Pearson **0.442**, and F1 **0.413**; image prediction exceeds coordinate and spatial-KNN controls in **28/30 samples**.
+This infrastructure lets researchers study scaling, foundation encoders, normalization, adaptation, robust learning, and biological transfer without rebuilding the dataset. It does not claim that image-to-expression prediction is solved.
 
-On marker/HVG overlap, image Gene Pearson is **0.201**, versus **0.031/0.028** for coordinate/KNN controls. Cell-type-stratified pseudobulk RMSE is **0.120**, versus **0.224/0.187/0.188** for coordinate/KNN/training mean. Because cell-type strata are expression-derived, this is aggregate biological calibration rather than independent label validation. Code, fixed splits, configurations, and evaluations are available in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75).
+**2. Cell alignment enables downstream questions whose natural unit is the cell.**
 
-**3. Cell alignment exposes heterogeneity that coarse aggregation can hide.**
+Spots merge cells with different identities, states, and responses. Moving image and molecular targets toward the same cell preserves local heterogeneity and supports:
 
-Across six native-Xenium samples, matched cell/8/16/55-µm supervision gives Gene Pearson **0.365/0.365/0.363/0.330**. We do not argue that cell-level prediction must always produce a higher correlation. Instead, the controlled pseudo-spot analysis shows what averaging removes: in dense lung, **55.5–66.4%** of 55-µm pseudo-spots mix cell types and involve **73.8–81.0%** of cells, versus **3.5–4.1%** and **7.0–8.3%** in a sparse sample. Cell-level evaluation therefore preserves tissue-dependent heterogeneity that may be numerically smoothed at spot resolution.
+- cell type/state analysis linking morphology to identity and disease programs;
+- cell–cell communication and the role of tissue architecture;
+- virtual-cell and perturbation models linking morphology, context, state, and response;
+- microenvironment analysis that distinguishes cells within a niche rather than assigning one averaged profile.
 
-**4. Heterogeneity is now a benchmark variable rather than a hidden nuisance.**
+sMMC does not itself solve these tasks; it supplies a common multimodal substrate on which they can be trained and evaluated across organs and contexts.
 
-The audit identifies:
+**3. The revision explicitly documents heterogeneity and its downstream effects.**
 
-- a **135-fold** organ-size range (**26,366–3,559,793 cells**), which makes cell-weighted pooling misleading;
-- gene-panel ranges of **450–72,302 genes**, which prevent naïve full-panel comparisons;
-- only **10/25** public tissue strata represented on both Xenium and Visium HD, allowing platform and biology to be confounded;
-- 18 same-organ held-out targets with mean top-50-HVG Gene Pearson **0.170** but range **0.016–0.372**; and
-- context-associated failures, including ovarian F1 **0.289→0.072**.
+We will distinguish:
 
-Accordingly, the revision will report organ-macro and platform-separated results; distinguish spatial interpolation, sample-held-out, and verified patient-held-out protocols; report Average/Worst/Gap with support; disclose panel overlap and metadata missingness; and never infer missing sensitive attributes. The ovarian comparison will be labeled sample/age-confounded rather than causal.
+- biological heterogeneity: organ, species, disease, composition, density, and donor;
+- technical heterogeneity: platform, study, acquisition, segmentation, and resolution;
+- molecular heterogeneity: panel overlap, coverage, sparsity, and target construction;
+- context heterogeneity: uneven age, sex, disease, site, and patient support;
+- scale imbalance across organs and studies.
 
-The revised contribution is therefore precise: sMMC does not eliminate biological and technical heterogeneity. It provides sufficient scale, alignment, and context to measure how that heterogeneity changes model behavior across organs, platforms, resolutions, samples, and subgroups.
+These factors directly affect analysis: large organs can dominate pooled training; unmatched panels make gene metrics incomparable; platform/study effects can resemble biology; segmentation and density change targets and neighborhood mixing; missing donors make sample shift look like patient shift; and uneven context support confounds subgroup comparisons.
+
+Accordingly, we will report organ-macro and platform-separated summaries, panel overlap, donor/sample support, metadata missingness, and Average/Worst/Gap; reserve “patient-held-out” for independent donors; separate native/derived targets and spatial/sample/patient/platform protocols; and label measured, processed, generated, and model-derived fields.
+
+The revised claim is precise: sMMC does not remove heterogeneity. It makes heterogeneity auditable and provides a shared resource for studying how it affects generalization, bias, and cell-centered downstream research.
