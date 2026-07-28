@@ -20,33 +20,20 @@
 Submission 13175
 \end{center}
 
-\textbf{Opening response.}
-We sincerely thank the reviewer. The three requests sharpen the revision: audit
-Visium HD construction, demonstrate breadth, and biologically calibrate low
-correlations. This resource has accompanied me since my first PhD year; near
-graduation, I hope its release helps newcomers enter spatial transcriptomics.
-
-Our 21-sample in-house DBiC-seq collection adds 54,304 measured/53,989 post-QC
-cells with paired morphology, RNA, and context. The working manifest contains 99
-unique samples (100 records) and 28,315,247 targets; a broader continuing
-DBiC-seq pool of approximately 200,000 paired cells is not counted here.
+We thank the reviewer for requesting an HD-construction audit, broader
+evaluation, and biological calibration. We provide each below while separating
+native from derived targets and retaining negative transfer results.
 
 \questionsep
 \textbf{Q1.}\quad
-\textit{For the Visium HD data, how reliable is the bin-to-cell aggregation?
-How are boundary bins assigned, and do segmentation errors noticeably affect
-expression profiles?}
+\textit{How reliable is Visium HD bin-to-cell aggregation?}
 
 \textbf{A1 (Construction).}
 \begin{itemize}
-\item We will distinguish native Xenium cells from \emph{derived cell-aligned}
-Visium HD targets.
-\item Official transforms register native 2-\(\mu\)m bins to H\&E. A
-closed bin square is assigned when it intersects a same-frame CellViT polygon;
-if several polygons claim it, the nearest full-resolution centroid wins, with
-raw-cell index breaking exact ties.
-\item Unsupported cells are removed. We will move this rule and a complete
-record example from Appendix S2 into the main text.
+\item Official transforms register native 2-\(\mu\)m bins to H\&E; intersecting
+CellViT polygons aggregate counts, conflicts go to the nearest centroid, and
+unsupported cells are removed. We will move this rule to the main text and
+label HD outputs \emph{derived cell-aligned}, separately from native Xenium.
 \end{itemize}
 
 \textbf{A2 (Sensitivity audit).}\enspace We audited 3,000 raw polygons per
@@ -70,20 +57,15 @@ Human pancreas & 50.0\% & 0.706--0.714 & 0.994 & 13.0\%--13.7\% \\
 \endgroup
 \end{center}
 
-\textbf{A3 (Interpretation).}
-\begin{itemize}
-\item Percentages use all detected polygons; unsupported polygons are excluded.
-\item Shifts preserve expression direction but alter membership/UMIs;
-erosion/dilation gives Jaccard 0.462--0.720, cosine 0.871--0.993, and
-\(|\Delta\mathrm{UMI}|\) 32.8\%--66.6\%.
-\item Uncertainty is material. We will release settings/QC, avoid ground-truth
-language, and report Xenium separately.
-\end{itemize}
+Across all raw polygons, coverage is sample dependent. Among supported
+polygons, shifts largely preserve expression direction but alter
+membership/UMIs; erosion/dilation gives Jaccard 0.462--0.720, cosine
+0.871--0.993, and \(|\Delta\mathrm{UMI}|\) 32.8\%--66.6\%. We will release
+settings/QC and avoid ground-truth language.
 
 \questionsep
 \textbf{Q2.}\quad
-\textit{The main experiments cover only a few representative cases. Can the
-authors summarize more organs or platforms?}
+\textit{Can the authors summarize more organs/platforms?}
 
 \textbf{A1 (Release-wide breadth).}\enspace
 Yes. Table~1 reports results for all 25 release categories.
@@ -145,28 +127,19 @@ Xenograft (human + mouse) & \textbf{0.387} & 0.041 & 0.049 & 0.362 & 0.526 & 0.5
 
 \textbf{A2 (Independent-sample evidence).}
 \begin{itemize}
-\item Image is strongest in 21/25 category rows; the four failures remain
-visible rather than being removed.
-\item Across 18 complete same-organ held-out targets, image
+\item Image is strongest in 21/25 rows. Across 18 same-organ held-out targets,
+image
 top-50-HVG Gene Pearson averages 0.170 (0.016--0.372), Cell Pearson is 0.275
 versus 0.205 for training mean, and F1 is 0.125 versus 0.031. These are sample-,
 not donor-held-out, results.
-\item The updated benchmark code, fixed splits,
-configurations, and evaluation scripts are now available in our
-\href{https://anonymous.4open.science/r/sMMC-22M-DB75}{anonymous GitHub
-repository}.
 \end{itemize}
 
-\textbf{A3 (Visium HD transfer).}\enspace We additionally evaluated eight
-complete source-sample-to-target-sample organ pairs. Because these full-panel
-transfer results are central to the reviewer's calibration question, we report
-them in Q3 rather than only giving a favorable aggregate.
+\textbf{A3 (Visium HD transfer).}\enspace Q3 reports eight complete
+source-to-target pairs before and after the requested calibration controls.
 
 \questionsep
 \textbf{Q3.}\quad
-\textit{Some gene-wise correlations are low, especially under transfer. How
-should they be interpreted biologically, and could marker/cell-type genes or
-spatial-only/metadata-only baselines calibrate them?}
+\textit{How should low transfer correlations be interpreted and calibrated?}
 
 \textbf{A1 (Full-panel transfer before calibration).}\enspace The unweighted
 per-organ results are:
@@ -175,9 +148,8 @@ per-organ results are:
 \begingroup
 \footnotesize
 \setlength{\tabcolsep}{3.4pt}
-\textit{\textbf{Table 2. Eight-organ full-panel Visium HD transfer before
-metadata calibration.} TM denotes the source training mean; its gene-wise
-correlation is undefined.}\\[3pt]
+\textit{\textbf{Table 2. Full-panel Visium HD transfer before calibration.}
+TM is the source mean; its gene correlation is undefined.}\\[3pt]
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrrrrr@{}}
 \toprule
 Organ & Pair & \shortstack{UNI2-h\\Gene P} & \shortstack{UNI2-h\\Cell P} &
@@ -199,20 +171,15 @@ Mouse kidney & a$\to$aj & 0.0049 & 0.2678 & 0.0513 & 0.4696 & 0.0159 \\
 \endgroup
 \end{center}
 
-\begin{itemize}
-\item Full-panel Gene Pearson is low, and UNI2-h improves F1 but not Cell
-Pearson over the mean. We intentionally retain this negative transfer result.
-\item It measures sample, processing, composition, and acquisition shift; it
-must not be conflated with the easier training-selected-HVG spatial
-interpolation result.
-\end{itemize}
+Full-panel Gene Pearson is low; UNI2-h improves F1 but not Cell Pearson over
+the mean. We retain this negative result and do not conflate
+sample/processing/composition shift with the easier spatial-interpolation
+endpoint.
 
-\textbf{A2 (Reviewer-inspired transfer calibration).}\enspace We sincerely
-thank the reviewer for suggesting metadata/spatial controls. Following this
-suggestion, we fit three leakage-controlled baselines on the identical source
-cells, target cells, and genes: coordinate-only, segmentation-metadata-only,
-and their combination. Segmentation metadata comprise CellViT type/confidence,
-polygon/bounding-box morphology, status, and edge flag; expression-derived
+\textbf{A2 (Reviewer-inspired calibration).}\enspace We thank the reviewer for
+suggesting metadata/spatial controls. On identical cells/genes we fit
+coordinate-only, segmentation-metadata-only, and combined baselines. Metadata
+include CellViT type/confidence, polygon/bbox morphology, status, and edge flag;
 \texttt{total\_counts} and \texttt{n\_genes\_detected} are excluded.
 
 \begin{center}
@@ -242,16 +209,14 @@ Mouse kidney & 0.0213 & 0.0211 & 0.3910 & 0.0904 & 0.0175 \\
 \end{center}
 
 \begin{itemize}
-\item Segmentation metadata improve Gene Pearson in all 8/8 organs and raise
+\item Segmentation metadata improve Gene Pearson in 8/8 organs and raise
 organ-macro Gene/Cell Pearson from 0.0151/0.2036 to 0.0399/0.2344.
-Coordinate-only and metadata+coordinate reach Gene Pearson -0.0023 and 0.0316,
+Coordinate-only and combined reach Gene Pearson -0.0023 and 0.0316,
 respectively.
-\item F1 remains lower than UNI2-h (0.0432 versus 0.0815), so this is a stronger
-\emph{correlation-calibration} baseline, not a universally superior predictor.
-We will adopt it as the principal non-image transfer baseline alongside the
-training mean.
-\item Age/sex/disease are not fitted here: each organ has only one source and
-one target sample, so clinical-context effects are not separately identifiable.
+\item F1 is lower than UNI2-h (0.0432 versus 0.0815). We will therefore use
+this as the principal non-image \emph{correlation-calibration} baseline
+alongside the mean, not claim universal superiority. Age/sex/disease are not
+identifiable from one source/target pair per organ.
 \end{itemize}
 
 \textbf{A3 (Biological calibration).}\enspace The complementary 30-sample
@@ -273,52 +238,36 @@ Cell-type-stratified pseudobulk RMSE \(\downarrow\) &
 \endgroup
 \end{center}
 
-\textbf{A4 (Claim boundary).}
-\begin{itemize}
-\item The marker inventory overlaps training-selected HVGs, and cell-type strata
-are expression-derived; these results show recoverable aggregate structure, not
-independent cell-type validation.
-\item Under the harder bidirectional all-gene lung/ovary transfer, image Gene
-Pearson averages are \(-0.0003/0.0020\), whereas
-metadata-only baselines reach 0.104/0.142; coarse-state balanced accuracy is
-0.139/0.159 for image prediction versus 0.220/0.252 for metadata.
-\item Together, the native-Xenium and eight-organ HD controls demonstrate
-context dependence and motivate stronger patient/platform-robust methods
-rather than supporting unrestricted cell-wise recovery.
-\end{itemize}
+\textbf{A4 (Boundary).}\enspace Marker overlap and expression-derived strata
+provide aggregate biological calibration, not independent labels. Together,
+the controls demonstrate context dependence and motivate
+patient/platform-robust methods rather than unrestricted cell-wise recovery.
 
 \questionsep
 \textbf{Q4.}\quad
-\textit{In-domain results may reflect local interpolation and spatial
-autocorrelation rather than robust generalization.}
+\textit{Could in-domain results reflect spatial interpolation?}
 
 \textbf{A.}
 \begin{itemize}
 \item We will call same-sample results \emph{spatial interpolation diagnostics}.
-\item The 30-sample experiment uses contiguous holdouts and a 5\%
-train--test buffer, while the 18-target and eight-organ experiments hold out
-complete samples. Their lower and heterogeneous performance quantifies the
-generalization gap.
-\item ``Patient-held-out'' will be used only when donor identity is verified.
+They use contiguous holdouts and a 5\% buffer; 18-target/eight-organ tests hold
+out complete samples and expose the generalization gap.
+\item ``Patient-held-out'' will be used only for verified donors.
 \end{itemize}
 
 \questionsep
 \textbf{Q5.}\quad
-\textit{The ovarian context analysis is narrow and does not establish
-systematic evaluation of all variables.}
+\textit{Is the ovarian context analysis too narrow?}
 
 \textbf{A1 (Scope of the ovarian result).}
 \begin{itemize}
-\item Ovarian AK (60+) \(\to\) AD (60+) versus AK \(\to\) AL (40-) changes F1
-0.289 \(\to\) 0.072, gene Spearman 0.036 \(\to\) 0.006, cell Spearman
-0.206 \(\to\) 0.095, and nonzero rate 0.166 \(\to\) 0.027.
-\item Because age is nested
-within sample/patient and panels differ, we will call this an \emph{age-associated,
-sample-confounded shift}, not a causal age effect.
+\item AK (60+) \(\to\) AD (60+) versus AK \(\to\) AL (40-) changes F1
+0.289 \(\to\) 0.072 and gene/cell Spearman 0.036/0.206 \(\to\)
+0.006/0.095. Because age is nested within sample/patient and panels differ,
+this is an \emph{age-associated, sample-confounded shift}, not causal.
 \end{itemize}
 
-\textbf{A2 (Broader context audit).}\enspace To show the broader purpose of rich
-context, we applied Average/Worst/Gap audits to complementary cohorts:
+\textbf{A2 (Broader audit).}
 
 \begin{center}
 \begingroup
@@ -338,13 +287,11 @@ LGG IDH / H-Optimus-0 & site; leave-one-site & 0.747 & 0.476 & 0.524 \\
 \endgroup
 \end{center}
 
-\textbf{A3 (Significance).}\enspace Rich metadata enable subgroup-support and
-worst-context audits; they do not themselves remove bias.
+Rich metadata enable worst-context audits; they do not remove bias.
 
 \questionsep
 \textbf{Q6.}\quad
-\textit{Users need clear guidance on which fields are direct measurements and
-which are generated or post-processed.}
+\textit{Which fields are measured, processed, or generated?}
 
 \textbf{A1 (Provenance classes).}
 \begin{center}
@@ -365,13 +312,8 @@ molecular ground truth. \\
 \endgroup
 \end{center}
 
-\textbf{A2 (Generated-text validation and scope).}
-\begin{itemize}
-\item GPT-4o only verbalizes supplied fields.
-\item PLIP/CONCH audits give AUC 0.993/0.988 and 100\% Top-3 retrieval.
-\item We will restore prompts, field checks, examples, and matrices in the
-Appendix.
-\item Captions remain optional context, not molecular ground truth.
-\end{itemize}
+\textbf{A2 (Text scope).}\enspace GPT-4o verbalizes supplied fields; PLIP/CONCH
+audits give AUC 0.993/0.988 and 100\% Top-3 retrieval. We will restore audit
+materials; captions remain optional context, not ground truth.
 
 \end{document}
