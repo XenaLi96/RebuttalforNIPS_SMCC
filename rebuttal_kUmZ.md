@@ -18,7 +18,7 @@ We thank the reviewer for emphasizing target provenance, breadth, and cell align
 - Following 10x Genomics’ [documented mapping](https://www.10xgenomics.com/support/software/space-ranger/latest/analysis/segmented-outputs), HD registers native 2-µm bins to H&E-aligned CellViT contours, aggregates intersections, assigns conflicts to the nearest centroid, and excludes unsupported polygons. These are *derived cell-aligned targets*.
 - We audited 3,000 polygons/dataset (9,000 total) under ±1-µm shifts:
 
-| Visium HD example | Raw polygons with canonical bins | Shift-bin Jaccard | Shift-expression cosine | Shift median $|\Delta\mathrm{UMI}|$ |
+| Visium HD example | Raw polygons with canonical bins | Shift-bin Jaccard | Shift-expression cosine | Median absolute change in UMI count |
 |---|---:|---:|---:|---:|
 | Human lung cancer | 49.4% | 0.727–0.733 | 0.954–0.957 | 11.1%–11.3% |
 | Mouse brain | 97.5% | 0.806–0.816 | 0.936–0.939 | 6.0%–6.1% |
