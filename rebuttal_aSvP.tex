@@ -2,7 +2,6 @@
 \usepackage[margin=0.68in]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[hidelinks]{hyperref}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.40em}
 \setlength{\emergencystretch}{2em}
@@ -16,109 +15,112 @@ Submission 13175
 \end{center}
 
 \textbf{Opening response.}
-We sincerely thank the reviewer for asking what research becomes possible
-because sMMC is larger, cell aligned, and context rich. This helped us see that
-the paper must explain scientific utility rather than treat scale, resolution,
-and context as self-evident contributions. We will revise the manuscript point
-by point following these suggestions and hope the reviewer will reconsider.
+We sincerely thank the reviewer for identifying two questions that the
+manuscript had not explained clearly enough: how the data promote research, and
+how increased heterogeneity affects downstream analysis. We will organize the
+revision around these questions, revise point by point, and hope the reviewer
+will reconsider.
 
 \questionsep
-\textbf{Q1.}\quad
-\textit{How can the new data promote research progress?}
+\textbf{Q1 (Weakness).}\quad
+\textit{How can the new data truly promote relevant research progress?}
 
-\textbf{A1 (A unified resource).}\enspace
-Spatial-transcriptomics data are fragmented across platforms, panels, formats,
-segmentation, and metadata schemas. sMMC unifies morphology, tissue context,
-molecular targets, coordinates, and available donor metadata, lowering
-preprocessing barriers and making the 25-organ release usable through one
-pipeline. Its manifest distinguishes native Xenium/DBiC-seq cells from Visium
-HD targets derived within cell masks.
+\textbf{A1 (Lowering practical barriers).}\enspace
+Existing data are fragmented across platforms, panels, formats, segmentation,
+and metadata schemas. sMMC provides one cell-aligned interface for morphology,
+context, molecular targets, coordinates, and available donor metadata. The
+25-organ release becomes usable through one pipeline while preserving
+provenance: native Xenium/DBiC-seq cells remain distinct from Visium HD targets
+derived within cell masks. Data loading, preprocessing, splitting, and
+evaluation can therefore be reused across studies.
 
-\textbf{A2 (A benchmark moving image-to-expression modeling toward cells).}
-The task asks whether histology can predict RNA aligned to an individual cell.
-Its input is image only---a local cell crop and a larger tissue-context
-crop---and no molecular information is supplied at inference. STBoost lets
-existing spot-level predictors use this hierarchical cell/context interface
-while retaining their prediction modules.
+\textbf{A2 (Enabling reproducible method development).}\enspace
+Image-only local-cell and tissue-context crops predict RNA aligned to a cell.
+STBoost lets existing spot predictors use this hierarchical interface while
+retaining their prediction modules.
 
-We designed complementary protocols because no single split establishes
-usefulness:
+The resource supports several complementary research settings:
 \begin{itemize}
-\item spatially separated regions test morphology-associated signal without
-adjacent train/test cells;
-\item complete-sample transfer tests acquisition and composition shifts;
-\item verified patient/donor holdout tests biological transfer only with
-independent donors;
-\item panel-matched cross-platform transfer tests generalization across
-technologies;
-\item 25-organ breadth tests whether conclusions extend beyond selected
-tissues.
+\item spatially separated regions for within-sample prediction;
+\item complete-sample transfer for acquisition/composition shifts;
+\item verified patient/donor holdout for biological transfer;
+\item panel-matched cross-platform transfer;
+\item 25-organ breadth and context-aware evaluation.
 \end{itemize}
 
-Gene/cell, marker/HVG, expression-detection, and cell-state evaluation capture
-complementary behavior. We will release fixed splits and code so future methods
-use identical targets. This is an environment for measuring progress across
-organs and shifts, not a claim that prediction is solved.
+Together, these protocols ask whether additional data help, whether encoders
+capture morphology rather than location, and whether gains persist across
+organs, donors, technologies, and contexts. A fixed interface also lets new
+architectures, normalization methods, and adaptation strategies be compared
+without rebuilding the dataset.
 
-\textbf{A3 (Scale, transfer, and context become research variables).}\enspace
-The collection supports training-scale studies across foundation encoders.
-Multi-organ evaluation prevents one-tissue gains from appearing universal;
-sample, verified-patient, and cross-platform protocols make generalization a
-first-class target.
+Fixed splits and code let future methods use identical targets, supporting
+studies of scaling, foundation encoders, adaptation, robust learning, and
+biological transfer. This is infrastructure for comparing progress, not a
+claim that prediction is solved.
 
-Metadata enable context-bias analysis when averages hide failures by study,
-platform, site, age, or disease. sMMC supports Average/Worst/Gap, subgroup
-support, donor-aware resampling, and context-specific failure analysis. We will
-report missingness, infer no undocumented attributes, and avoid unsupported
-causal or fairness claims.
+\textbf{A3 (Expanding cell-centered downstream research).}\enspace
+Spots merge cells with different identities, states, and responses. Moving
+image and molecular targets toward the same cell preserves local heterogeneity
+and supports:
+\begin{itemize}
+\item \textbf{cell type/state:} connect morphology with identity and disease
+programs;
+\item \textbf{cell--cell communication:} study neighboring-cell interactions
+and tissue architecture;
+\item \textbf{virtual-cell/perturbation modeling:} link morphology, context,
+state, and response, then trace effects through interacting cells;
+\item \textbf{microenvironment analysis:} distinguish cells within a niche
+rather than assign one averaged profile.
+\end{itemize}
+
+sMMC does not solve these tasks; it supplies a common substrate for training
+and evaluating them across organs and contexts. We will state these
+opportunities explicitly.
 
 \questionsep
-\textbf{Q2.}\quad
-\textit{How does heterogeneity affect downstream analysis, and what does cell
-alignment add?}
+\textbf{Q2 (Heterogeneity).}\quad
+\textit{What heterogeneity is introduced by increased scale, resolution, and
+context, and how may it influence downstream analysis?}
 
-\textbf{A1 (Heterogeneity becomes measurable rather than hidden).}\enspace
-Scale introduces variation in organ size, platform, gene coverage, density,
-composition, disease, and donor support. Pooled results can be dominated by
-large organs; unmatched panels distort gene metrics; missing donor IDs make
-sample shift look like patient shift. We will report organ-macro/platform-
-separated summaries, panel overlap, support, missingness, and
-Average/Worst/Gap, and use ``patient-held-out'' only for independent donors.
-
-\textbf{A2 (Cell alignment expands the biological questions that can be
-asked).}\enspace
-Spots merge neighboring cells with different identities, states, and
-responses. An averaged prediction may look plausible while losing the
-heterogeneity required for interpretation. Aligning image and molecular
-targets toward the same cell preserves cell identity and neighborhood
-organization, supporting:
+\textbf{A1 (Sources of heterogeneity).}\enspace
+We agree that a larger resource contains more variation. We will document:
 \begin{itemize}
-\item \textbf{cell type/state:} connect morphology with identity, activation,
-and disease programs;
-\item \textbf{cell--cell communication:} study which neighboring cell types
-interact and how tissue architecture shapes them;
-\item \textbf{virtual-cell and perturbation modeling:} associate morphology,
-context, molecular state, and response at the cell unit, then trace
-perturbation effects through interacting cells across tissue;
-\item \textbf{microenvironment analysis:} separate heterogeneous cells within
-a region and relate their states to local niches instead of assigning one
-averaged profile to all cells.
+\item \textbf{biological:} organ, species, disease, composition, density, and
+donor;
+\item \textbf{technical:} platform, study, acquisition, segmentation, and
+resolution;
+\item \textbf{molecular:} panel overlap, coverage, sparsity, and target
+construction;
+\item \textbf{context:} uneven support for age, sex, disease, site, and
+patient;
+\item \textbf{scale:} unequal samples/cells across organs and studies.
 \end{itemize}
 
-These questions are poorly posed when heterogeneous cells are collapsed into a
-spot. sMMC does not itself solve cell-state prediction, communication
-inference, or virtual-cell modeling; it supplies a common substrate on which
-these directions can be evaluated and improved.
+\textbf{A2 (Downstream influence).}\enspace
+Cell-weighted pooling can let large organs dominate; unmatched panels make
+gene metrics incomparable; platform/study effects can resemble biology;
+segmentation and density change targets and neighborhood mixing; incomplete
+donors make sample shift look like patient shift; uneven context support
+confounds subgroup comparisons. A model may therefore optimize dominant
+tissues, learn technical signatures, or appear robust because averaging hides
+rare-context failures. Heterogeneity defines deployment shifts, while the
+unified manifest supports normalization, panel alignment, adaptation,
+calibration, and robust generalization.
 
-\textbf{A3 (Revision plan).}\enspace
-We will move the task, STBoost, splits, 25-organ scope, provenance, and
-heterogeneity controls into the main text; distinguish measured, processed,
-generated, and model-derived fields; separate spatial, sample, patient, and
-platform claims; and frame the resource as enabling these directions rather
-than claiming one baseline solves them.
+\textbf{A3 (Controls and manuscript revisions).}\enspace
+Following the reviewer's advice, we will:
+\begin{itemize}
+\item report organ-macro/platform-separated summaries and panel overlap;
+\item separate native/derived targets and spatial/sample/patient/platform
+protocols;
+\item report Average/Worst/Gap, donor support, and missingness;
+\item reserve ``patient-held-out'' for independent donors;
+\item label measured, processed, generated, and model-derived fields.
+\end{itemize}
 
-We again thank the reviewer. These suggestions clarify how a cell-aligned
-resource lowers entry barriers and supports generalization, bias, and
-cell-centered research.
+These changes do not remove heterogeneity; they make its downstream effects
+auditable. We again thank the reviewer: these two questions make the resource's
+purpose, opportunities, and limitations clearer.
 
 \end{document}
