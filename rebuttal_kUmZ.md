@@ -113,3 +113,63 @@ We thank the reviewer for identifying the central issues: molecular-target prove
 
 - We will use these names consistently, define every split/unit, and correct Figure 1 and Figure 3.
 - We will state the limits of spatial autocorrelation, sample/platform shift, HD boundary assignment, metadata missingness, and prediction as a substitute for measurement.
+
+**Q7 (Q3, L3).** *What does cell-aligned evaluation add beyond spot-centered prediction?*
+
+**A1 — Matched resolution control.**
+
+- We constructed 8-, 16-, and 55-µm pseudo-spots from the same native-Xenium cells while holding the image representation, target genes, and evaluation protocol fixed across six samples.
+- Mean Gene Pearson was 0.365 at cell level, 0.365 at 8 µm, 0.363 at 16 µm, and 0.330 at 55 µm. We therefore do not claim that cell-level prediction is universally more accurate than spot-level prediction.
+
+**A2 — What averaging hides.**
+
+- In full-density lung HLCX022, 55-µm aggregation mixed cell types in 55.5–66.4% of test pseudo-spots, containing 73.8–81.0% of evaluated cells. In the much sparser HHDX011 sample, only 3.5–4.1% of pseudo-spots were mixed, containing 7.0–8.3% of cells.
+- The benefit of cell alignment is therefore density dependent: it preserves within-region cellular heterogeneity that coarse averaging can conceal, even when aggregate correlation changes little. We will replace the vague limitation identified by the reviewer with this measured statement.
+
+**Q8 (P6).** *How are cells detected and aligned when the platform does not provide cell boundaries, and how reliable is the resulting Visium HD assignment?*
+
+**A1 — Platform-specific construction.**
+
+- Xenium supplies native cell boundaries and transcript coordinates; no spot-to-cell expression inference is used.
+- For Visium HD, official spatial transforms register native 2-µm bins to H&E. A published CellViT model supplies same-frame cell contours; intersecting bins are aggregated within each contour, conflicts are assigned to the nearest full-resolution cell centroid, and unsupported polygons are excluded. Thus there is no single spot center that is simply matched to a cell center.
+
+**A2 — Assignment sensitivity.** We audited 3,000 raw CellViT polygons in each of three Visium HD samples (9,000 total) under ±1-µm registration shifts:
+
+| Visium HD sample | Polygons with canonical bins | Shift-bin Jaccard | Shift-expression cosine | Shift median absolute UMI change |
+|---|---:|---:|---:|---:|
+| Human lung cancer | 49.4% | 0.727–0.733 | 0.954–0.957 | 11.1–11.3% |
+| Mouse brain | 97.5% | 0.806–0.816 | 0.936–0.939 | 6.0–6.1% |
+| Human pancreas | 50.0% | 0.706–0.714 | 0.994 | 13.0–13.7% |
+
+- Among supported polygons, small shifts largely preserve expression direction, but coverage is sample dependent. Mask erosion/dilation is more disruptive (Jaccard 0.462–0.720; expression cosine 0.871–0.993; median absolute UMI change 32.8–66.6%).
+- We will move the segmentation, transform, conflict-resolution, filtering, and sensitivity details into the main body; release the corresponding coverage/QC fields; and continue to report native Xenium separately from derived HD evidence.
+
+**Q9 (P8, P9, L4).** *How many independent patients or animals support the experiments, and how complete is the demographic metadata?*
+
+**A1 — Verified evaluation units.**
+
+| Evaluation | Verifiable sample support | Patient/animal interpretation |
+|---|---:|---|
+| Native-Xenium breadth benchmark | 30 H&E-aligned samples | Independent donor/animal IDs are not consistently reported upstream |
+| Eight-organ HD transfer | 16 source/target samples in 8 pairs | Sample-held-out; donor relationships are unverified |
+
+- We cannot responsibly convert sample records into a unique patient or animal count when upstream identifiers are absent. We will add per-organ sample-record counts alongside cell counts, mark unavailable donor/animal fields explicitly, and use “patient-held-out” only where independent donor identity is verified.
+
+**A2 — Demographic coverage.**
+
+- As stated in Q5, age, sex, and disease are retained only when reported by the source, while ethnicity is undocumented in the current manifest. We will report field-level missingness rather than infer sensitive attributes, and no demographic comparison will be presented as independently supported without multiple verified donors per group.
+
+**Q10 (P7, second Q4).** *How will STBoost and the changing resource size be named?*
+
+**A.**
+
+- We will define STBoost at its first appearance in both the abstract and Introduction, introduce BLEEP before the first comparison, and use STBoost, STBoosted BLEEP, and STBoost-Ref consistently instead of the undefined label “Ours.”
+- To avoid 22M/23M becoming obsolete as the resource grows, we will use the count-independent name *sMMC* and report the exact frozen release version and platform-resolved counts in the manifest.
+
+**Q11 (P3–P5, Q1).** *How will the revised main body distinguish the three experimental purposes and reduce redundancy?*
+
+**A.**
+
+- The resolution evidence—native-Xenium targets, the 25-category benchmark, and the matched pseudo-spot control—addresses whether cell-aligned evaluation preserves cell-specific molecular heterogeneity.
+- The context experiment is orthogonal: it tests whether a trained model remains reliable across recorded biological contexts; it is not offered as evidence that the targets are single-cell.
+- We will place a compact 25-category result summary, the histology-only input and cell-expression target, split definitions, and platform-specific alignment/QC in the main body, while removing repeated scale/resolution/context framing and the line-level redundancies identified by the reviewer.
