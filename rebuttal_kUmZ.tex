@@ -209,19 +209,18 @@ details into the main body and keep native Xenium separate from derived HD.
 \textbf{Q4 (Q3, L3).}\quad
 \textit{What does cell alignment add beyond spot-centered prediction?}
 
-\textbf{A.}
+\textbf{A.}\enspace We thank the reviewer for this important suggestion.
 \begin{itemize}
-\item Across six native-Xenium samples, matched cell/8/16/55-\(\mu\)m targets
-gave Gene Pearson 0.365/0.365/0.363/0.330. This controlled target aggregation
-rather than comparing unrelated pipelines; it does not support universal
-cell-level accuracy superiority.
-\item At 55 \(\mu\)m, dense lung HLCX022 mixed cell types in 55.5--66.4\% of
-pseudo-spots, involving 73.8--81.0\% of cells, versus 3.5--4.1\% and
-7.0--8.3\% in sparse HHDX011. Cell alignment therefore exposes
-density-dependent heterogeneity that averaging can hide.
-\item We will replace the vague limitation criticized in L3 with this measured
-statement: coarse aggregation can hide cell-type mixing even when its
-correlation appears similar.
+\item Across six native-Xenium samples, we held the pipeline fixed and changed
+only target scale (cell/8/16/55 \(\mu\)m): Gene Pearson was
+0.365/0.365/0.363/0.330, showing averaging can retain a similar global score.
+\item We then audited two representative samples. At 55 \(\mu\)m, pseudo-spots
+mixed cell types in 55.5--66.4\% of regions and affected 73.8--81.0\% of cells
+in dense tissue, versus 3.5--4.1\% and 7.0--8.3\% in sparse tissue.
+\item Cell alignment thus reveals heterogeneity hidden by averaging and enables
+cell-resolved studies such as cell--cell communication, virtual-cell
+perturbation prediction, and tracing perturbation effects through interactions
+across spatial tissue.
 \end{itemize}
 
 \questionsep

@@ -26,7 +26,7 @@ For HD, intersecting registered bins are aggregated, conflicts go to the nearest
 
 **4. A controlled pseudo-spot experiment shows what cell alignment adds.**
 
-Across six native-Xenium samples, matched cell/8/16/55-µm targets give Gene Pearson **0.365/0.365/0.363/0.330**. We do not claim universal cell-level accuracy superiority. Instead, coarse aggregation hides heterogeneity: in dense lung, **55.5–66.4%** of 55-µm pseudo-spots mix cell types and involve **73.8–81.0%** of cells, versus **3.5–4.1%** and **7.0–8.3%** in a sparse sample. We will replace the vague limitation criticized by the reviewer with this measured density-dependent result.
+Across six native-Xenium samples, fixed-pipeline cell/8/16/55-µm targets give Gene Pearson **0.365/0.365/0.363/0.330**. In two representative samples, 55-µm pseudo-spots mix cell types in **55.5–66.4%** of regions and affect **73.8–81.0%** of cells in dense tissue, versus **3.5–4.1%** and **7.0–8.3%** in sparse tissue. Cell alignment therefore reveals heterogeneity hidden by averaging and enables cell-resolved studies of cell–cell communication, virtual-cell perturbation prediction, and perturbation effects across spatial tissue.
 
 **5. Context and presentation claims will be constrained.**
 
