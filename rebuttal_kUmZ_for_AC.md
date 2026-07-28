@@ -5,7 +5,7 @@ We thank Reviewer kUmZ for focusing on molecular provenance, evaluation breadth,
 **1. Molecular provenance and alignment are now explicit.**
 
 We separate native Xenium/DBiC-seq cells from HD targets derived by aggregating 2-µm bins within cell masks. DBiC-seq data are available in our [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75). We now document HD assignment/QC and provide a 9,000-polygon shift audit. We will use “native cell-resolved” and “derived cell-aligned,” remove unqualified single-cell claims, and adopt a count-independent title.
-
+、
 **2. The benchmark scope, task, and limitations are now clear.**
 
 We report one protocol across all 25 categories and separate complete-sample transfer. Histology-only local-cell/context crops predict aligned-cell RNA; STBoost adapts spot predictors to this interface. Difficult transfer results remain visible rather than being presented as patient generalization.
