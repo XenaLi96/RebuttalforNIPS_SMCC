@@ -6,11 +6,19 @@ We thank Reviewer kUmZ for focusing on molecular provenance, evaluation breadth,
 
 We separate native Xenium/DBiC-seq cells from HD targets derived by aggregating 2-µm bins within cell masks. DBiC-seq data are available in our [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75). We now document HD assignment/QC and provide a 9,000-polygon shift audit. We will use “native cell-resolved” and “derived cell-aligned,” remove unqualified single-cell claims, and adopt a count-independent title.
 
-**2. The benchmark scope, task, and limitations are now clear.**
+**2. The benchmark scope and the purpose of moving from spots toward cells are now clear.**
 
-We report one protocol across all 25 categories and separate complete-sample transfer. Histology-only local-cell/context crops predict aligned-cell RNA; STBoost adapts spot predictors to this interface. Difficult transfer results remain visible rather than being presented as patient generalization.
+We provide complete results across all 25 release categories and eight cross-sample settings. The task uses histology-only local-cell/context crops to predict RNA aligned to a cell, and STBoost adapts existing spot predictors to this interface. These experiments clarify our central goal: to provide the data, task, and benchmark needed to move image-to-expression research from multi-cell spots toward the cell scale.
 
-Cell alignment preserves heterogeneity hidden by spot aggregation and supports cell type/state, communication, virtual-cell, and perturbation research. Context fields enable bias audits but do not establish representativeness; unsupported causal/fairness claims will be removed.
+The reviewer questions our comparison with spot-level methods and suggests that cell-aligned prediction should achieve substantially higher accuracy than spot-centered prediction before we may claim to be “moving toward single-cell prediction.” We find this requirement difficult to understand. This is an ED-track dataset and benchmark paper: our responsibility is to formulate an important task, provide data and reproducible protocols, establish baselines, and make the unsolved problem available to the community. Requiring the first benchmark paper to solve the task before it may introduce it would undermine the purpose of releasing challenging benchmarks—there would be little left for subsequent methods to improve.
+
+Moreover, the cell-level task is intrinsically harder, not easier. In representative settings, the prediction unit shrinks from a spot containing roughly twenty cells to one cell—approximately one-twentieth of the aggregated molecular material. Spot averaging reduces noise and biological heterogeneity, so it can produce higher correlations even when it hides cell-specific errors. We therefore do not believe cell-level accuracy must exceed spot-level accuracy before the task can legitimately be described as moving toward cell-resolved prediction.
+
+The reviewer also questioned our statement that cell-level prediction is more biologically meaningful because it exposes errors hidden by spots. We believe the point is direct: a spot may contain multiple cell types, yet averaging assigns them one molecular profile. This hides within-spot cell-type differences, marker separation, cell-state variation, and the cellular interactions needed for communication analysis. A spot predictor can look accurate at the averaged level while being unable to distinguish the cells inside that spot.
+
+We have deep respect for the spot-level literature and have implemented and evaluated nearly all leading spot-level approaches. STBoost was proposed precisely to preserve these effective methods while lifting their input/target interface toward cells, not to dismiss their contribution. At the same time, wet-lab biology is rapidly moving toward single-cell assays. Cell-type/state analysis, single-cell perturbation, virtual-cell modeling, and cell–cell communication all operate naturally at the cell level; cell-resolved spatial transcriptomics is the bridge from a virtual cell to a virtual tissue by showing how perturbed cells interact in space. This is why we believe the benchmark opens an important research direction even though current baselines do not solve it.
+
+Context fields further enable bias audits but do not establish population representativeness; unsupported causal or fairness claims will be removed.
 
 **3. Requested method details and Figure 1 authorship.**
 
