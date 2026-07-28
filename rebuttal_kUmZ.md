@@ -116,7 +116,7 @@ Context materially changes performance; structured metadata make this measurable
 
 **Q6 (P5, second Q4, minor remarks).** *How will naming, Figure 1, and presentation be revised?*
 
-**A1 — Figure 1.** Figure 1 was not AI-generated. I began this resource in my first PhD year; over three years, the figure had two manually drawn Sketch versions and now has 162 editable vector layers. Layer-workspace screenshots are in our [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure_evidence_not_AI/`.
+**A1 — Figure 1.** Figure 1 was not AI-generated. I began this resource in my first PhD year; over three years, the figure had two manually drawn Sketch versions and now has 161 editable vector layers. Layer-workspace screenshots are in our [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure_evidence_not_AI/`.
 
 **A2 — Revisions.**
 

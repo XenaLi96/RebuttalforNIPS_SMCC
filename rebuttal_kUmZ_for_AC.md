@@ -1,37 +1,21 @@
 # Response to the Area Chair regarding Reviewer kUmZ
 
-We thank Reviewer kUmZ for focusing on the manuscript’s central issue: whether the resource and benchmark are genuinely cell resolved on the molecular side, what cell alignment adds beyond spot analysis, and whether evidence extends beyond three examples. We now separate native from derived targets, provide full-category and cross-sample results, and narrow the claims.
+We thank Reviewer kUmZ for focusing on molecular provenance, evaluation breadth, and the value of cell alignment. We now separate native/derived targets, evaluate all release categories, and narrow the claims.
 
-**1. “Native cell-resolved” and “derived cell-aligned” are now separated.**
+**1. Molecular provenance and alignment are now explicit.**
 
-| Component | Count | Molecular status |
-|---|---:|---|
-| Public Xenium | 16,314,129 cells | Native cell-resolved |
-| Public Visium HD | 7,629,697 targets | Derived cell-aligned |
-| In-house DBiC-seq | 53,989 post-QC cells from 21 samples | Native cell-resolved |
+We separate native Xenium/DBiC-seq cells from HD targets derived by aggregating 2-µm bins within cell masks. DBiC-seq data are available in our [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75). We now document HD assignment/QC and provide a 9,000-polygon shift audit. We will use “native cell-resolved” and “derived cell-aligned,” remove unqualified single-cell claims, and adopt a count-independent title.
 
-The new DBiC-seq data pair cell morphology and RNA and are available for [download](https://anonymous.4open.science/r/sMMC-22M-DB75/README.md). We will call Xenium/DBiC-seq “native cell-resolved,” HD “derived cell-aligned,” avoid unqualified “single-cell predictor” claims, and use the count-independent title *sMMC: A Cell-Aligned Multimodal Resource for Spatial Transcriptomics*.
+**2. The benchmark scope, task, and limitations are now clear.**
 
-For HD, following 10x Genomics’ documented mapping, official transforms register native 2-µm bins to H&E-aligned CellViT contours, aggregate intersecting bins, assign conflicts to the nearest centroid, and exclude unsupported polygons. These are derived cell-aligned targets, not native single-cell measurements. In a **9,000-polygon** audit, ±1-µm shifts gave Jaccard **0.706–0.816**, expression cosine **0.936–0.994**, and median absolute UMI change **6.0–13.7%**. We will move this construction rule and QC into the main body.
+We report one protocol across all 25 categories and separate complete-sample transfer. Histology-only local-cell/context crops predict aligned-cell RNA; STBoost adapts spot predictors to this interface. Difficult transfer results remain visible rather than being presented as patient generalization.
 
-**2. Benchmark results now cover all 25 release categories.**
+Cell alignment preserves heterogeneity hidden by spot aggregation and supports cell type/state, communication, virtual-cell, and perturbation research. Context fields enable bias audits but do not establish representativeness; unsupported causal/fairness claims will be removed.
 
-Under one fixed protocol using training-selected top-50 HVGs, four contiguous spatial holdouts, and a 5% train–test buffer, image macro Gene Pearson, Gene Spearman, Cell Pearson, and F1 are **0.324/0.291/0.442/0.413**; image prediction is strongest in **21/25 category rows**. These results establish image-associated signal under leakage-controlled spatial holdouts, not patient generalization.
+**3. Requested method details and Figure 1 authorship.**
 
-We separately report eight source→target organ pairs. Cross-sample prediction remains difficult and the results are not yet satisfactory: UNI2-h macro Gene Pearson/Cell Pearson/F1 are **0.0151/0.2036/0.0815**, while the mean reaches Cell Pearson/F1 **0.2422/0.0375**. We report these results transparently beside the spatial-holdout benchmark.
+The method details requested by the reviewer were not absent. Because this was submitted to the ED track as a dataset paper, we placed the complete STBoost design, equations, training objective, and architecture figure in the Appendix. We agree that a concise definition should also appear in the main body and will move it there.
 
-**3. The task and STBoost interface will be defined in the main body.**
+I also want to address the statement that Figure 1 “feels AI-generated.” I began curating this resource in my first PhD year and am now approaching graduation. Figure 1 went through two complete versions in the Sketch app and the current source contains **161 editable layers**. Every circle, line, connector, label, and layout element was drawn and adjusted manually, one by one. The cumulative drawing and revision time exceeded one week. Screenshots of the editable layer workspace are available in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure_evidence_not_AI/`; even modest magnification shows the individually constructed vector elements.
 
-The benchmark predicts cell-aligned RNA from histology alone; no molecular input is supplied at inference. STBoost replaces the spot interface with hierarchical local-cell/context inputs while retaining prediction modules. Table BLEEP is STBoosted BLEEP; STBoost-Ref is our image-only reference. Because this ED-track submission was framed as a dataset paper, we initially placed detailed methods, equations, and architecture in the Appendix. We will define the terms at first mention and move a concise formulation/architecture into the main body.
-
-**4. A controlled pseudo-spot experiment shows what cell alignment adds.**
-
-Across six native-Xenium samples, fixed-pipeline cell/8/16/55-µm targets give Gene Pearson **0.365/0.365/0.363/0.330**. In two representative samples, 55-µm pseudo-spots mix cell types in **55.5–66.4%** of regions and affect **73.8–81.0%** of cells in dense tissue, versus **3.5–4.1%** and **7.0–8.3%** in sparse tissue. Cell alignment reveals heterogeneity hidden by averaging and supports cell–cell communication, virtual-cell perturbation prediction, and perturbation analysis across spatial tissue.
-
-**5. Context representativeness and bias are treated separately.**
-
-We agree that existing datasets cannot be assumed representative of ethnicity, sex/gender, or other human traits. We will report missingness, never infer undocumented sensitive attributes, and avoid unsupported population-level claims. Nevertheless, context-bias evaluation remains important: patient-CV/leave-one-site-out audits of Geneformer, scGPT, CONCH, UNI, and H-Optimus-0 show substantial Average–Worst gaps (**0.258–0.975**). The ovarian result will be called a *sample/age-confounded context shift*, not causal.
-
-Figure 1 was not AI-generated: it has two manually drawn Sketch versions and 162 editable vector layers, documented in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure_evidence_not_AI/`. We will correct its text, expand the caption, define split/cell-unit/ratio terminology, and identify public components.
-
-The revision therefore distinguishes native from derived evidence, makes the benchmark and alignment auditable, and clarifies the scientific value of cell-resolved evaluation.
+Having years of work, and this manually constructed figure, dismissed in one sentence as AI-generated was genuinely heartbreaking. Nevertheless, we appreciate the underlying concern about clarity. We will correct the labels, expand the caption, and improve the layout while retaining verifiable evidence of the figure’s manual construction.
