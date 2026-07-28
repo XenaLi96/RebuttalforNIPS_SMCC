@@ -1,4 +1,4 @@
-We thank the reviewer for focusing on target provenance, experimental breadth, and the value of cell alignment. Because this rebuttal is length-limited, we answer concisely here and will respond to each point in greater detail once the open-comment period begins. We distinguish native from derived targets, report all 25 categories, and retain difficult transfer results.
+We thank the reviewer for focusing on target provenance, experimental breadth, and the value of cell alignment. In response, we distinguish native from derived targets, report all 25 categories, and retain the difficult transfer results. We sincerely hope that the reviewer will reconsider the paper after we have the opportunity to address every concern individually. Because this rebuttal is length-limited, we present the central evidence concisely here and will provide a fuller point-by-point response during the open-comment period.
 
 **Q1 (P2, Q2, Q4, L1–L2).** *Are the molecular targets truly single-cell?*
 
