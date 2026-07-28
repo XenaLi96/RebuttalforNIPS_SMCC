@@ -1,4 +1,4 @@
-We thank the reviewer for focusing on target provenance, experimental breadth, and the value of cell alignment. We distinguish native from derived targets, report all 25 categories, and retain difficult transfer results.
+We thank the reviewer for focusing on target provenance, experimental breadth, and the value of cell alignment. Because this rebuttal is length-limited, we answer concisely here and will respond to each point in greater detail once the open-comment period begins. We distinguish native from derived targets, report all 25 categories, and retain difficult transfer results.
 
 **Q1 (P2, Q2, Q4, L1–L2).** *Are the molecular targets truly single-cell?*
 
@@ -96,7 +96,7 @@ We thank the reviewer for focusing on target provenance, experimental breadth, a
 
 **Q6 (P5, second Q4, minor remarks).** *How will naming, Figure 1, and presentation be revised?*
 
-**A1 — Figure 1.** Figure 1 was not AI-generated. I began this resource in my first PhD year and manually developed two Sketch versions with 162 editable vector layers over more than one week. Screenshots of the layer workspace are available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure1_design_evidence/`.
+**A1 — Figure 1.** Figure 1 was not AI-generated. I began this resource in my first PhD year and manually developed two Sketch versions with 162 editable vector layers over more than one week. Screenshots of the layer workspace are available in our [anonymous GitHub repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure_evidence_not_AI/`.
 
 **A2 — Revisions.**
 

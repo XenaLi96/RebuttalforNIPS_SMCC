@@ -32,6 +32,6 @@ Across six native-Xenium samples, fixed-pipeline cell/8/16/55-µm targets give G
 
 Context is an orthogonal robustness axis, not proof of cell-level validity. The ovarian result will be called a *sample/age-confounded context shift*, not causal. Donor/animal IDs are incomplete; we will report missingness, never infer ethnicity or other sensitive attributes, and require verified donor support for subgroup claims.
 
-Figure 1 was manually created in two Sketch versions with 162 editable vector layers; evidence is available in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75). We will nevertheless correct its wording/blanks, expand the caption, define split/cell-unit/ratio terminology, move task and alignment details into the main body, and state exactly which components are public.
+Figure 1 was manually created in two Sketch versions with 162 editable vector layers; evidence is available in the [anonymous repository](https://anonymous.4open.science/r/sMMC-22M-DB75) under `figure_evidence_not_AI/`. We will nevertheless correct its wording/blanks, expand the caption, define split/cell-unit/ratio terminology, move task and alignment details into the main body, and state exactly which components are public.
 
 The revised claim is therefore narrower and better supported: the resource combines native cell-resolved and explicitly labeled derived cell-aligned data, enables evaluation at cellular coordinates, and reveals heterogeneity hidden by averaging, while cross-sample and cross-platform molecular prediction remain open challenges.
